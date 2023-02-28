@@ -66,24 +66,30 @@ class DeptLoginController extends Controller
     }
 
     public function deptupdate($id, Request $request, $de){
+        
+        // print_r($request['update_file']);
+        // die;
+        if(isset($request['update_file'])){
 
-        $fileName = time() . "-ocrs-" . date('d-m-y') . "." . $request->file('update_file')->getClientOriginalExtension();
-        $fileloc = $request->file('update_file')->storeAs('public/uploads/update', $fileName);
-
-        $complain = Complain::find($de);
-        $complain->status = $request['status'];
-        $complain->file_update = $fileloc;
-        $complain->save();
-        echo "<pre>";
-        print_r($complain);
-        $url = url('/deptlogin/deptdash') ."/". $id;
-        return redirect($url);
+            $fileName = time() . "-ocrs-" . date('d-m-y') . "." . $request->file('update_file')->getClientOriginalExtension();
+            $fileloc = $request->file('update_file')->storeAs('public/uploads/update', $fileName);
+            $complain = Complain::find($de);
+            $complain->status = $request['status'];
+            $complain->file_update = $fileloc;
+            $complain->save();
+            // echo "<pre>";
+            // print_r($complain);
+            $url = url('/deptlogin/deptdash') ."/". $id;
+            return redirect($url);
+        }
+        else{
+            $complain = Complain::find($de);
+            $complain->status = $request['status'];
+            $complain->save();
+            $url = url('/deptlogin/deptdash') ."/". $id;
+            return redirect($url);
+        }
+        
     }
 
-    // public function deptdash()
-    // {
-    //     $complaints = Complain::where('department_id', 'water')->get();
-    //     // where 1 is the ID of the water department in the database
-    //     return view('deptdash', ['complain' => $complaints]);
-    // }
 }

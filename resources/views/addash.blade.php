@@ -32,14 +32,28 @@
                         </li>
                     </ul>
                     <div class="d-flex navbar-btn btn-nav">
-                        <a name="" id="" class="btn btn-danger navbar-btn btn-nav" href="{{url('/logout')}}" role="button" type="submit">Log out</a>
+                        <a name="" id="" class="btn btn-danger navbar-btn btn-nav"
+                            href="{{ url('/logout') }}" role="button" type="submit">Log out</a>
                     </div>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container d-flex">
-        <div class="table-responsive-sm mt-3">
+    <div class="container d-flex row m-auto">
+        <div class="container-sm d-flex m-3">
+            <form action="" class="col-6">
+                <div class="form-group d-flex col">
+                    <input type="search" name="search" class="form-control form-control-sm me-4"
+                        placeholder="search here" value="{{ $search }}">
+                    <button class="btn btn-sm btn-outline-success me-2">Search</button>
+                    <a href="{{ url('/adlogin/addash/view') }}">
+                        <button class="btn btn-sm btn-outline-danger" type="button">Reset</button>
+                    </a>
+                    
+                </div>
+            </form>
+        </div>
+        <div class="table-responsive-sm mt-2">
             <table class="table table-striped table-hover align-middle">
                 <thead class="table-light">
                     <tr>
@@ -57,34 +71,39 @@
                     </tr>
                 </thead>
                 <tbody class="">
-                    @foreach ($complain as $complain)
+                    @foreach ($complain as $complains)
                         <tr class="">
-                            <td>{{ $complain->complain_id }}</td>
-                            <td>{{ $complain->name }}</td>
-                            <td>{{ $complain->email }}</td>
-                            <td>{{ $complain->address }}</td>
-                            <td>{{ $complain->city }}</td>
-                            <td>{{ $complain->state }}</td>
-                            <td>{{ $complain->pt }}</td>
-                            <td>{{ $complain->dept }}</td>
-                            <td>{{ $complain->mob }}</td>
+                            <td>{{ $complains->complain_id }}</td>
+                            <td>{{ $complains->name }}</td>
+                            <td>{{ $complains->email }}</td>
+                            <td>{{ $complains->address }}</td>
+                            <td>{{ $complains->city }}</td>
+                            <td>{{ $complains->state }}</td>
+                            <td>{{ $complains->pt }}</td>
+                            <td>{{ $complains->dept }}</td>
+                            <td>{{ $complains->mob }}</td>
                             <td>
-                                @if ($complain->status == 1)
-                                <span class="badge text-bg-success">active</span>
+                                @if ($complains->status == 1)
+                                    <span class="badge text-bg-success">active</span>
                                 @else
-                                <span class="badge text-bg-danger">solved</span>    
+                                    <span class="badge text-bg-danger">solved</span>
                                 @endif
                             </td>
                             <td>
                                 <div class="container gap-2 d-flex">
-                                    <a href="{{route('complain.edit', ['id' => $complain->complain_id])}}"><button type="button" class="btn btn-sm btn-primary" >Edit</button></a>
-                                    <a href="{{route('complain.delete', ['id' => $complain->complain_id])}}"><button type="button" class="btn btn-sm btn-danger" >Delete</button></a>
+                                    <a href="{{ route('complain.edit', ['id' => $complains->complain_id]) }}"><button
+                                            type="button" class="btn btn-sm btn-primary">Edit</button></a>
+                                    <a href="{{ route('complain.delete', ['id' => $complains->complain_id]) }}"><button
+                                            type="button" class="btn btn-sm btn-danger">Delete</button></a>
                                 </div>
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+        </div>
+        <div class="row justify-content-center">
+                {{ $complain->links() }}
         </div>
     </div>
 

@@ -50,10 +50,16 @@ class AdminLoginController extends Controller
         return view('adhome');
     }
 
-    public function addash()
+    public function addash(Request $request)
     {
-        $complain = Complain::all();
-        $data = compact('complain');
+        $search = $request['search'] ?? "";
+        if($search != ""){
+            $complain = Complain::where('name', 'LIKE', "%$search%" )->orWhere('email', 'LIKE', "%$search%")->paginate(6);
+        }
+        else{
+            $complain = Complain::paginate(6);
+        }
+        $data = compact('complain', 'search');
         return view('addash')->with($data);
     }
 
