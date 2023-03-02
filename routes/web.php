@@ -5,6 +5,7 @@ use App\Http\Controllers\DeptLoginController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\complainController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\viewDetailsController;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Route;
 
@@ -24,18 +25,14 @@ use function GuzzleHttp\Promise\all;
 Route::get('/', [LoginController::class, 'index']);
 Route::post('/', [LoginController::class, 'register']);
 
-// Route::get('/customer', function(){
-//     $customer = Customer::all();
-//     echo "<pre/>";
-//     print_r($customer->toArray());
-// });
-
 Route::get('/login', [CustomerLoginController::class, 'index']);
-Route::post('/login', [CustomerLoginController::class, 'login']);
+Route::post('/login', [CustomerLoginController::class, 'login'])->middleware('customerLogin');
 
-Route::get('/login/dash', [CustomerLoginController::class, 'dash'])->middleware('guard');
-Route::post('/login/dash', [complainController::class, 'complain']);
-Route::get('/login/dash/view', [CustomerLoginController::class, 'viewComp'])->middleware('guard');
+Route::get('/login/dash/{cid}', [CustomerLoginController::class, 'dash'])->middleware('guard');
+Route::post('/login/dash/{cid}', [complainController::class, 'complain']);
+Route::get('/login/dash/{cid}/view', [CustomerLoginController::class, 'viewComp'])->middleware('guard');
+Route::post('/login/dash/{cid}/view', [CustomerLoginController::class, 'viewComp'])->middleware('guard');
+Route::get('/login/dash/{cid}/view/details/{comp_id}', [viewDetailsController::class, 'detailView'])->name('detail.view')->middleware('guard');
 
 Route::get('/adlogin', [AdminLoginController::class, 'index']);
 Route::post('/adlogin', [AdminLoginController::class, 'adlogin']);
@@ -60,5 +57,7 @@ Route::get('/logout', function () {
     session()->forget('customer_id');
     session()->forget('dept_id');
     session()->forget('admin_id');
+    session()->forget('cid');
+    session()->flush();
     return redirect('/login');
 });

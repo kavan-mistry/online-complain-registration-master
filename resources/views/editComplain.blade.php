@@ -156,6 +156,11 @@
                             @enderror
                         </span>
                     </div>
+                    <div class="col-12 m-3">
+                        <label class="form-label col-form-label-sm">uploaded Image</label>
+                        <img src="{{ asset('storage/' . str_replace('public/', '', $complain->file)) }}"
+                            class="img-thumbnail" alt="Complaint Image">
+                    </div>
                     <div class="col-md-4">
                         <label for="inputEmail4" class="form-label col-form-label-sm">Status</label>
                         <select id="inputState" name="status" class="form-select form-select-sm">

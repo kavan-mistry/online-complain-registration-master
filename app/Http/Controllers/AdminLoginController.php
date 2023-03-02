@@ -20,19 +20,16 @@ class AdminLoginController extends Controller
                 'email' => 'email|required',
                 'passward' => 'required',
             ]
-            );
+        );
 
         $user = admin::where('email', $request->input('email'))->get();
 
         echo "<pre>";
         print_r($user);
 
-        if(empty($user->all())) {
+        if (empty($user->all())) {
             return redirect('/adlogin')->withError('Invalid email or password');
-        }
-        
-        elseif($user[0]->passward==$request->input('passward'))
-        {
+        } elseif ($user[0]->passward == $request->input('passward')) {
             session()->put('admin_id', 1);
             return redirect('/adlogin/addash');
         } else {
@@ -53,11 +50,30 @@ class AdminLoginController extends Controller
     public function addash(Request $request)
     {
         $search = $request['search'] ?? "";
-        if($search != ""){
-            $complain = Complain::where('name', 'LIKE', "%$search%" )->orWhere('email', 'LIKE', "%$search%")->paginate(6);
+        $dept = $request['dept'];
+        if ($dept != "" && $search != "") {
+            $complain = Complain::sortable()->where([
+                ['name', 'LIKE', "%$search%"],
+                ['dept', '=', "$dept"]
+            ])->paginate(6);
+            // $complain = Complain::sortable()->where('name', 'LIKE', "%$search%")->orWhere('email', 'LIKE', "%$search%")->paginate(6);
+        } elseif ($dept != "") {
+            $complain = Complain::sortable()->where('dept', '=', "$dept")->paginate(6);
         }
-        else{
-            $complain = Complain::paginate(6);
+        // elseif($dept == "" && $search == ""){
+        //     $complain = Complain::sortable()->paginate(6);
+        // }
+        elseif ($search != "") {
+            $complain = Complain::sortable()->where('name', 'LIKE', "%$search%")->orWhere('email', 'LIKE', "%$search%")->paginate(6);
+            // $complain = Complain::sortable()->where('name', 'LIKE', "%$search%")->when($search, function ($search, $dept) {
+            //     return $search->where('dept', $dept);
+            // })->paginate(6);
+            // $complain = Complain::sortable()->where([
+            //     ['name', 'LIKE', "%$search%"],
+            //     ['dept', '=', "$dept"]
+            // ])->paginate(6);
+        } else {
+            $complain = Complain::sortable()->paginate(6);
         }
         $data = compact('complain', 'search');
         return view('addash')->with($data);
@@ -66,7 +82,7 @@ class AdminLoginController extends Controller
     public function delete($id)
     {
         $complain = Complain::find($id);
-        if(!is_null($complain)){
+        if (!is_null($complain)) {
             $complain->delete();
         }
         return redirect('/adlogin/addash/view');
@@ -75,18 +91,18 @@ class AdminLoginController extends Controller
     public function edit($id)
     {
         $complain = Complain::find($id);
-        if(is_null($complain)){
+        if (is_null($complain)) {
             return redirect('/adlogin/addash/view');
-        }
-        else{
-            $url = url('/adlogin/addash/view/update') ."/". $id;
+        } else {
+            $url = url('/adlogin/addash/view/update') . "/" . $id;
             $data = compact('complain', 'url');
             // print_r($data);
-            return view('editComplain')->with($data , $url);
+            return view('editComplain')->with($data, $url);
         }
     }
 
-    public function update($id, Request $request){
+    public function update($id, Request $request)
+    {
         $complain = Complain::find($id);
         $complain->name = $request['name'];
         $complain->email = $request['email'];

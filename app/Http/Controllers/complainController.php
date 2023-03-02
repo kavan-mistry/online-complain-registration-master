@@ -7,7 +7,13 @@ use Illuminate\Http\Request;
 
 class complainController extends Controller
 {
-    public function complain(Request $request)
+
+    public function customer()
+    {
+        return $this->belongsTo(customers::class);
+    }
+
+    public function complain(Request $request, $data)
     {
         $request->validate(
             [
@@ -22,8 +28,8 @@ class complainController extends Controller
                 'dept' => 'required|not_in:0',
                 'pd' => 'required',
                 'file' => 'required'
-                ]
-            );
+            ]
+        );
 
 
         $fileName = time() . "-ocrs-" . date('d-m-y') . "." . $request->file('file')->getClientOriginalExtension();
@@ -32,17 +38,16 @@ class complainController extends Controller
 
         // echo "<pre>";
         // print_r($request->all());
-        if($request['dept'] == 'water'){
+        if ($request['dept'] == 'water') {
             $dept_id = 1;
-        }
-        elseif($request['dept'] == 'electricity'){
+        } elseif ($request['dept'] == 'electricity') {
             $dept_id = 2;
-        }
-        elseif($request['dept'] == 'disaster'){
+        } elseif ($request['dept'] == 'disaster') {
             $dept_id = 3;
         }
 
         $complain = new Complain;
+        $complain->customer_id = $data;
         $complain->name = $request['name'];
         $complain->email = $request['email'];
         $complain->mob = $request['mob'];

@@ -19,7 +19,7 @@
                 <a class="nav-link active" aria-current="page" href="{{url('/login/dash')}}">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{{url('/login/dash/view')}}">view complain</a>
+                <a class="nav-link" href="{{url('/login/dash') . "/" . $cid . '/view'}}">view complain</a>
               </li>
             </ul>
             <div class="d-flex" role="search">
@@ -37,7 +37,7 @@
                   </div>
             @endif
             <h2 class="text-center mb-4">online complain registration</h1>
-    <form class="row g-1" method="post" action="{{url('/login/dash')}}" enctype="multipart/form-data">
+    <form class="row g-1" method="post" action="{{url('/login/dash') . '/' . $cid }}" enctype="multipart/form-data">
         @csrf
         <div class="col-md-6">
             <label for="inputEmail4" class="form-label col-form-label-sm">Name</label>
@@ -145,7 +145,7 @@
           </span>
         </div>
         <div class="col-12">
-            <label for="formFileSm" class="form-label col-form-label-sm">Small file input example</label>
+            <label for="formFileSm" class="form-label col-form-label-sm">file input</label>
             <input class="form-control form-control-sm" name="file" id="formFileSm" type="file">
             <span class="text-danger col-form-label-sm">
             @error('file')

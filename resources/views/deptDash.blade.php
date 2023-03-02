@@ -25,10 +25,7 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{{ url('/adlogin/addash') }}">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="{{ url('/adlogin/addash/view') }}">view complain</a>
+                            <a class="nav-link active" href="">view complain</a>
                         </li>
                     </ul>
                     <div class="d-flex navbar-btn btn-nav">

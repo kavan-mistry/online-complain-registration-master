@@ -18,7 +18,7 @@ class LoginController extends Controller
             [
                 'name' => 'required',
                 'email' => 'email|required',
-                'mob' => 'required|min:10|max:11',
+                'mob' => 'required|min:10|max:10',
                 'passward' => 'required|confirmed',
                 'passward_confirmation' => 'required'
             ]

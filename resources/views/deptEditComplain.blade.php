@@ -20,10 +20,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="">Home</a>
+                        <a class="nav-link active" aria-current="page" href="{{ url('/deptlogin/deptdash/view') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/adlogin/addash/view') }}">view complain</a>
+                        <a class="nav-link" href="{{ url('/deptlogin/deptdash/view') }}">view complain</a>
                     </li>
                 </ul>
                 <div class="d-flex" role="search">
@@ -88,7 +88,7 @@
                     <div class="col-md-4">
                         <label for="inputState" class="form-label col-form-label-sm">State</label>
                         <select id="inputState" name="state" class="form-select form-select-sm" disabled>
-                            <option>{{ $complain->state}}</option>
+                            <option>{{ $complain->state }}</option>
                             <option>Gujarat</option>
                             <option>Rajasthan</option>
                             <option>panjab</option>
@@ -101,7 +101,8 @@
                     </div>
                     <div class="col-md-2">
                         <label for="inputZip" class="form-label col-form-label-sm">Zip</label>
-                        <input type="text" name="zip" class="form-control form-control-sm" id="inputZip" value="{{ $complain->zip}}" disabled>
+                        <input type="text" name="zip" class="form-control form-control-sm" id="inputZip"
+                            value="{{ $complain->zip }}" disabled>
                         <span class="text-danger col-form-label-sm">
                             @error('zip')
                                 {{ $message }}
@@ -111,7 +112,7 @@
                     <div class="col-md-4">
                         <label for="inputState" class="form-label col-form-label-sm">problem type</label>
                         <select id="inputState" name="pt" class="form-select form-select-sm" disabled>
-                            <option>{{ $complain->pt}}</option>
+                            <option>{{ $complain->pt }}</option>
                             <option>water leakage</option>
                             <option>electric wire brokan</option>
                             <option>dranage problem</option>
@@ -125,7 +126,7 @@
                     <div class="col-md-4">
                         <label for="inputState" class="form-label col-form-label-sm">Department</label>
                         <select id="inputState" name="dept" class="form-select form-select-sm" disabled>
-                            <option>{{ $complain->dept}}</option>
+                            <option>{{ $complain->dept }}</option>
                             <option>water</option>
                             <option>electricity</option>
                             <option>disaster</option>
@@ -139,7 +140,7 @@
                     <div class="col-md-4">
                         <label for="inputPassword4" class="form-label col-form-label-sm">Contact number</label>
                         <input type="number" name="mob" class="form-control form-control-sm"
-                            id="inputPassword4" value="{{ $complain->mob}}" disabled>
+                            id="inputPassword4" value="{{ $complain->mob }}" disabled>
                         <span class="text-danger col-form-label-sm">
                             @error('mob')
                                 {{ $message }}
@@ -149,19 +150,24 @@
                     <div class="col-12">
                         <label for="inputAddress2" class="form-label col-form-label-sm">Problem description</label>
                         <textarea class="form-control form-control-sm" name="pd" placeholder="Write a problem here"
-                            id="floatingTextarea2" style="height: 100px" disabled>{{ $complain->pd}}</textarea>
+                            id="floatingTextarea2" style="height: 100px" disabled>{{ $complain->pd }}</textarea>
                         <span class="text-danger col-form-label-sm">
                             @error('pd')
                                 {{ $message }}
                             @enderror
                         </span>
                     </div>
+                    <div class="col-12 m-3">
+                        <label class="form-label col-form-label-sm">uploaded Image</label>
+                        <img src="{{ asset('storage/' . str_replace('public/', '', $complain->file)) }}"
+                            class="img-thumbnail" alt="Complaint Image">
+                    </div>
                     <div class="col-md-4">
                         <label class="form-label col-form-label-sm">Status</label>
                         <select id="inputState" name="status" class="form-select form-select-sm">
-                            <option>{{ $complain->status}}</option>
-                            <option>1</option>
-                            <option>0</option>
+                            <option>{{ $complain->status }}</option>
+                            <option value="1">active</option>
+                            <option value="0">solved</option>
                         </select>
                         <span class="text-danger col-form-label-sm">
                             @error('state')
@@ -171,10 +177,11 @@
                     </div>
                     <div class="col-6">
                         <label for="formFileSm" class="form-label col-form-label-sm">file input</label>
-                        <input class="form-control form-control-sm" name="update_file" id="formFileSm" type="file">
+                        <input class="form-control form-control-sm" name="update_file" id="formFileSm"
+                            type="file">
                         <span class="text-danger col-form-label-sm">
-                        @error('file')
-                                {{$message}}
+                            @error('file')
+                                {{ $message }}
                             @enderror
                         </span>
                     </div>

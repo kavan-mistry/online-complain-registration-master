@@ -11,6 +11,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+
 </head>
 
 <body>
@@ -25,59 +28,96 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{{ url('/login/dash') }}">Home</a>
+                            <a class="nav-link" aria-current="page" href="{{ url('/login/dash') . '/' . $customer_id }}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="{{ url('/login/dash/view') }}">view complain</a>
+                            <a class="nav-link active" href="{{ url('/login/dash') . '/' . $customer_id . '/view' }}">view complain</a>
                         </li>
                     </ul>
                     <div class="d-flex" role="search">
-                        <a name="" id="" class="btn btn-danger" href="{{url('/logout')}}" role="button">Log out</a>
-                      </div>
+                        <a name="" id="" class="btn btn-danger" href="{{ url('/logout') }}"
+                            role="button">Log out</a>
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container d-flex">
+    <div class="container d-flex row m-auto">
+        <div class="container-sm d-flex m-3">
+            <form method="post" action="" class="col-10">
+                @csrf
+                <div class="form-group d-flex col">
+                    <input type="search" name="search" class="form-control form-control-sm me-4"
+                        placeholder="search here" value="{{ $search }}">
+                    <label class="form-label-sm m-auto">Department</label>
+                    <select name="dept" class="form-select form-select-sm ms-2">
+                        <option value="">choose..</option>
+                        <option value="water">water</option>
+                        <option value="electricity">electricity</option>
+                        <option value="disaster">disaster</option>
+                    </select>
+                    <button class="btn btn-sm btn-outline-success me-2 ms-2">Search</button>
+                    <a href="{{ url('/login/dash') . '/' . $customer_id . '/view' }}">
+                        <button class="btn btn-sm btn-outline-danger" type="button">Reset</button>
+                    </a>
+                </div>
+            </form>
+        </div>
         <div class="table-responsive-sm mt-3">
             <table class="table table-striped table-hover table-borderless align-middle">
                 <thead class="table-light">
                     <tr>
-                        <th>complain id</th>
-                        <th>name</th>
-                        <th>email</th>
-                        <th>address</th>
-                        <th>city</th>
-                        <th>state</th>
+                        <th>@sortablelink('complain_id')</th>
+                        <th>@sortablelink('name')</th>
+                        <th>@sortablelink('email')</th>
+                        <th>@sortablelink('address')</th>
+                        <th>@sortablelink('city')</th>
+                        <th>@sortablelink('state')</th>
                         <th>problem type</th>
-                        <th>department</th>
+                        <th>@sortablelink('dept')</th>
                         <th>mobile</th>
                         <th>status</th>
+                        <th>action</th>
                     </tr>
                 </thead>
                 <tbody class="">
-                    @foreach ($complain as $complain)
-                        <tr class="">
-                            <td>{{ $complain->complain_id }}</td>
-                            <td>{{ $complain->name }}</td>
-                            <td>{{ $complain->email }}</td>
-                            <td>{{ $complain->address }}</td>
-                            <td>{{ $complain->city }}</td>
-                            <td>{{ $complain->state }}</td>
-                            <td>{{ $complain->pt }}</td>
-                            <td>{{ $complain->dept }}</td>
-                            <td>{{ $complain->mob }}</td>
-                            <td>
-                                @if ($complain->status == 1)
-                                <span class="badge text-bg-success">active</span>
-                                @else
-                                <span class="badge text-bg-danger">solved</span>    
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
+                    @if (!$complain->isEmpty())
+
+
+                        @foreach ($complain as $complains)
+                            <tr class="">
+                                <td>{{ $complains->complain_id }}</td>
+                                <td>{{ $complains->name }}</td>
+                                <td>{{ $complains->email }}</td>
+                                <td>{{ $complains->address }}</td>
+                                <td>{{ $complains->city }}</td>
+                                <td>{{ $complains->state }}</td>
+                                <td>{{ $complains->pt }}</td>
+                                <td>{{ $complains->dept }}</td>
+                                <td>{{ $complains->mob }}</td>
+                                <td>
+                                    @if ($complains->status == 1)
+                                        <span class="badge text-bg-success">active</span>
+                                    @else
+                                        <span class="badge text-bg-danger">solved</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <a href="{{ route('detail.view', ['cid' => $customer_id, 'comp_id' => $complains->complain_id]) }}">
+                                        <button type="button" class="btn btn-sm btn-warning">view</button>
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <td colspan="11" class="text-center">No data found !</td>
+                    @endif
                 </tbody>
             </table>
+        </div>
+        <div class="row justify-content-center">
+            {{-- {{ $complain->links() }} --}}
+            {!! $complain->appends(\Request::except('page'))->render() !!}
         </div>
     </div>
 

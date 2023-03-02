@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'guard' => \App\Http\Middleware\WebGuard::class,
         'waterdepartment' => \App\Http\Middleware\WaterDepartmentMiddleware::class,
+        'customerLogin' => \App\Http\Middleware\customerLogin::class,
     ];
 }
