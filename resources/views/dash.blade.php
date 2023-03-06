@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>online complain registration | customer dashbord</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="{{ asset('js/app.js')}}"></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg bg-light">
@@ -37,11 +38,12 @@
                   </div>
             @endif
             <h2 class="text-center mb-4">online complain registration</h1>
-    <form class="row g-1" method="post" action="{{url('/login/dash') . '/' . $cid }}" enctype="multipart/form-data">
+    <form class="row g-1" method="post" action="{{url('/login/dash') . '/' . $cid }}" enctype="multipart/form-data" >
         @csrf
         <div class="col-md-6">
             <label for="inputEmail4" class="form-label col-form-label-sm">Name</label>
-            <input type="text" name="name" class="form-control form-control-sm" id="inputEmail4">
+            <input type="text" name="name" class="form-control form-control-sm" id="inputEmail4"
+                            value="{{ $customer->name }}">
             <span class="text-danger col-form-label-sm">
                 @error('name')
                     {{$message}}
@@ -49,8 +51,8 @@
                </span>
           </div>
         <div class="col-md-6">
-          <label for="inputEmail4" class="form-label col-form-label-sm">Email</label>
-          <input type="email" name="email" class="form-control form-control-sm" id="inputEmail4">
+          <label for="inputEmail4" class="form-label col-form-label-sm" >Email</label>
+          <input type="email" name="email" class="form-control form-control-sm" id="inputEmail4" value="{{ $customer->email }}">
           <span class="text-danger col-form-label-sm">
             @error('email')
                 {{$message}}
@@ -128,7 +130,7 @@
         </div>
         <div class="col-md-4">
           <label for="inputPassword4" class="form-label col-form-label-sm">Contact number</label>
-          <input type="number" name="mob" class="form-control form-control-sm" id="inputPassword4">
+          <input type="number" name="mob" class="form-control form-control-sm" id="inputPassword4" value="{{ $customer->mob }}">
           <span class="text-danger col-form-label-sm">
           @error('mob')
                     {{$message}}
@@ -146,7 +148,7 @@
         </div>
         <div class="col-12">
             <label for="formFileSm" class="form-label col-form-label-sm">file input</label>
-            <input class="form-control form-control-sm" name="file" id="formFileSm" type="file">
+            <input class="form-control form-control-sm" name="file" id="formFileSm" type="file" accept="image/*">
             <span class="text-danger col-form-label-sm">
             @error('file')
                     {{$message}}

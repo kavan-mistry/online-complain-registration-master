@@ -15,10 +15,10 @@ class viewDetailsController extends Controller
         // print_r($comp_id);
         $complain_id = $comp_id;
         $complain = Complain::where('complain_id', $complain_id)->get();
-        $data = compact('complain');
+        $data = compact('complain' ,'cid');
         // echo "<pre>";
         // print_r($data);
-        return view('viewDetails')->with($data);
+        return view('viewDetails')->with($data , $cid);
     }
 
 }

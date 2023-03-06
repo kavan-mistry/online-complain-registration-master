@@ -28,10 +28,12 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{{ url('/login/dash') . '/' . $customer_id }}">Home</a>
+                            <a class="nav-link" aria-current="page"
+                                href="{{ url('/login/dash') . '/' . $customer_id }}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="{{ url('/login/dash') . '/' . $customer_id . '/view' }}">view complain</a>
+                            <a class="nav-link active"
+                                href="{{ url('/login/dash') . '/' . $customer_id . '/view' }}">view complain</a>
                         </li>
                     </ul>
                     <div class="d-flex" role="search">
@@ -47,15 +49,32 @@
             <form method="post" action="" class="col-10">
                 @csrf
                 <div class="form-group d-flex col">
+                    <input type="hidden" name="search" value="{{ $search }}">
+
                     <input type="search" name="search" class="form-control form-control-sm me-4"
                         placeholder="search here" value="{{ $search }}">
                     <label class="form-label-sm m-auto">Department</label>
-                    <select name="dept" class="form-select form-select-sm ms-2">
+                    {{-- <select name="dept" class="form-select form-select-sm ms-2">
                         <option value="">choose..</option>
                         <option value="water">water</option>
                         <option value="electricity">electricity</option>
                         <option value="disaster">disaster</option>
-                    </select>
+                    </select> --}}
+                    @if (isset($dept))
+                        <select name="dept" class="form-select form-select-sm ms-2">
+                            @foreach (['water', 'electricity', 'disaster'] as $dept1)
+                                <option value="{{ $dept1 }}" {{ $dept == $dept1 ? 'selected' : '' }}>
+                                    {{ $dept1 }}</option>
+                            @endforeach
+                        </select>
+                    @else
+                        <select name="dept" class="form-select form-select-sm ms-2">
+                            <option value="">choose..</option>
+                            <option value="water">water</option>
+                            <option value="electricity">electricity</option>
+                            <option value="disaster">disaster</option>
+                        </select>
+                    @endif
                     <button class="btn btn-sm btn-outline-success me-2 ms-2">Search</button>
                     <a href="{{ url('/login/dash') . '/' . $customer_id . '/view' }}">
                         <button class="btn btn-sm btn-outline-danger" type="button">Reset</button>
@@ -103,7 +122,8 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{ route('detail.view', ['cid' => $customer_id, 'comp_id' => $complains->complain_id]) }}">
+                                    <a
+                                        href="{{ route('detail.view', ['cid' => $customer_id, 'comp_id' => $complains->complain_id]) }}">
                                         <button type="button" class="btn btn-sm btn-warning">view</button>
                                     </a>
                                 </td>
@@ -117,7 +137,8 @@
         </div>
         <div class="row justify-content-center">
             {{-- {{ $complain->links() }} --}}
-            {!! $complain->appends(\Request::except('page'))->render() !!}
+            {{-- {!! $complain->appends(\Request::except('page'))->render() !!} --}}
+            {{ $complain->appends(['search' => $search, 'dept' => $dept])->links() }}
         </div>
     </div>
 

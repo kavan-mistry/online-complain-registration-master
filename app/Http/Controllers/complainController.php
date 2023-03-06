@@ -27,7 +27,7 @@ class complainController extends Controller
                 'pt' => 'required|not_in:0',
                 'dept' => 'required|not_in:0',
                 'pd' => 'required',
-                'file' => 'required'
+                'file' => 'required|image|mimes:jpeg,png,jpg'
             ]
         );
 

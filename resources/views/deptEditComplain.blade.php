@@ -20,10 +20,8 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ url('/deptlogin/deptdash/view') }}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/deptlogin/deptdash/view') }}">view complain</a>
+                        <a class="nav-link active" aria-current="page"
+                            href="{{ url('/deptlogin/deptdash') . '/' . $de }}">Home</a>
                     </li>
                 </ul>
                 <div class="d-flex" role="search">
@@ -157,17 +155,23 @@
                             @enderror
                         </span>
                     </div>
-                    <div class="col-12 m-3">
+                    <div class="col-6 m-auto mt-3">
                         <label class="form-label col-form-label-sm">uploaded Image</label>
                         <img src="{{ asset('storage/' . str_replace('public/', '', $complain->file)) }}"
                             class="img-thumbnail" alt="Complaint Image">
                     </div>
-                    <div class="col-md-4">
+                    @if (isset($complain->file_update))
+                        <div class="col-6 m-auto mt-3">
+                            <label class="form-label col-form-label-sm">updated Image</label>
+                            <img src="{{ asset('storage/' . str_replace('public/', '', $complain->file_update)) }}"
+                                class="img-thumbnail" alt="Complaint Image">
+                        </div>
+                    @endif
+                    <div class="col-md-6">
                         <label class="form-label col-form-label-sm">Status</label>
                         <select id="inputState" name="status" class="form-select form-select-sm">
-                            <option>{{ $complain->status }}</option>
-                            <option value="1">active</option>
-                            <option value="0">solved</option>
+                            <option value="1" {{ $complain->status == 1 ? 'selected' : '' }}>active</option>
+                            <option value="0" {{ $complain->status == 0 ? 'selected' : '' }}>solved</option>
                         </select>
                         <span class="text-danger col-form-label-sm">
                             @error('state')
@@ -185,7 +189,7 @@
                             @enderror
                         </span>
                     </div>
-                    <div class="col-12 mt-3 d-flex justify-content-center">
+                    <div class="col-12 mt-3 mb-3 d-flex justify-content-center">
                         <button type="submit" class="btn btn-primary">Edit complain</button>
                     </div>
                 </form>

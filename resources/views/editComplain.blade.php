@@ -88,10 +88,10 @@
                     <div class="col-md-4">
                         <label for="inputState" class="form-label col-form-label-sm">State</label>
                         <select id="inputState" name="state" class="form-select form-select-sm">
-                            <option>{{ $complain->state}}</option>
-                            <option>Gujarat</option>
-                            <option>Rajasthan</option>
-                            <option>panjab</option>
+                            @foreach (['Gujarat', 'Rajasthan', 'panjab'] as $state)
+                                <option value="{{ $state }}"
+                                    {{ $complain->state == $state ? 'selected' : '' }}>{{ $state }}</option>
+                            @endforeach
                         </select>
                         <span class="text-danger col-form-label-sm">
                             @error('state')
@@ -101,7 +101,8 @@
                     </div>
                     <div class="col-md-2">
                         <label for="inputZip" class="form-label col-form-label-sm">Zip</label>
-                        <input type="text" name="zip" class="form-control form-control-sm" id="inputZip" value="{{ $complain->zip}}">
+                        <input type="text" name="zip" class="form-control form-control-sm" id="inputZip"
+                            value="{{ $complain->zip }}">
                         <span class="text-danger col-form-label-sm">
                             @error('zip')
                                 {{ $message }}
@@ -111,10 +112,10 @@
                     <div class="col-md-4">
                         <label for="inputState" class="form-label col-form-label-sm">problem type</label>
                         <select id="inputState" name="pt" class="form-select form-select-sm">
-                            <option>{{ $complain->pt}}</option>
-                            <option>water leakage</option>
-                            <option>electric wire brokan</option>
-                            <option>dranage problem</option>
+                            @foreach (['water leakage', 'electric wire brokan', 'dranage problem'] as $pt)
+                                <option value="{{ $pt }}" {{ $complain->pt == $pt ? 'selected' : '' }}>
+                                    {{ $pt }}</option>
+                            @endforeach
                         </select>
                         <span class="text-danger col-form-label-sm">
                             @error('pt')
@@ -124,11 +125,11 @@
                     </div>
                     <div class="col-md-4">
                         <label for="inputState" class="form-label col-form-label-sm">Department</label>
-                        <select id="inputState" name="dept" class="form-select form-select-sm" value>
-                            <option>{{ $complain->dept}}</option>
-                            <option>water</option>
-                            <option>electricity</option>
-                            <option>disaster</option>
+                        <select id="inputState" name="dept" class="form-select form-select-sm">
+                            @foreach (['water', 'electricity', 'disaster'] as $dept)
+                                <option value="{{ $dept }}" {{ $complain->dept == $dept ? 'selected' : '' }}>
+                                    {{ $dept }}</option>
+                            @endforeach
                         </select>
                         <span class="text-danger col-form-label-sm">
                             @error('dept')
@@ -139,7 +140,7 @@
                     <div class="col-md-4">
                         <label for="inputPassword4" class="form-label col-form-label-sm">Contact number</label>
                         <input type="number" name="mob" class="form-control form-control-sm"
-                            id="inputPassword4" value="{{ $complain->mob}}">
+                            id="inputPassword4" value="{{ $complain->mob }}">
                         <span class="text-danger col-form-label-sm">
                             @error('mob')
                                 {{ $message }}
@@ -149,24 +150,30 @@
                     <div class="col-12">
                         <label for="inputAddress2" class="form-label col-form-label-sm">Problem description</label>
                         <textarea class="form-control form-control-sm" name="pd" placeholder="Write a problem here"
-                            id="floatingTextarea2" style="height: 100px" >{{ $complain->pd}}</textarea>
+                            id="floatingTextarea2" style="height: 100px">{{ $complain->pd }}</textarea>
                         <span class="text-danger col-form-label-sm">
                             @error('pd')
                                 {{ $message }}
                             @enderror
                         </span>
                     </div>
-                    <div class="col-12 m-3">
+                    <div class="col-6 m-auto m-3">
                         <label class="form-label col-form-label-sm">uploaded Image</label>
                         <img src="{{ asset('storage/' . str_replace('public/', '', $complain->file)) }}"
                             class="img-thumbnail" alt="Complaint Image">
                     </div>
+                    @if (isset($complain->file_update))
+                        <div class="col-6 m-auto mt-3">
+                            <label class="form-label col-form-label-sm">updated Image</label>
+                            <img src="{{ asset('storage/' . str_replace('public/', '', $complain->file_update)) }}"
+                                class="img-thumbnail" alt="Complaint Image">
+                        </div>
+                    @endif
                     <div class="col-md-4">
                         <label for="inputEmail4" class="form-label col-form-label-sm">Status</label>
                         <select id="inputState" name="status" class="form-select form-select-sm">
-                            <option>{{ $complain->status}}</option>
-                            <option>1</option>
-                            <option>0</option>
+                            <option value="1" {{ $complain->status == 1 ? 'selected' : '' }}>active</option>
+                            <option value="0" {{ $complain->status == 0 ? 'selected' : '' }}>solved</option>
                         </select>
                         <span class="text-danger col-form-label-sm">
                             @error('state')

@@ -38,6 +38,9 @@
                     <img src="{{ asset('storage/' .str_replace('public/', '', $complain->file)) }}" class="img-fluid img-thumbnail" alt="Complaint Image">
                 </div>
             @endforeach
+            {{-- <button type="submit" class="btn btn-primary m-3" url={{ url('login/dash') . '/' . $cid . '/view' }}>back</button> --}}
+            <a name="" id="" class="btn btn-primary m-3" href="{{ url('login/dash') . '/' . $cid . '/view' }}"
+                        role="button">back</a>
         </div>
 
     </main>

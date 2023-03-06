@@ -45,9 +45,9 @@ Route::post('/adlogin/addash/view/update/{id}', [AdminLoginController::class, 'u
 
 Route::get('/deptlogin', [DeptLoginController::class, 'index']);
 Route::post('/deptlogin', [DeptLoginController::class, 'deptlogin'])->middleware('waterdepartment');
-Route::get('/deptlogin/deptdash/{de}', [DeptLoginController::class, 'viewdash']);
-Route::get('/deptlogin/deptdash/{de}/edit/{id}', [DeptLoginController::class, 'deptedit'])->name('deptcomplain.edit');
-Route::post('/deptlogin/deptdash/{de}/update/{id}', [DeptLoginController::class, 'deptupdate'])->name('deptcomplain.update');
+Route::get('/deptlogin/deptdash/{de}', [DeptLoginController::class, 'viewdash'])->middleware('guard');
+Route::get('/deptlogin/deptdash/{de}/edit/{id}', [DeptLoginController::class, 'deptedit'])->name('deptcomplain.edit')->middleware('guard');
+Route::post('/deptlogin/deptdash/{de}/update/{id}', [DeptLoginController::class, 'deptupdate'])->name('deptcomplain.update')->middleware('guard');
 
 // Route::middleware(['auth', 'waterdepartment'])->get('/deptlogin/deptdash', [DeptLoginController::class, 'deptdash']);
 

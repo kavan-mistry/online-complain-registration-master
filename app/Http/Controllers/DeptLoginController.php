@@ -43,7 +43,7 @@ class DeptLoginController extends Controller
         if(!is_null($de)){
             $complaints = Complain::where('dept', $de)->get();
             $data = compact('complaints');
-            return view('deptDash')->with($data);
+            return view('deptDash')->with($data, $de);
         }
     }
 
@@ -52,16 +52,16 @@ class DeptLoginController extends Controller
         $complain = Complain::find($id);
         if(is_null($complain)){
             $url = url('/deptlogin/deptdash') ."/". $de;
-            return redirect($url);
+            return redirect($url, $de);
         }
         else{
             $url = url('/deptlogin/deptdash') ."/". $de . "/update" . "/" . $id;
             // $url = url('/deptlogin/deptdash/{de}/update/{id}') ."/". $id;
             // echo $url;
-            $data = compact('complain', 'url', 'id');
+            $data = compact('complain', 'url', 'de', 'id');
             // echo "<pre>";
             // print_r($data);
-            return view('deptEditComplain')->with($data , $url);
+            return view('deptEditComplain')->with($data , $url, $de);
         }
     }
 
