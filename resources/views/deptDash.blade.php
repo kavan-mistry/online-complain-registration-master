@@ -11,42 +11,78 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 
-<body style="font-size: small">
-    <header>
-        <nav class="navbar navbar-expand-lg bg-light">
+<body>
+
+    <section class="container">
+        <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Navbar</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <h2 class="display-6 text-decoration-none">Welcome,
+                    {{ $de }} department
+                </h2>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main_nav"
+                    aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="">view complain</a>
-                        </li>
+                <div class="collapse navbar-collapse justify-content-end justify-self-end" id="main_nav">
+                    <ul class="navbar-nav align-items-center">
+                        <li class="nav-item"><a class="nav-link  text-dark" href=""> view
+                                complain </a></li>
+                        <li class="nav-item"><a name="" id="" class="btn btn-danger my-3"
+                                href="{{ url('/logout') }}" role="button">Log
+                                out</a></li>
                     </ul>
-                    <div class="d-flex navbar-btn btn-nav">
-                        <a name="" id="" class="btn btn-danger navbar-btn btn-nav"
-                            href="{{ url('/logout') }}" role="button" type="submit">Log out</a>
-                    </div>
-                </div>
-            </div>
+                </div> <!-- navbar-collapse.// -->
+            </div> <!-- container-fluid.// -->
         </nav>
-    </header>
+    </section>
+
+    <div class="container-sm d-flex m-auto justify-content-center ">
+        <form method="post" action="" class="col-10">
+            @csrf
+            <div class="form-group d-flex col">
+                <input type="hidden" name="search" value="">
+
+                <input type="search" name="search" class="form-control form-control-sm me-4" placeholder="search here"
+                    value="{{ $search }}" autocomplete="off">
+                {{-- <label class="form-label-sm m-auto">Department</label>
+                
+                @if (isset($dept))
+                    <select name="dept" class="form-select form-select-sm ms-2">
+                        @foreach (['water', 'electricity', 'disaster'] as $dept1)
+                            <option value="{{ $dept1 }}" {{ $dept == $dept1 ? 'selected' : '' }}>
+                                {{ $dept1 }}</option>
+                        @endforeach
+                    </select>
+                @else
+                    <select name="dept" class="form-select form-select-sm ms-2">
+                        <option value="">choose..</option>
+                        <option value="water">water</option>
+                        <option value="electricity">electricity</option>
+                        <option value="disaster">disaster</option>
+                    </select>
+                @endif --}}
+                <button class="btn btn-sm btn-outline-success me-2 ms-2">Search</button>
+                <a href="{{ url('/deptlogin/deptdash' . '/' . $de) }}">
+                    <button class="btn btn-sm btn-outline-danger" type="button">Reset</button>
+                </a>
+            </div>
+        </form>
+    </div>
+
     <div class="container d-flex">
         <div class="table-responsive-sm mt-3">
             <table class="table table-striped table-hover align-middle">
                 <thead class="table-light">
                     <tr>
-                        <th>complain id</th>
-                        <th>name</th>
-                        <th>email</th>
-                        <th>address</th>
-                        <th>city</th>
-                        <th>state</th>
+                        <th>@sortablelink('complain_id')</th>
+                        <th>@sortablelink('name')</th>
+                        <th>@sortablelink('email')</th>
+                        <th>@sortablelink('address')</th>
+                        <th>@sortablelink('city')</th>
+                        <th>@sortablelink('state')</th>
                         <th>problem type</th>
                         <th>department</th>
                         <th>mobile</th>
@@ -55,35 +91,49 @@
                     </tr>
                 </thead>
                 <tbody class="">
-                    @foreach ($complaints as $complain)
-                        <tr class="">
-                            <td>{{ $complain->complain_id }}</td>
-                            <td>{{ $complain->name }}</td>
-                            <td>{{ $complain->email }}</td>
-                            <td>{{ $complain->address }}</td>
-                            <td>{{ $complain->city }}</td>
-                            <td>{{ $complain->state }}</td>
-                            <td>{{ $complain->pt }}</td>
-                            <td>{{ $complain->dept }}</td>
-                            <td>{{ $complain->mob }}</td>
-                            <td>
-                                @if ($complain->status == 1)
-                                    <span class="badge text-bg-success">active</span>
-                                @else
-                                    <span class="badge text-bg-danger">solved</span>
-                                @endif
-                            </td>
-                            <td>
-                                <div class="container gap-2 d-flex">
-                                    <a
-                                        href="{{ route('deptcomplain.edit', ['id' => $complain->complain_id, 'de' => $complain->dept]) }}"><button
-                                            type="button" class="btn btn-sm btn-primary">Edit</button></a>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
+                    @if (!$complaints->isEmpty())
+
+                        @foreach ($complaints as $complain)
+                            <tr class="">
+                                <td>{{ $complain->complain_id }}</td>
+                                <td>{{ $complain->name }}</td>
+                                <td>{{ $complain->email }}</td>
+                                <td>{{ $complain->address }}</td>
+                                <td>{{ $complain->city }}</td>
+                                <td>{{ $complain->state }}</td>
+                                <td>{{ $complain->pt }}</td>
+                                <td>{{ $complain->dept }}</td>
+                                <td>{{ $complain->mob }}</td>
+                                <td>
+                                    @if ($complain->status == 1)
+                                        <span class="badge text-bg-info">active</span>
+                                    @elseif($complain->status == 0)
+                                        <span class="badge text-bg-success">solved</span>
+                                    @elseif($complain->status == 2)
+                                        <span class="badge text-bg-warning">pending</span>
+                                    @elseif($complain->status == 3)
+                                        <span class="badge text-bg-danger">rejected</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="container gap-2 d-flex">
+                                        <a
+                                            href="{{ route('deptcomplain.edit', ['id' => $complain->complain_id, 'de' => $complain->dept]) }}"><button
+                                                type="button" class="btn btn-sm btn-primary">Edit</button></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <td colspan="11" class="text-center">No data found !</td>
+                    @endif
                 </tbody>
             </table>
+            <div class="row justify-content-center">
+                {{-- {{ $complaints->links() }} --}}
+                {!! $complaints->appends(\Request::except('page'))->render() !!}
+                {{-- {{ $complaints->appends(['search' => $search, 'dept' => $dept])->links() }} --}}
+            </div>
         </div>
     </div>
 

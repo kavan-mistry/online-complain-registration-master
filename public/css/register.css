@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap');
+
+* {
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.reg-show {
+    height: 100vh;
+    background-image: url('/img/main-bg.png');
+    background-position: center;
+    background-size: cover;
+}
+
+.title-h1 {
+    font-family: 'Bubblegum Sans', cursive;
+    font-size: 4rem;
+    color: white;
+    text-shadow:
+        4px 4px 0 #f73535,
+        -3px -3px 0 #e2d624,
+        3px -3px 0 #24f324,
+        -3px 3px 0 #0aeaf1,
+        3px 3px 0 #b61fca;
+}
+
+/* mouse animation */
+
+.scroll-downs {
+    position: absolute;
+    top: 80vh;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    
+    width :34px;
+    height: 55px;
+  }
+  .mousey {
+    width: 3px;
+    padding: 10px 15px;
+    height: 35px;
+    border: 2px solid #000000;
+    /* background: linear-gradient(to right, #f73535, #e2d624, #24f324, #0aeaf1, #b61fca); */
+    border-radius: 25px;
+    /* background-color: rgb(255, 255, 255); */
+    opacity: 0.75;
+    box-sizing: content-box;
+    
+  }
+  .scroller {
+    width: 3px;
+    height: 10px;
+    border-radius: 25%;
+    background-color: rgb(0, 0, 0);
+    animation-name: scroll;
+    animation-duration: 2s;
+    animation-timing-function: cubic-bezier(.15,.41,.69,.94);
+    animation-iteration-count: infinite;
+  }
+  @keyframes scroll {
+    0% { opacity: 0; }
+    10% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(25px); opacity: 0;}
+  }
+
+
+.reg-two {
+    /* background-image: url('/img/main-bg.png'); */
+    background-position: center;
+    background-size: cover;
+}
+
+.reg-three {
+    background: rgba(162, 162, 162, 0.09);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(162, 162, 162, 0.32);
+}
+
+@media (max-width: 800px){
+    .reg-three{
+            background: rgba(162, 162, 162, 0.09);
+            /* border-radius: 16px; */
+            /* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); */
+            backdrop-filter: none;
+            /* border: 1px solid rgba(162, 162, 162, 0.32); */
+        }
+        
+}

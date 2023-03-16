@@ -15,28 +15,31 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg bg-light">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Navbar</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ url('/adlogin/addash') }}">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/adlogin/addash/view') }}">view complain</a>
-                        </li>
-                    </ul>
-                    <div class="d-flex" role="search">
-                        <a name="" id="" class="btn btn-danger" href="{{url('/logout')}}" role="button">Log out</a>
-                      </div>
-                </div>
-            </div>
-        </nav>
+        <section class="container">
+            <nav class="navbar navbar-expand-lg">
+                <div class="container-fluid">
+                    <h2 class="display-6 text-decoration-none">Welcome, Admin</h2>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main_nav"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-end justify-self-end" id="main_nav">
+                        <ul class="navbar-nav align-items-center">
+                            <li class="nav-item active"> <a class="nav-link  text-dark"
+                                    href="{{ url('/adlogin/addash') }}">Home
+                                </a> </li>
+    
+                            <li class="nav-item"><a class="nav-link  text-dark"
+                                    href="{{ url('/adlogin/addash/view') }}"> view
+                                    complain </a></li>
+                            <li class="nav-item"><a name="" id="" class="btn btn-danger my-3"
+                                    href="{{ url('/logout') }}" role="button">Log
+                                    out</a></li>
+                        </ul>
+                    </div> <!-- navbar-collapse.// -->
+                </div> <!-- container-fluid.// -->
+            </nav>
+        </section>
     </header>
     
 

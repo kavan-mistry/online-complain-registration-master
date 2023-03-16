@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\EmailVerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +17,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::group(['middleware'=>'api'], function($routes){
+    Route::get('send-verify-email/{email}', [EmailVerificationController::class, 'sendVerifyMail']);
 });

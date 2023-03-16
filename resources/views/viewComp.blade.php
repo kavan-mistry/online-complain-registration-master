@@ -18,7 +18,7 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg bg-light">
+        {{-- <nav class="navbar navbar-expand-lg bg-light">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">Navbar</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -42,10 +42,36 @@
                     </div>
                 </div>
             </div>
-        </nav>
+        </nav> --}}
+        <section class="container">
+            <nav class="navbar navbar-expand-lg">
+                <div class="container-fluid">
+                    <h3 class="text-decoration-none">Your complaint list
+                    </h3>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main_nav"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-end justify-self-end" id="main_nav">
+                        <ul class="navbar-nav align-items-center">
+                            <li class="nav-item active"> <a class="nav-link  text-dark"
+                                    href="{{ url('/login/dash') . '/' . $customer_id }}">Home
+                                </a> </li>
+
+                            <li class="nav-item"><a class="nav-link  text-dark"
+                                    href="{{ url('/login/dash') . '/' . $customer_id . '/view' }}"> view
+                                    complain </a></li>
+                            <li class="nav-item"><a name="" id="" class="btn btn-danger my-3"
+                                    href="{{ url('/logout') }}" role="button">Log
+                                    out</a></li>
+                        </ul>
+                    </div> <!-- navbar-collapse.// -->
+                </div> <!-- container-fluid.// -->
+            </nav>
+        </section>
     </header>
     <div class="container d-flex row m-auto">
-        <div class="container-sm d-flex m-3">
+        <div class="container-sm d-flex justify-content-center">
             <form method="post" action="" class="col-10">
                 @csrf
                 <div class="form-group d-flex col">
@@ -116,9 +142,13 @@
                                 <td>{{ $complains->mob }}</td>
                                 <td>
                                     @if ($complains->status == 1)
-                                        <span class="badge text-bg-success">active</span>
-                                    @else
-                                        <span class="badge text-bg-danger">solved</span>
+                                        <span class="badge text-bg-info">active</span>
+                                    @elseif($complains->status == 0)
+                                        <span class="badge text-bg-success">solved</span>
+                                    @elseif($complains->status == 2)
+                                        <span class="badge text-bg-warning">pending</span>
+                                    @elseif($complains->status == 3)
+                                        <span class="badge text-bg-danger">rejected</span>
                                     @endif
                                 </td>
                                 <td>

@@ -1,0 +1,26 @@
+
+*{
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.log-one{
+    background-image: url('/img/main-bg.png');
+    background-position: center;
+    background-size: cover;
+}
+
+.log-two{
+    background: rgba(162, 162, 162, 0.09);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(162, 162, 162, 0.32);
+}
+
+@media (max-width: 800px){
+    .log-two{
+            background: rgba(162, 162, 162, 0.09);
+            backdrop-filter: none;
+        }
+        
+}

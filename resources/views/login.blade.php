@@ -7,14 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>online complain registration</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ asset('/css/login.css') }}">
 </head>
 
 <body style="font-size: small">
-    <div class="container-sm d-flex" style="height: 100vh">
+    <div class="container-fluid d-flex log-one" style="height: 100vh">
 
-        <div class="container m-auto p-auto d-flex justify-content-center align-items-center" style="max-height: 100vh">
-            <h1 class="col">Customer login</h1>
+        <div class="container m-auto p-3 d-flex justify-content-center align-items-center log-two" style="max-height: 100vh">
+            <h1 class="col ms-5">Customer login</h1>
             <form action="{{ url('/login') }}" method="post"
                 class="align-self-center row-cols-lg-auto w-50 card p-4 shadow d-flex justify-content-center">
                 @csrf

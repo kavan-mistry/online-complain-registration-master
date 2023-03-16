@@ -5,10 +5,13 @@ use App\Http\Controllers\DeptLoginController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\complainController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\viewDetailsController;
 use App\Models\Customer;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Auth;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use function GuzzleHttp\Promise\all;
 
 /*
@@ -22,13 +25,22 @@ use function GuzzleHttp\Promise\all;
 |
 */
 
+
 Route::get('/', [LoginController::class, 'index']);
 Route::post('/', [LoginController::class, 'register']);
 
-Route::get('/login', [CustomerLoginController::class, 'index']);
+Route::get('/login', [CustomerLoginController::class, 'index'])->name('login');
 Route::post('/login', [CustomerLoginController::class, 'login'])->middleware('customerLogin');
 
-Route::get('/login/dash/{cid}', [CustomerLoginController::class, 'dash'])->middleware('guard');
+Route::get('send-verify-email/{email}', [EmailController::class, 'sendVerifyMail']);
+Route::get('verify/{tokan}', [EmailController::class, 'VerifyMail']);
+Route::get('resend-verify-email/{email}', [EmailController::class, 'resendVerifyMailView']);
+Route::post('resend-verify-email/{email}', [EmailController::class, 'resendVerifyMail']);
+
+Route::post('/reset-email', [EmailController::class, 'resetMail']);
+
+
+Route::get('/login/dash/{cid}', [CustomerLoginController::class, 'dash'])->middleware('guard', 'VerifiedEmail');
 Route::post('/login/dash/{cid}', [complainController::class, 'complain']);
 Route::get('/login/dash/{cid}/view', [CustomerLoginController::class, 'viewComp'])->middleware('guard');
 Route::post('/login/dash/{cid}/view', [CustomerLoginController::class, 'viewComp'])->middleware('guard');
@@ -46,6 +58,7 @@ Route::post('/adlogin/addash/view/update/{id}', [AdminLoginController::class, 'u
 Route::get('/deptlogin', [DeptLoginController::class, 'index']);
 Route::post('/deptlogin', [DeptLoginController::class, 'deptlogin'])->middleware('waterdepartment');
 Route::get('/deptlogin/deptdash/{de}', [DeptLoginController::class, 'viewdash'])->middleware('guard');
+Route::post('/deptlogin/deptdash/{de}', [DeptLoginController::class, 'viewdash'])->middleware('guard');
 Route::get('/deptlogin/deptdash/{de}/edit/{id}', [DeptLoginController::class, 'deptedit'])->name('deptcomplain.edit')->middleware('guard');
 Route::post('/deptlogin/deptdash/{de}/update/{id}', [DeptLoginController::class, 'deptupdate'])->name('deptcomplain.update')->middleware('guard');
 
@@ -60,4 +73,4 @@ Route::get('/logout', function () {
     session()->forget('cid');
     session()->flush();
     return redirect('/login');
-});
+})->name('logout');

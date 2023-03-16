@@ -172,6 +172,8 @@
                         <select id="inputState" name="status" class="form-select form-select-sm">
                             <option value="1" {{ $complain->status == 1 ? 'selected' : '' }}>active</option>
                             <option value="0" {{ $complain->status == 0 ? 'selected' : '' }}>solved</option>
+                            <option value="2" {{ $complain->status == 2 ? 'selected' : '' }}>pending</option>
+                            <option value="3" {{ $complain->status == 3 ? 'selected' : '' }}>rejected</option>
                         </select>
                         <span class="text-danger col-form-label-sm">
                             @error('state')

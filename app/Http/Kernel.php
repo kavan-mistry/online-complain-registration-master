@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'guard' => \App\Http\Middleware\WebGuard::class,
         'waterdepartment' => \App\Http\Middleware\WaterDepartmentMiddleware::class,
         'customerLogin' => \App\Http\Middleware\customerLogin::class,
+        'VerifiedEmail' => \App\Http\Middleware\VerifiedEmail::class,
     ];
 }

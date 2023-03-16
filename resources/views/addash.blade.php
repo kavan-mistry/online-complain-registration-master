@@ -15,9 +15,8 @@
 
 </head>
 
-<body style="font-size: small">
-    <header>
-        <nav class="navbar navbar-expand-lg bg-light">
+<body>
+        {{-- <nav class="navbar navbar-expand-lg bg-light">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">Navbar</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -39,10 +38,35 @@
                     </div>
                 </div>
             </div>
-        </nav>
-    </header>
+        </nav> --}}
+        <section class="container">
+            <nav class="navbar navbar-expand-lg">
+                <div class="container-fluid">
+                    <h2 class="display-6 text-decoration-none">Welcome, Admin</h2>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main_nav"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-end justify-self-end" id="main_nav">
+                        <ul class="navbar-nav align-items-center">
+                            <li class="nav-item active"> <a class="nav-link  text-dark"
+                                    href="{{ url('/adlogin/addash') }}">Home
+                                </a> </li>
+
+                            <li class="nav-item"><a class="nav-link  text-dark"
+                                    href="{{ url('/adlogin/addash/view') }}"> view
+                                    complain </a></li>
+                            <li class="nav-item"><a name="" id="" class="btn btn-danger my-3"
+                                    href="{{ url('/logout') }}" role="button">Log
+                                    out</a></li>
+                        </ul>
+                    </div> <!-- navbar-collapse.// -->
+                </div> <!-- container-fluid.// -->
+            </nav>
+        </section>
+
     <div class="container d-flex row m-auto">
-        <div class="container-sm d-flex m-3">
+        <div class="container-sm d-flex m-auto justify-content-center">
             <form action="" class="col-10">
                 <div class="form-group d-flex col">
                     <input type="search" name="search" class="form-control form-control-sm me-4"
@@ -61,7 +85,7 @@
                 </div>
             </form>
         </div>
-        <div class="table-responsive-sm mt-2">
+        <div class="table-responsive mt-4">
             <table class="table table-striped table-hover align-middle">
                 <thead class="table-light">
                     <tr>
@@ -95,16 +119,21 @@
                                 <td>{{ $complains->mob }}</td>
                                 <td>
                                     @if ($complains->status == 1)
-                                        <span class="badge text-bg-success">active</span>
-                                    @else
-                                        <span class="badge text-bg-danger">solved</span>
+                                        <span class="badge text-bg-info">active</span>
+                                    @elseif($complains->status == 0)
+                                        <span class="badge text-bg-success">solved</span>
+                                    @elseif($complains->status == 2)
+                                        <span class="badge text-bg-warning">pending</span>
+                                    @elseif($complains->status == 3)
+                                        <span class="badge text-bg-danger">rejected</span>
                                     @endif
                                 </td>
                                 <td>
                                     <div class="container gap-2 d-flex">
                                         <a href="{{ route('complain.edit', ['id' => $complains->complain_id]) }}"><button
                                                 type="button" class="btn btn-sm btn-primary">Edit</button></a>
-                                        <a href="{{ route('complain.delete', ['id' => $complains->complain_id]) }}"><button
+                                        <a href="{{ route('complain.delete', ['id' => $complains->complain_id]) }}"
+                                            onclick="return confirm('Are you sure you want to delete complain ?')"><button
                                                 type="button" class="btn btn-sm btn-danger">Delete</button></a>
                                     </div>
                                 </td>

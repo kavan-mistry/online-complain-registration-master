@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Mockery\Generator\StringManipulation\Pass\Pass;
 use PHPUnit\Event\Test\Passed;
 
+use Illuminate\Auth\Events\Registered;
+
 class CustomerLoginController extends Controller
 {
 

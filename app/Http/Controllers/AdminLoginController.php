@@ -55,16 +55,16 @@ class AdminLoginController extends Controller
             $complain = Complain::sortable()->where([
                 ['name', 'LIKE', "%$search%"],
                 ['dept', '=', "$dept"]
-            ])->paginate(6);
+            ])->paginate(5);
             // $complain = Complain::sortable()->where('name', 'LIKE', "%$search%")->orWhere('email', 'LIKE', "%$search%")->paginate(6);
         } elseif ($dept != "") {
-            $complain = Complain::sortable()->where('dept', '=', "$dept")->paginate(6);
+            $complain = Complain::sortable()->where('dept', '=', "$dept")->paginate(5);
         }
         // elseif($dept == "" && $search == ""){
         //     $complain = Complain::sortable()->paginate(6);
         // }
         elseif ($search != "") {
-            $complain = Complain::sortable()->where('name', 'LIKE', "%$search%")->orWhere('email', 'LIKE', "%$search%")->paginate(6);
+            $complain = Complain::sortable()->where('name', 'LIKE', "%$search%")->orWhere('email', 'LIKE', "%$search%")->paginate(5);
             // $complain = Complain::sortable()->where('name', 'LIKE', "%$search%")->when($search, function ($search, $dept) {
             //     return $search->where('dept', $dept);
             // })->paginate(6);
@@ -73,7 +73,7 @@ class AdminLoginController extends Controller
             //     ['dept', '=', "$dept"]
             // ])->paginate(6);
         } else {
-            $complain = Complain::sortable()->paginate(6);
+            $complain = Complain::sortable()->paginate(5);
         }
         $data = compact('complain', 'search');
         return view('addash')->with($data);
