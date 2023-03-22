@@ -9,6 +9,8 @@
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link rel="stylesheet" href="{{ asset('/css/customer.css') }}">
 </head>
 
 <body>
@@ -16,7 +18,8 @@
     <section class="container">
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
-                <h2 class="display-6 text-decoration-none">Welcome,
+                <h2 class="display-6 text-decoration-none">
+                    Welcome,
                     {{ $customer->name }}</h2>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main_nav"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -24,12 +27,11 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-end justify-self-end" id="main_nav">
                     <ul class="navbar-nav align-items-center">
-                        <li class="nav-item active"> <a class="nav-link  text-dark"
-                                href="{{ url('/login/dash') . '/' . $cid }}">Home
+                        <li class="nav-item"> <a class="nav-link active " 
+                                href="{{ url('/login/dash')  }}"> Add complain
                             </a> </li>
-                        <li class="nav-item"><a class="nav-link  text-dark"
-                                href="{{ url('/login/dash') . '/' . $cid . '/view' }}"> view
-                                complain </a></li>
+                        <li class="nav-item"><a class="nav-link "
+                                href="{{ url('/login/dash') . '/view' }}"> Complain list </a></li>
                         <li class="nav-item"><a name="" id="" class="btn btn-danger my-3"
                                 href="{{ url('/logout') }}" role="button">Log
                                 out</a></li>
@@ -41,15 +43,10 @@
 
     <div class="container-sm d-flex col" style="height: 100vh">
         <div class="container m-auto p-auto justify-content-center align-items-center" style="max-height: 100vh">
-            @if (session('success'))
-                <div class="d-flex alert alert-success alert-dismissible fade show my-5 text-center justify-content-center"
-                    role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-            <h2 class="text-center mb-4">online complain registration</h1>
-                <form class="row g-1" method="post" action="{{ url('/login/dash') . '/' . $cid }}"
+            
+            <h2 class="text-center mb-4 p-2" style="
+            background-color: lavender;">online complain registration</h1>
+                <form class="row g-1" method="post" action="{{ url('/login/dash') }}"
                     enctype="multipart/form-data">
                     @csrf
                     <div class="col-md-6">
@@ -75,7 +72,7 @@
                     <div class="col-12">
                         <label for="inputAddress" class="form-label col-form-label-sm">Address</label>
                         <input type="text" name="address" class="form-control form-control-sm" id="inputAddress"
-                            placeholder="1234 Main St">
+                            placeholder="1234 Main St" value="{{ old('address') }}">
                         <span class="text-danger col-form-label-sm">
                             @error('address')
                                 {{ $message }}
@@ -84,7 +81,8 @@
                     </div>
                     <div class="col-md-6">
                         <label for="inputCity" class="form-label col-form-label-sm">City</label>
-                        <input type="text" name="city" class="form-control form-control-sm" id="inputCity">
+                        <input type="text" name="city" class="form-control form-control-sm" id="inputCity"
+                            value="{{ old('city') }}">
                         <span class="text-danger col-form-label-sm">
                             @error('city')
                                 {{ $message }}
@@ -95,9 +93,10 @@
                         <label for="inputState" class="form-label col-form-label-sm">State</label>
                         <select id="inputState" name="state" class="form-select form-select-sm">
                             <option selected value="0">Choose...</option>
-                            <option>Gujarat</option>
-                            <option>Rajasthan</option>
-                            <option>panjab</option>
+                            <option value="Gujarat" {{ old('state') == 'Gujarat' ? 'selected' : '' }}>Gujarat</option>
+                            <option value="Rajasthan" {{ old('state') == 'Rajasthan' ? 'selected' : '' }}>Rajasthan
+                            </option>
+                            <option value="panjab" {{ old('state') == 'panjab' ? 'selected' : '' }}>panjab</option>
                         </select>
                         <span class="text-danger col-form-label-sm">
                             @error('state')
@@ -107,7 +106,8 @@
                     </div>
                     <div class="col-md-2">
                         <label for="inputZip" class="form-label col-form-label-sm">Zip</label>
-                        <input type="text" name="zip" class="form-control form-control-sm" id="inputZip">
+                        <input type="text" name="zip" class="form-control form-control-sm" id="inputZip"
+                            value="{{ old('zip') }}">
                         <span class="text-danger col-form-label-sm">
                             @error('zip')
                                 {{ $message }}
@@ -149,7 +149,7 @@
                             var inputStatePt = $('#inputState[name="pt"]');
                             var inputStateDeptVisible = $('#inputStateDeptVisible');
                             var inputStateDept = $('#inputStateDept');
-                    
+
                             inputStatePt.on('change', function() {
                                 switch ($(this).val()) {
                                     case 'water leakage':
@@ -186,7 +186,7 @@
                     <div class="col-12">
                         <label for="inputAddress2" class="form-label col-form-label-sm">Problem description</label>
                         <textarea class="form-control form-control-sm" name="pd" placeholder="Write a problem here"
-                            id="floatingTextarea2" style="height: 100px"></textarea>
+                            id="floatingTextarea2" style="height: 100px">{{ old('pd') }}</textarea>
                         <span class="text-danger col-form-label-sm">
                             @error('pd')
                                 {{ $message }}

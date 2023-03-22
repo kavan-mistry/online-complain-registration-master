@@ -7,6 +7,8 @@ use App\Http\Controllers\complainController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\viewDetailsController;
+use App\Http\Controllers\ResetPasswardController;
+
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -39,12 +41,16 @@ Route::post('resend-verify-email/{email}', [EmailController::class, 'resendVerif
 
 Route::post('/reset-email', [EmailController::class, 'resetMail']);
 
+Route::get('/reset-pass', [ResetPasswardController::class, 'resetPassView']);
+Route::post('/reset-pass', [ResetPasswardController::class, 'resetPassSend']);
+Route::get('/reset-pass/{cid}/{tokan}', [ResetPasswardController::class, 'resetPassEnter']);
+Route::post('/reset-pass/{cid}/{tokan}', [ResetPasswardController::class, 'resetPass']);
 
-Route::get('/login/dash/{cid}', [CustomerLoginController::class, 'dash'])->middleware('guard', 'VerifiedEmail');
-Route::post('/login/dash/{cid}', [complainController::class, 'complain']);
-Route::get('/login/dash/{cid}/view', [CustomerLoginController::class, 'viewComp'])->middleware('guard');
-Route::post('/login/dash/{cid}/view', [CustomerLoginController::class, 'viewComp'])->middleware('guard');
-Route::get('/login/dash/{cid}/view/details/{comp_id}', [viewDetailsController::class, 'detailView'])->name('detail.view')->middleware('guard');
+Route::get('/login/dash/', [CustomerLoginController::class, 'dash'])->middleware('guard', 'VerifiedEmail');
+Route::post('/login/dash/', [complainController::class, 'complain']);
+Route::get('/login/dash/view', [CustomerLoginController::class, 'viewComp'])->middleware('guard');
+Route::post('/login/dash/view', [CustomerLoginController::class, 'viewComp'])->middleware('guard');
+Route::get('/login/dash/view/details/{comp_id}', [viewDetailsController::class, 'detailView'])->name('detail.view')->middleware('guard');
 
 Route::get('/adlogin', [AdminLoginController::class, 'index']);
 Route::post('/adlogin', [AdminLoginController::class, 'adlogin']);

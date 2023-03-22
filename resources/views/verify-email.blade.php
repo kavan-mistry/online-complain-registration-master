@@ -34,7 +34,7 @@
              }
          @endif
 
-         <img src="{{ asset('/img/email.png') }}" alt="mail varify" class="img-fluid" style="width: 10%">
+         <img src="{{ asset('/img/safe-mail.png') }}" alt="mail varify" class="img-fluid" style="width: 10%">
 
          <h1 class="text-align-center title-h1 mt-3">Verify your Email</h1>
 

@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Carbon\Carbon;
-use Mail;
+use Faker\Core\DateTime;
+// use Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\URL;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail as FacadesMail;
+use Illuminate\Support\Facades\Mail;
 
 class EmailController extends Controller
 {
@@ -109,7 +110,7 @@ class EmailController extends Controller
 
         if (count($customer) > 0) {
 
-            $datetime = Carbon::now()->format('d-m-y h:i:s');
+            $datetime = now();
             $customer = Customer::find($customer[0]['customer_id']);
             $customer->email_verified_at = $datetime;
             $customer->remember_token = "";

@@ -12,6 +12,8 @@
         integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ asset('/css/login.css') }}">
 </head>
 
 <body>
@@ -28,8 +30,7 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-end justify-self-end" id="main_nav">
                     <ul class="navbar-nav align-items-center">
-                        <li class="nav-item"><a class="nav-link  text-dark" href=""> view
-                                complain </a></li>
+                        <li class="nav-item"><a class="nav-link  text-dark" href=""> complain list </a></li>
                         <li class="nav-item"><a name="" id="" class="btn btn-danger my-3"
                                 href="{{ url('/logout') }}" role="button">Log
                                 out</a></li>
@@ -38,16 +39,24 @@
             </div> <!-- container-fluid.// -->
         </nav>
     </section>
+    <div class="container d-flex row m-auto">
+        
+            @if (session()->has('message'))
+                <div class="alert alert-success text-center alert-dismissible fade show">
+                    {{ session('message') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+        
+        <div class="container-sm d-flex m-auto justify-content-center ">
+            <form method="post" action="" class="col-10">
+                @csrf
+                <div class="form-group d-flex col">
+                    <input type="hidden" name="search" value="">
 
-    <div class="container-sm d-flex m-auto justify-content-center ">
-        <form method="post" action="" class="col-10">
-            @csrf
-            <div class="form-group d-flex col">
-                <input type="hidden" name="search" value="">
-
-                <input type="search" name="search" class="form-control form-control-sm me-4" placeholder="search here"
-                    value="{{ $search }}" autocomplete="off">
-                {{-- <label class="form-label-sm m-auto">Department</label>
+                    <input type="search" name="search" class="form-control form-control-sm me-4"
+                        placeholder="search here" value="{{ $search }}" autocomplete="off">
+                    {{-- <label class="form-label-sm m-auto">Department</label>
                 
                 @if (isset($dept))
                     <select name="dept" class="form-select form-select-sm ms-2">
@@ -64,20 +73,20 @@
                         <option value="disaster">disaster</option>
                     </select>
                 @endif --}}
-                <button class="btn btn-sm btn-outline-success me-2 ms-2">Search</button>
-                <a href="{{ url('/deptlogin/deptdash' . '/' . $de) }}">
-                    <button class="btn btn-sm btn-outline-danger" type="button">Reset</button>
-                </a>
-            </div>
-        </form>
-    </div>
+                    <button class="btn btn-sm btn-outline-success me-2 ms-2">Search</button>
+                    <a href="{{ url('/deptlogin/deptdash' . '/' . $de) }}">
+                        <button class="btn btn-sm btn-outline-danger" type="button">Reset</button>
+                    </a>
+                </div>
+            </form>
+        </div>
 
-    <div class="container d-flex">
-        <div class="table-responsive-sm mt-3">
+
+        <div class="table-responsive mt-4">
             <table class="table table-striped table-hover align-middle">
                 <thead class="table-light">
                     <tr>
-                        <th>@sortablelink('complain_id')</th>
+                        <th>@sortablelink('complain_id', 'id')</th>
                         <th>@sortablelink('name')</th>
                         <th>@sortablelink('email')</th>
                         <th>@sortablelink('address')</th>
@@ -129,11 +138,11 @@
                     @endif
                 </tbody>
             </table>
-            <div class="row justify-content-center">
-                {{-- {{ $complaints->links() }} --}}
-                {!! $complaints->appends(\Request::except('page'))->render() !!}
-                {{-- {{ $complaints->appends(['search' => $search, 'dept' => $dept])->links() }} --}}
-            </div>
+        </div>
+        <div class="row justify-content-center">
+            {{-- {{ $complaints->links() }} --}}
+            {!! $complaints->appends(\Request::except('page'))->render() !!}
+            {{-- {{ $complaints->appends(['search' => $search, 'dept' => $dept])->links() }} --}}
         </div>
     </div>
 

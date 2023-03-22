@@ -12,8 +12,9 @@ use Mockery\Generator\StringManipulation\Pass\Pass;
 use PHPUnit\Event\Test\Passed;
 
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Session;
 
-class CustomerLoginController extends Controller
+class   CustomerLoginController extends Controller
 {
 
     public function complain()
@@ -37,9 +38,7 @@ class CustomerLoginController extends Controller
 
         $user = customer::where('email', $request->input('email'))->get();
 
-        echo "<pre>";
-        print_r($user);
-        die;
+        
         if (empty($user->all())) {
             return redirect('/login')->withError('Invalid email or password');
         } elseif ($user[0]->passward == $request->input('passward')) {
@@ -50,7 +49,7 @@ class CustomerLoginController extends Controller
         }
     }
 
-    public function dash($cid)
+    public function dash()
     {
         $cid = session()->get('cid');
         $customer = customer::where('customer_id', $cid)->first();
@@ -62,17 +61,17 @@ class CustomerLoginController extends Controller
         return view('dash')->with($data);
     }
 
-    public function viewComp(Request $request, $cid)
+    public function viewComp(Request $request)
     {
         $search = $request['search'] ?? "";
-        $dept = $request['dept'];
+        $pt = $request['pt'];
         //print_r($dept);
-        $customer_id = $cid;
+        $customer_id = Session()->get('cid');
         // print_r($customer_id);
         $user = Customer::find($customer_id);
         $complain = Complain::where('customer_id', $customer_id)->sortable()->paginate(5);
         //if ($request->isMethod('post')) {
-        if ($dept != "" && $search != "") {
+        if ($pt != "" && $search != "") {
             // print_r("sss");
             // echo $search;
             // echo $dept;
@@ -80,20 +79,20 @@ class CustomerLoginController extends Controller
             $complain = Complain::sortable()->where([
                 // ['customer_id', '=', $customer_id],
                 ['name', 'LIKE', "%$search%"],
-                ['dept', '=', "$dept"],
+                ['pt', '=', "$pt"],
                 ['customer_id', $customer_id]
-            ])->paginate(5)->appends(['dept' => $dept, 'search' => $search]);
+            ])->paginate(5)->appends(['pt' => $pt, 'search' => $search]);
             /* echo "<pre>";
                 print_r($complain);
                 die; */
-        } elseif ($dept != "") {
+        } elseif ($pt != "") {
             // print_r("jjii");
             // echo 'hi';
             // die;
             $complain = Complain::sortable()->where([
-                ['dept', '=', "$dept"],
+                ['pt', '=', "$pt"],
                 ['customer_id', $customer_id]
-            ])->paginate(5)->appends(['dept' => $dept]);
+            ])->paginate(5)->appends(['pt' => $pt]);
         } elseif ($search != "") {
             // print_r("qaqaqa");
             $complain = Complain::sortable()->where([
@@ -109,7 +108,7 @@ class CustomerLoginController extends Controller
 
 
 
-        $data = compact('complain', 'search', 'customer_id', 'dept');
+        $data = compact('complain', 'search', 'customer_id', 'pt');
         // echo $cid;
         // echo "<pre>";
         // print_r($data);

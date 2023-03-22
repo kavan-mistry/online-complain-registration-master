@@ -13,7 +13,8 @@
 <body style="font-size: small">
     <div class="container-fluid d-flex log-one" style="height: 100vh">
 
-        <div class="container m-auto p-3 d-flex justify-content-center align-items-center log-two" style="max-height: 100vh">
+        <div class="container m-auto p-3 d-flex justify-content-center align-items-center log-two"
+            style="max-height: 100vh">
             <h1 class="col ms-5">Customer login</h1>
             <form action="{{ url('/login') }}" method="post"
                 class="align-self-center row-cols-lg-auto w-50 card p-4 shadow d-flex justify-content-center">
@@ -44,6 +45,11 @@
                     </span>
                 </div>
                 <div class="mb-3">
+                    @if (Session::has('error'))
+                        <div id="emailHelp" class="form-text text-danger">forgot passward ? <a
+                                href="{{ url('/reset-pass') }}">Reset Here</a>
+                        </div>
+                    @endif
                     <div id="emailHelp" class="form-text">new customer ? <a href="{{ url('/') }}">Register Here</a>
                     </div>
                     <div id="emailHelp" class="form-text">log in as Admin <a href="{{ url('/adlogin') }}">Login Here</a>

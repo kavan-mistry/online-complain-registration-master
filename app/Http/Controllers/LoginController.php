@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -33,11 +34,13 @@ class LoginController extends Controller
             // echo "<pre>";
             // print_r($request->all());
     
+            $hashPass = Hash::make($request['passward']);
+
             $customer = new Customer;
             $customer->name = $request['name'];
             $customer->email = $request['email'];
             $customer->mob = $request['mob'];
-            $customer->passward = $request['passward'];
+            $customer->passward = $hashPass;
             $customer->save();
      
             // event(new Registered($customer));

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use App\Models\Customer;
+use Illuminate\Support\Facades\Session;
 
 class VerifiedEmail
 {
@@ -18,7 +19,7 @@ class VerifiedEmail
     public function handle(Request $request, Closure $next): Response
     {
         // $data = $request->route('data');
-        $cid = $request->route('cid');
+        $cid = Session()->get('cid');
         $customer = Customer::where('customer_id', $cid)->first();
         // print_r($customer);
         $email = $customer->email;

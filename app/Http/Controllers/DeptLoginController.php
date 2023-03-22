@@ -112,16 +112,20 @@ class DeptLoginController extends Controller
             $fileloc = $request->file('update_file')->storeAs('public/uploads/update', $fileName);
             $complain = Complain::find($de);
             $complain->status = $request['status'];
+            $complain->rejection_reason = $request['rejection_reason'];
             $complain->file_update = $fileloc;
             $complain->save();
             // echo "<pre>";
             // print_r($complain);
+            session()->flash('message', 'edited successfully.');
             $url = url('/deptlogin/deptdash') . "/" . $id;
             return redirect($url);
         } else {
             $complain = Complain::find($de);
             $complain->status = $request['status'];
+            $complain->rejection_reason = $request['rejection_reason'];
             $complain->save();
+            session()->flash('message', 'edited successfully.');
             $url = url('/deptlogin/deptdash') . "/" . $id;
             return redirect($url);
         }

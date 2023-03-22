@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Complain;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 
 class complainController extends Controller
@@ -13,8 +14,10 @@ class complainController extends Controller
         return $this->belongsTo(customers::class);
     }
 
-    public function complain(Request $request, $data)
+    public function complain(Request $request)
     {
+        $cid = Session()->get('cid');
+
         $request->validate(
             [
                 'name' => 'required',
@@ -47,7 +50,7 @@ class complainController extends Controller
         }
 
         $complain = new Complain;
-        $complain->customer_id = $data;
+        $complain->customer_id = $cid;
         $complain->name = $request['name'];
         $complain->email = $request['email'];
         $complain->mob = $request['mob'];
@@ -62,6 +65,6 @@ class complainController extends Controller
         $complain->file = $fileloc;
         $complain->save();
 
-        return redirect()->back()->with('success', 'Complain registered successfully.');
+        return redirect('/login/dash/view')->with('success', 'Complain registered successfully.');
     }
 }
