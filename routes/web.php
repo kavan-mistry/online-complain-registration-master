@@ -7,7 +7,7 @@ use App\Http\Controllers\complainController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\viewDetailsController;
-use App\Http\Controllers\ResetPasswardController;
+use App\Http\Controllers\ResetpasswordController;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
@@ -31,8 +31,8 @@ use function GuzzleHttp\Promise\all;
 Route::get('/', [LoginController::class, 'index']);
 Route::post('/', [LoginController::class, 'register']);
 
-Route::get('/login', [CustomerLoginController::class, 'index'])->name('login');
-Route::post('/login', [CustomerLoginController::class, 'login'])->middleware('customerLogin');
+Route::get('/login', [CustomerLoginController::class, 'index'])->name('login')->middleware('NotReturn');;
+Route::post('/login', [CustomerLoginController::class, 'login'])->middleware('customerLogin', 'NotReturn');
 
 Route::get('send-verify-email/{email}', [EmailController::class, 'sendVerifyMail']);
 Route::get('verify/{tokan}', [EmailController::class, 'VerifyMail']);
@@ -41,18 +41,19 @@ Route::post('resend-verify-email/{email}', [EmailController::class, 'resendVerif
 
 Route::post('/reset-email', [EmailController::class, 'resetMail']);
 
-Route::get('/reset-pass', [ResetPasswardController::class, 'resetPassView']);
-Route::post('/reset-pass', [ResetPasswardController::class, 'resetPassSend']);
-Route::get('/reset-pass/{cid}/{tokan}', [ResetPasswardController::class, 'resetPassEnter']);
-Route::post('/reset-pass/{cid}/{tokan}', [ResetPasswardController::class, 'resetPass']);
+Route::get('/reset-pass', [ResetpasswordController::class, 'resetPassView']);
+Route::post('/reset-pass', [ResetpasswordController::class, 'resetPassSend']);
+Route::get('/reset-pass/{cid}/{tokan}', [ResetpasswordController::class, 'resetPassEnter']);
+Route::post('/reset-pass/{cid}/{tokan}', [ResetpasswordController::class, 'resetPass']);
 
 Route::get('/login/dash/', [CustomerLoginController::class, 'dash'])->middleware('guard', 'VerifiedEmail');
 Route::post('/login/dash/', [complainController::class, 'complain']);
-Route::get('/login/dash/view', [CustomerLoginController::class, 'viewComp'])->middleware('guard');
+Route::get('/login/dash/view', [CustomerLoginController::class, 'viewComp'])->middleware('guard', 'VerifiedEmail');
+Route::get('/login/dash/view/delete/{id}', [CustomerLoginController::class, 'close'])->name('complain.close')->middleware('guard');
 Route::post('/login/dash/view', [CustomerLoginController::class, 'viewComp'])->middleware('guard');
 Route::get('/login/dash/view/details/{comp_id}', [viewDetailsController::class, 'detailView'])->name('detail.view')->middleware('guard');
 
-Route::get('/adlogin', [AdminLoginController::class, 'index']);
+Route::get('/adlogin', [AdminLoginController::class, 'index'])->middleware('NotReturn');;
 Route::post('/adlogin', [AdminLoginController::class, 'adlogin']);
 
 Route::get('/adlogin/addash', [AdminLoginController::class, 'adhome'])->middleware('guard');
@@ -61,10 +62,10 @@ Route::get('/adlogin/addash/view/delete/{id}', [AdminLoginController::class, 'de
 Route::get('/adlogin/addash/view/edit/{id}', [AdminLoginController::class, 'edit'])->name('complain.edit')->middleware('guard');
 Route::post('/adlogin/addash/view/update/{id}', [AdminLoginController::class, 'update'])->name('complain.update')->middleware('guard');
 
-Route::get('/deptlogin', [DeptLoginController::class, 'index']);
+Route::get('/deptlogin', [DeptLoginController::class, 'index'])->middleware('NotReturn');;
 Route::post('/deptlogin', [DeptLoginController::class, 'deptlogin'])->middleware('waterdepartment');
-Route::get('/deptlogin/deptdash/{de}', [DeptLoginController::class, 'viewdash'])->middleware('guard');
-Route::post('/deptlogin/deptdash/{de}', [DeptLoginController::class, 'viewdash'])->middleware('guard');
+Route::get('/deptlogin/deptdash/', [DeptLoginController::class, 'viewdash'])->middleware('guard');
+Route::post('/deptlogin/deptdash/', [DeptLoginController::class, 'viewdash'])->middleware('guard');
 Route::get('/deptlogin/deptdash/{de}/edit/{id}', [DeptLoginController::class, 'deptedit'])->name('deptcomplain.edit')->middleware('guard');
 Route::post('/deptlogin/deptdash/{de}/update/{id}', [DeptLoginController::class, 'deptupdate'])->name('deptcomplain.update')->middleware('guard');
 

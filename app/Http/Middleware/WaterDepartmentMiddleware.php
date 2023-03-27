@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use App\Models\Complain;
 use App\Models\department;
+use Error;
 use Symfony\Component\HttpFoundation\Response;
 
 class WaterDepartmentMiddleware
@@ -17,56 +18,29 @@ class WaterDepartmentMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = department::where('email', $request->input('email'))->get();
+        echo $request['email'];
+        echo $request['password'];
+        
+        $user = department::where('email', $request->input('email'))->first();
         $request->validate(
             [
                 'email' => 'email|required',
-                'passward' => 'required',
+                'password' => 'required',
             ]
         );
-        if ($request->email == 'water@gmail.com') {
-            // $complaints = Complain::where('dept', 'water')->get();
-            // $data = compact('complaints');
-            $de = "water";
-            // echo '<pre>';
-            // print_r($data);
-            $url = url('/deptlogin/deptdash') ."/". $de;
-            if ($user[0]->passward == $request->input('passward')) 
-            { 
-                session()->put('dept_id', 1);
-                // return redirect('/deptlogin/deptdash');
-                return redirect($url);
-            } else {
-                return redirect('/deptlogin')->withError('Invalid email or password');
+        
+        if(isset($user)){
+            if($request['password'] == $user['password']){
+                $department = $user->department;
+                session()->put('department', $department);
+                return $next($request);
             }
-        }
-        elseif($request->email == 'electricity@gmail.com'){
-            $de = "electricity";
-            $url = url('/deptlogin/deptdash') ."/". $de;
-            if ($user[0]->passward == $request->input('passward')) 
-            { 
-                session()->put('dept_id', 1);
-                // return redirect('/deptlogin/deptdash');
-                return redirect($url);
-            } else {
-                return redirect('/deptlogin')->withError('Invalid email or password');
-            }
-        }
-        elseif($request->email == 'disaster@gmail.com'){
-            $de = "disaster";
-            $url = url('/deptlogin/deptdash') ."/". $de;
-            if ($user[0]->passward == $request->input('passward')) 
-            { 
-                session()->put('dept_id', 1);
-                // return redirect('/deptlogin/deptdash');
-                return redirect($url);
-            } else {
-                return redirect('/deptlogin')->withError('Invalid email or password');
+            else{
+                return redirect()->back()->with('errorPass','Invalid password')->withInput();
             }
         }
         else{
-            return redirect('/deptlogin');
+            return redirect('/deptlogin')->with('errorEmail','Invalid email');
         }
-        return $next($request);
     }
 }

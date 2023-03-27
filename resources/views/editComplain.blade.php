@@ -7,32 +7,42 @@
     <title>edit complain</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{ asset('/css/login.css') }}">
 </head>
 
 <body>
-    <section class="container">
-        <nav class="navbar navbar-expand-lg">
+    <section class="">
+        <nav class="navbar nvr navbar-expand-lg">
             <div class="container-fluid">
-                <h2 class="display-6 text-decoration-none">Welcome, Admin</h2>
+                <h3>
+                    <img src="{{ asset('/img/logo.png') }}" alt="" width="40"
+                        class="d-inline-block align-text-top">
+                    Online Complain Registration
+                </h3>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main_nav"
                     aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse justify-content-end justify-self-end" id="main_nav">
                     <ul class="navbar-nav align-items-center">
-                        <li class="nav-item"><a class="nav-link  text-dark" href="{{ url('/adlogin/addash/view') }}">
-                                complain list </a></li>
+
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/adlogin/addash') . '/view' }}">
+                                <i class="bi bi-card-list me-1"></i>Complain list </a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link active">
+                                <i class="bi bi-person-circle"></i> Admin </a>
+                        </li>
                         <li class="nav-item"><a name="" id="" class="btn btn-danger my-3"
-                                href="{{ url('/logout') }}" role="button">Log
-                                out</a></li>
+                                href="{{ url('/logout') }}" role="button"><i class="bi bi-door-open"></i>
+                                Log out</a></li>
                     </ul>
                 </div> <!-- navbar-collapse.// -->
             </div> <!-- container-fluid.// -->
         </nav>
     </section>
-    <div class="container-sm d-flex col" style="height: 100vh">
+    <div class="container-sm d-flex col">
         <div class="container m-auto p-auto justify-content-center align-items-center" style="max-height: 100vh">
             @if (session('success'))
                 <div class="d-flex alert alert-success alert-dismissible fade show my-5 text-center justify-content-center"
@@ -41,7 +51,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-            <h2 class="text-center mb-4 p-2" style="background-color: lavender;">Edit Complain</h2>
+            <h2 class="text-center mb-4 p-2" id="dash-head" style="background-color: lavender;">Edit Complain</h2>
             <form class="row g-1" method="post" action="{{ $url }}" enctype="multipart/form-data">
                 @csrf
                 <div class="col-md-6">
@@ -87,8 +97,9 @@
                 <div class="col-md-4">
                     <label for="inputState" class="form-label col-form-label-sm">State</label>
                     <select id="inputState" name="state" class="form-select form-select-sm">
-                        @foreach (['Gujarat', 'Rajasthan', 'panjab'] as $state)
-                            <option value="{{ $state }}" {{ $complain->state == $state ? 'selected' : '' }}>
+                        <option selected value="0">Choose...</option>
+                        @foreach ($states as $state)
+                            <option value="{{ $state }}" {{ old('state', $complain->state) == $state ? 'selected' : '' }}>
                                 {{ $state }}</option>
                         @endforeach
                     </select>
@@ -110,10 +121,10 @@
                 </div>
                 <div class="col-md-4">
                     <label for="inputState" class="form-label col-form-label-sm">problem type</label>
-                    <select id="inputState" name="pt" class="form-select form-select-sm">
-                        @foreach (['water leakage', 'electric wire brokan', 'dranage problem'] as $pt)
-                            <option value="{{ $pt }}" {{ $complain->pt == $pt ? 'selected' : '' }}>
-                                {{ $pt }}</option>
+                    <select id="inputState" name="pt" class="form-select form-select-sm" disabled>
+                        <option selected value="0">Choose...</option>
+                        @foreach ($problem_types as $p_t)
+                            <option value="{{ $p_t }}" {{ old('pt', $complain->pt) == $p_t ? 'selected' : '' }}>{{ $p_t }}</option>
                         @endforeach
                     </select>
                     <span class="text-danger col-form-label-sm">
@@ -124,10 +135,10 @@
                 </div>
                 <div class="col-md-4">
                     <label for="inputState" class="form-label col-form-label-sm">Department</label>
-                    <select id="inputState" name="dept" class="form-select form-select-sm">
-                        @foreach (['water', 'electricity', 'disaster'] as $dept)
-                            <option value="{{ $dept }}" {{ $complain->dept == $dept ? 'selected' : '' }}>
-                                {{ $dept }}</option>
+                    <select id="inputState" name="dept" class="form-select form-select-sm" disabled>
+                        @foreach (['water', 'electricity', 'general', 'cleaning', 'repair'] as $dept)
+                            <option value="{{ $dept }}" {{ old('dept',$complain->dept) == $dept ? 'selected' : '' }}>
+                                {{ ucfirst($dept) }}</option>
                         @endforeach
                     </select>
                     <span class="text-danger col-form-label-sm">
@@ -157,24 +168,25 @@
                     </span>
                 </div>
                 <div class="col-6 m-auto m-3">
-                    <label class="form-label col-form-label-sm">uploaded Image</label>
-                    <img src="{{ asset('storage/' . str_replace('public/', '', $complain->file)) }}"
-                        class="img-thumbnail" alt="Complaint Image">
+                    <label class="form-label col-form-label-sm">Customer Uploaded Image</label>
+                    <img id="up-img" src="{{ asset('storage/' . str_replace('public/', '', $complain->file)) }}"
+                        class="img-thumbnail mt-2" alt="Complaint Image">
                 </div>
                 @if (isset($complain->file_update))
                     <div class="col-6 m-auto mt-3">
-                        <label class="form-label col-form-label-sm">updated Image</label>
-                        <img src="{{ asset('storage/' . str_replace('public/', '', $complain->file_update)) }}"
-                            class="img-thumbnail" alt="Complaint Image">
+                        <label class="form-label col-form-label-sm">Department Work Proof Image</label>
+                        <img id="up-img"
+                            src="{{ asset('storage/' . str_replace('public/', '', $complain->file_update)) }}"
+                            class="img-thumbnail mt-2" alt="Complaint Image">
                     </div>
                 @endif
                 <div class="col-md-4">
                     <label for="inputEmail4" class="form-label col-form-label-sm">Status</label>
-                    <select id="inputState" name="status" class="form-select form-select-sm">
-                        <option value="1" {{ $complain->status == 1 ? 'selected' : '' }}>active</option>
-                        <option value="0" {{ $complain->status == 0 ? 'selected' : '' }}>solved</option>
-                        <option value="2" {{ $complain->status == 2 ? 'selected' : '' }}>pending</option>
-                        <option value="3" {{ $complain->status == 3 ? 'selected' : '' }}>rejected</option>
+                    <select id="inputState" name="status" class="form-select form-select-sm" onchange="showDiv(this)">
+                        <option value="1" {{ old( 'status' ,$complain->status) == 1 ? 'selected' : '' }}>active</option>
+                        <option value="0" {{ old( 'status' ,$complain->status) == 0 ? 'selected' : '' }}>solved</option>
+                        <option value="2" {{ old( 'status' ,$complain->status) == 2 ? 'selected' : '' }}>pending</option>
+                        <option value="3" {{ old( 'status' ,$complain->status) == 3 ? 'selected' : '' }}>rejected</option>
                     </select>
                     <span class="text-danger col-form-label-sm">
                         @error('state')
@@ -182,14 +194,38 @@
                         @enderror
                     </span>
                 </div>
-                <div class="col-12 mt-3 mb-3 d-flex justify-content-center">
+                <div >
+                    <label class="form-label col-form-label-sm">Reason for Rejection</label>
+                    <textarea name="rejection_reason" class="form-control form-control-sm">{{ $complain->rejection_reason }}
+                    </textarea>
+                    <span class="text-danger col-form-label-sm">
+                        @error('rejection_reason')
+                            {{ $message }}
+                        @enderror
+                    </span>
+                </div>
+                <div class="row-2 mt-3 mb-3 d-flex justify-content-center">
                     <button type="submit" class="btn btn-primary">Edit complain</button>
+                    <a name="" id="" class="btn btn-danger ms-2"
+                        href="{{ url('/adlogin/addash/view') }}" role="button">
+                        Back</a></li>
                 </div>
             </form>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
+    </script>
+
+    <script type="text/javascript">
+        function showDiv(select) {
+            if (select.value == 3) {
+                document.getElementById('hidden_div').style.display = "block";
+            } else {
+                document.getElementById('hidden_div').style.display = "none";
+            }
+        }
     </script>
 </body>
 

@@ -1,15 +1,25 @@
-
-*{
+* {
     font-family: 'Ubuntu', sans-serif;
 }
 
-.log-one{
+a{
+    text-decoration: none;
+}
+
+.nvr {
+    background: rgba(162, 162, 162, 0.09);
+    /* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); */
+    backdrop-filter: blur(15px);
+    /* border: 1px solid rgba(162, 162, 162, 0.32); */
+}
+
+.log-one {
     background-image: url('/img/main-bg.png');
     background-position: center;
     background-size: cover;
 }
 
-.log-two{
+.log-two {
     background: rgba(162, 162, 162, 0.09);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -17,10 +27,31 @@
     border: 1px solid rgba(162, 162, 162, 0.32);
 }
 
-@media (max-width: 800px){
-    .log-two{
-            background: rgba(162, 162, 162, 0.09);
-            backdrop-filter: none;
-        }
-        
+@media (max-width: 800px) {
+    .log-two {
+        background: rgba(162, 162, 162, 0.09);
+        backdrop-filter: none;
+    }
+
 }
+
+#dash-head {
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+#up-img {
+    width: 50%;
+}
+
+#up-img2{
+    width: 30%;
+}
+
+.foo{
+    align-items: center;
+    font-size: small;
+    justify-content:space-between;
+    display: flex;
+    background-color: rgba(162, 162, 162, 0.09);
+  }

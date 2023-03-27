@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Reset passward</title>
+    <title>Reset password</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -37,7 +37,7 @@
         </div>
         <div class="p-3 d-flex row log-two" style="max-height: 45vh; max-width: 50vw;">
             <div class="d-flex justify-content-center">
-                <h1> Reset Passward </h1>
+                <h1> Reset password </h1>
             </div>
             <div class="d-flex justify-content-center mt-4">
                 <form action="{{ url('/reset-pass') }}" method="post"

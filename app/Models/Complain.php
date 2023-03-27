@@ -13,5 +13,5 @@ class Complain extends Model
     protected $table = "complain";
     protected $primaryKey = "complain_id";
 
-    public $sortable = ['complain_id', 'name', 'email', 'address' , 'city' , 'state' , 'zip' , 'dept'];
+    public $sortable = ['complain_id', 'name', 'email', 'address' , 'city' , 'pt' , 'state' , 'zip' , 'dept'];
 }

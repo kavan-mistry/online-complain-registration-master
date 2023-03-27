@@ -16,7 +16,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <script src="https://unpkg.com/typed.js@2.0.132/dist/typed.umd.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     <style>
         #forimg {
@@ -29,21 +29,31 @@
     </style>
 
 </head>
-<section class="container-fluid sticky-top nvr d-flex align-items-center">
-    <nav class="navbar  navbar-expand-lg">
-        <div >
-            <h3 class="m-auto">
-                <img src="{{ asset('/img/logo.png') }}" alt="" width="40" class="d-inline-block align-text-top">
+
+<section class="">
+    <nav class="navbar nvr navbar-expand-lg">
+        <div class="container-fluid">
+            <h3>
+                <img src="{{ asset('/img/logo.png') }}" alt="" width="40"
+                    class="d-inline-block align-text-top">
                 Online Complain Registration
             </h3>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main_nav"
                 aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
+            <div class="collapse navbar-collapse justify-content-end justify-self-end" id="main_nav">
+                <ul class="navbar-nav align-items-center">
+
+                    <li class="nav-item"><a name="" id="" class="btn btn-outline-success my-3"
+                            href="{{ url('/login') }}" role="button"><i class="bi bi-box-arrow-in-right me-2"></i>
+                            Log in</a></li>
+                </ul>
+            </div> <!-- navbar-collapse.// -->
         </div> <!-- container-fluid.// -->
     </nav>
 </section>
+
 <body style="font-size: small">
     <div class="container-fluid reg-show d-flex justify-content-center align-items-center text-align-right"
         id="forimg">
@@ -125,7 +135,7 @@
                 <div class="mb-2">
                     <label for="" class="form-label col-form-label-sm">Mobile number</label>
                     <input type="tel" name="mob" pattern="\d{10}" class="form-control form-control-sm"
-                        value="{{ old('mob') }}" >
+                        value="{{ old('mob') }}">
                     <div class="error">
                         <span class="text-danger col-form-label-sm" id="numError"></span>
                         <span class="text-danger col-form-label-sm">
@@ -137,19 +147,19 @@
                 </div>
                 <div class="mb-2">
                     <label for="" class="form-label col-form-label-sm">Password</label>
-                    <input type="password" name="passward" class="form-control form-control-sm">
+                    <input type="password" name="password" class="form-control form-control-sm">
                     <div class="error">
                         <span class="text-danger col-form-label-sm" id="passError"></span>
                         <span class="text-danger col-form-label-sm">
-                            @error('passward')
+                            @error('password')
                                 {{ $message }}
                             @enderror
                         </span>
                     </div>
                 </div>
                 <div class="mb-2">
-                    <label for="" class="form-label col-form-label-sm">Canform Password</label>
-                    <input type="password" name="passward_confirmation" class="form-control form-control-sm">
+                    <label for="" class="form-label col-form-label-sm">Confirm password</label>
+                    <input type="password" name="password_confirmation" class="form-control form-control-sm">
                     <div class="error">
                         <span class="text-danger col-form-label-sm" id="conpassError"></span>
                         <span class="text-danger col-form-label-sm">
@@ -176,12 +186,15 @@
         </div>
     </div>
 
-    <footer class="foo container-fluid p-1">
+    <footer class="foo container-fluid justify-content-center p-1">
         <div>
-            Made with 💖 |  ®  OCR  | © all rights recieved.
+            Made with 💖 &emsp; | &emsp; ® OCR &emsp; | &emsp; © all rights recieved .
+        </div>
+        <div>
+            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
         </div>
         <div class="f_social_icon hstack gap-3">
-            Follow us on 
+            Follow us on
             <a href="" id="icon-instagram"><i class="bi-instagram"></i></a>
             <a href="" id="icon-linkedin"><i class="bi-linkedin"></i></a>
             <a href="" id="icon-github"><i class="bi-github"></i></a>

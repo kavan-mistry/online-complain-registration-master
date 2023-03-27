@@ -67,5 +67,6 @@ class Kernel extends HttpKernel
         'waterdepartment' => \App\Http\Middleware\WaterDepartmentMiddleware::class,
         'customerLogin' => \App\Http\Middleware\customerLogin::class,
         'VerifiedEmail' => \App\Http\Middleware\VerifiedEmail::class,
+        'NotReturn' => \App\Http\Middleware\NotReturn::class,
     ];
 }

@@ -13,6 +13,23 @@
   /* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); */
   backdrop-filter: blur(15px);
   /* border: 1px solid rgba(162, 162, 162, 0.32); */
+  height: 70px;
+  border-bottom: 2px solid;
+  /* border-radius: 16px; */
+  border-image: conic-gradient(from var(--angle), rgb(243, 9, 192), yellow,  aqua,lime, rgb(253, 106, 253), rgb(255, 145, 0)) 1;
+  animation: 5s rotate linear infinite;
+}
+
+@keyframes rotate {
+	to {
+		--angle: 360deg;
+	}
+}
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
 }
 
 .reg-show {

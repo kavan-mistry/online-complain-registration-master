@@ -37,7 +37,7 @@ class customerLogin
                 // echo "<pre>";
                 // print_r($user1);
                 // die;
-                if (Hash::check($request->input('passward'), $user1[0]->passward)) {
+                if (Hash::check($request->input('password'), $user1[0]->password)) {
                     // session()->put('customer_id', 1);
                     // echo "<pre>";
                     // echo $url;
@@ -46,10 +46,10 @@ class customerLogin
                     session()->put('cid', $cid);
                     return redirect($url)->with($cid, $url);
                 } else {
-                    return redirect('/login')->withError('Invalid password');
+                    return redirect('/login')->with('errorPass' ,'Invalid password')->withInput();
                 }
             } else {
-                return redirect('/login')->withError('Invalid email');
+                return redirect('/login')->with('errorEmail' ,'Invalid email');
             }
         } else {
             return redirect('/login')->withError('please enter email');

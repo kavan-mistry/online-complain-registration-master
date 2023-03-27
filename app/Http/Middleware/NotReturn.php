@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class WebGuard
+class NotReturn
 {
     /**
      * Handle an incoming request.
@@ -15,13 +15,13 @@ class WebGuard
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(session()->has('cid'))
-            return $next($request);
-        elseif(session()->has('department'))
-            return $next($request);
-        elseif(session()->has('admin_id'))
-            return $next($request);
+        if (session()->has('cid'))
+            return redirect()->back();
+        elseif (session()->has('department'))
+            return redirect()->back();
+        elseif (session()->has('admin_id'))
+            return redirect()->back();
         else
-            return redirect('/login');
+            return $next($request);
     }
 }

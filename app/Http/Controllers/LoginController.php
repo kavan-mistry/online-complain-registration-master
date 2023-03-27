@@ -26,21 +26,21 @@ class LoginController extends Controller
                     'name' => 'required',
                     'email' => 'email|required',
                     'mob' => 'required|min:10|max:10',
-                    'passward' => 'required|confirmed',
-                    'passward_confirmation' => 'required'
+                    'password' => 'required|confirmed',
+                    'password_confirmation' => 'required'
                 ]
                 );
     
             // echo "<pre>";
             // print_r($request->all());
     
-            $hashPass = Hash::make($request['passward']);
+            $hashPass = Hash::make($request['password']);
 
             $customer = new Customer;
             $customer->name = $request['name'];
             $customer->email = $request['email'];
             $customer->mob = $request['mob'];
-            $customer->passward = $hashPass;
+            $customer->password = $hashPass;
             $customer->save();
      
             // event(new Registered($customer));

@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 
 class DeptLoginController extends Controller
 {
+
+    
+
     public function index()
     {
         return view('deptlogin');
@@ -18,7 +21,7 @@ class DeptLoginController extends Controller
         $request->validate(
             [
                 'email' => 'email|required',
-                'passward' => 'required',
+                'password' => 'required',
             ]
         );
 
@@ -27,21 +30,14 @@ class DeptLoginController extends Controller
         // echo "<pre>";
         // print_r($user);
 
-        if (empty($user->all())) {
-            return redirect('/deptlogin')->withError('Invalid email or password');
-        } elseif ($user[0]->passward == $request->input('passward')) {
-            session()->put('dept_id', 1);
-            // return redirect('/deptlogin/deptdash');
-        } else {
-            return redirect('/deptlogin')->withError('Invalid email or password');
-        }
+        return redirect('/deptlogin/deptdash');
     }
 
-    public function viewdash(Request $request, $de)
+    public function viewdash(Request $request)
     {
-
+        $department= session()->get('department');
         // if(!is_null($de, $request)){
-        $complaints = Complain::where('dept', $de)->sortable()->paginate(5);
+        $complaints = Complain::where('dept', $department)->sortable()->paginate(5);
 
         $search = $request['search'] ?? "";
         // echo $search;
@@ -51,10 +47,10 @@ class DeptLoginController extends Controller
             // echo 'this one';
             $complaints = Complain::sortable()->where([
                 ['name', 'LIKE', "%$search%"],
-                ['dept', '=', "$de"]
+                ['dept', '=', "$department"]
             ])->orWhere([
                 ['email', 'LIKE', "%$search%"],
-                ['dept', '=', "$de"]
+                ['dept', '=', "$department"]
                 ])->paginate(5);
             // $complain = Complain::sortable()->where('name', 'LIKE', "%$search%")->orWhere('email', 'LIKE', "%$search%")->paginate(6);
         }
@@ -75,12 +71,12 @@ class DeptLoginController extends Controller
         //     // ])->paginate(6);
         // } 
         else {
-            $complaints = Complain::where('dept', $de)->sortable()->paginate(5);
+            $complaints = Complain::where('dept', $department)->sortable()->paginate(5);
             // echo 'not this';
         }
 
-        $data = compact('complaints', 'de', 'search');
-        return view('deptDash')->with($data, $de);
+        $data = compact('complaints', 'department', 'search');
+        return view('deptDash')->with($data, $department);
         // }
     }
 
@@ -104,6 +100,18 @@ class DeptLoginController extends Controller
     public function deptupdate($id, Request $request, $de)
     {
 
+        $status = $request['status'];
+        session()->put('status', $status);
+        
+        if($status == 3){
+            $request->validate(
+                [
+                    'rejection_reason' => 'required',
+                ]
+            );
+            // return redirect()->back();
+        }
+
         // print_r($request['update_file']);
         // die;
         if (isset($request['update_file'])) {
@@ -117,16 +125,16 @@ class DeptLoginController extends Controller
             $complain->save();
             // echo "<pre>";
             // print_r($complain);
-            session()->flash('message', 'edited successfully.');
-            $url = url('/deptlogin/deptdash') . "/" . $id;
+            session()->flash('message', 'Edited successfully.');
+            $url = url('/deptlogin/deptdash') ;
             return redirect($url);
         } else {
             $complain = Complain::find($de);
             $complain->status = $request['status'];
             $complain->rejection_reason = $request['rejection_reason'];
             $complain->save();
-            session()->flash('message', 'edited successfully.');
-            $url = url('/deptlogin/deptdash') . "/" . $id;
+            session()->flash('message', 'Edited successfully.');
+            $url = url('/deptlogin/deptdash') ;
             return redirect($url);
         }
     }

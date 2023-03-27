@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Reset passward</title>
+    <title>Reset password</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -21,7 +21,7 @@
         
         <div class="p-3 d-flex row log-two" style="max-height: 70vh; max-width: 50vw;">
             <div class="d-flex justify-content-center">
-                <h1> Reset Passward </h1>
+                <h1> Reset password </h1>
             </div>
             <div class="d-flex justify-content-center mt-4">
                 <form action="{{ url('/reset-pass' . '/' . $cid . '/' . $tokan) }}" method="post"
@@ -29,29 +29,29 @@
                     @csrf
                     <div class="mb-3">
                         <label for="" class="form-label col-form-label-sm">password</label>
-                        <input type="password" name="passward" class="form-control form-control-sm" id="">
+                        <input type="password" name="password" class="form-control form-control-sm" id="">
                         <span class="text-danger col-form-label-sm">
                             @if (Session::has('error'))
                                 <p class="text-danger">{{ Session::get('error') }}</p>
                             @endif
-                            @error('passward')
+                            @error('password')
                                 {{ $message }}
                             @enderror
                         </span>
                     </div>
                     <div class="mb-3">
-                        <label for="" class="form-label col-form-label-sm">Canform password</label>
-                        <input type="password" name="passward_confirmation" class="form-control form-control-sm" id="">
+                        <label for="" class="form-label col-form-label-sm">Confirm password</label>
+                        <input type="password" name="password_confirmation" class="form-control form-control-sm" id="">
                         <span class="text-danger col-form-label-sm">
                             @if (Session::has('error'))
                                 <p class="text-danger">{{ Session::get('error') }}</p>
                             @endif
-                            @error('passward_confirmation')
+                            @error('password_confirmation')
                                 {{ $message }}
                             @enderror
                         </span>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-sm">Reset passward</button>
+                    <button type="submit" class="btn btn-primary btn-sm">Reset password</button>
                 </form>
             </div>
         </div>

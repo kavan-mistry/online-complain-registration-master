@@ -8,32 +8,47 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
+    <link class="jsbin" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" rel="stylesheet"
+        type="text/css" />
+    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{ asset('/css/login.css') }}">
 </head>
 
 <body>
-    <section class="container">
-        <nav class="navbar navbar-expand-lg">
+    <section class="">
+        <nav class="navbar nvr navbar-expand-lg">
             <div class="container-fluid">
-                <h2 class="display-6 text-decoration-none">Welcome,
-                    {{ $de }} department
-                </h2>
+                <h3>
+                    <img src="{{ asset('/img/logo.png') }}" alt="" width="40"
+                        class="d-inline-block align-text-top">
+                    Online Complain Registration
+                </h3>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main_nav"
                     aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse justify-content-end justify-self-end" id="main_nav">
                     <ul class="navbar-nav align-items-center">
-                        <li class="nav-item"><a class="nav-link  text-dark" href="{{ url('/deptlogin/deptdash/') . '/' . $de }}"> complain list </a></li>
+
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/deptlogin/deptdash') }}">
+                                <i class="bi bi-card-list me-1"></i>Complain list </a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link active">
+                                <i class="bi bi-person-circle"></i> {{ ucfirst($de) }} department </a>
+                        </li>
                         <li class="nav-item"><a name="" id="" class="btn btn-danger my-3"
-                                href="{{ url('/logout') }}" role="button">Log
-                                out</a></li>
+                                href="{{ url('/logout') }}" role="button"><i class="bi bi-door-open"></i>
+                                Log out</a></li>
                     </ul>
                 </div> <!-- navbar-collapse.// -->
             </div> <!-- container-fluid.// -->
         </nav>
     </section>
-    <div class="container-sm d-flex col" style="height: 100vh">
+    <div class="container-sm d-flex col mt-4" style="height: 100vh">
         <div class="container m-auto p-auto justify-content-center align-items-center" style="max-height: 100vh">
             @if (session('success'))
                 <div class="d-flex alert alert-success alert-dismissible fade show my-5 text-center justify-content-center"
@@ -42,7 +57,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-            <h2 class="text-center mb-4 p-2" style="background-color: lavender;">edit complain</h1>
+            <h2 class="text-center mb-4 p-2" id="dash-head" style="background-color: lavender;">Edit Complain</h1>
                 <form class="row g-1" method="post" action="{{ $url }}" enctype="multipart/form-data">
                     @csrf
                     <div class="col-md-6">
@@ -158,25 +173,32 @@
                         </span>
                     </div>
                     <div class="col-6 m-auto mt-3">
-                        <label class="form-label col-form-label-sm">uploaded Image</label>
+                        <label class="form-label col-form-label-sm">Customer Uploaded Image</label>
                         <img src="{{ asset('storage/' . str_replace('public/', '', $complain->file)) }}"
-                            class="img-thumbnail" alt="Complaint Image">
+                            class="img-thumbnail" id="up-img" alt="Complaint Image">
                     </div>
                     @if (isset($complain->file_update))
                         <div class="col-6 m-auto mt-3">
-                            <label class="form-label col-form-label-sm">updated Image</label>
+                            <label class="form-label col-form-label-sm">Department Work Proof Image</label>
                             <img src="{{ asset('storage/' . str_replace('public/', '', $complain->file_update)) }}"
-                                class="img-thumbnail" alt="Complaint Image">
+                                class="img-thumbnail" id="up-img" alt="Complaint Image">
                         </div>
                     @endif
                     <div class="col-md-6">
                         <label class="form-label col-form-label-sm">Status</label>
+                        <label for="" hidden>
+                            {{ session()->get('status') }}
+                        </label>
                         <select id="inputStateSelection" name="status" class="form-select form-select-sm"
                             onchange="showDiv(this)">
-                            <option value="1" {{ $complain->status == 1 ? 'selected' : '' }}>active</option>
-                            <option value="0" {{ $complain->status == 0 ? 'selected' : '' }}>solved</option>
-                            <option value="2" {{ $complain->status == 2 ? 'selected' : '' }}>pending</option>
-                            <option value="3" {{ $complain->status == 3 ? 'selected' : '' }}>rejected</option>
+                            <option value="1" {{ old('status', $complain->status) == 1 ? 'selected' : '' }}>
+                                active</option>
+                            <option value="0" {{ old('status', $complain->status) ? 'selected' : '' }}>solved
+                            </option>
+                            <option value="2" {{ old('status', $complain->status) ? 'selected' : '' }}>pending
+                            </option>
+                            <option value="3" {{ old('status', $complain->status) == 3 ? 'selected' : '' }}>
+                                rejected</option>
                         </select>
                         <span class="text-danger col-form-label-sm">
                             @error('state')
@@ -184,23 +206,35 @@
                             @enderror
                         </span>
                     </div>
-                    <div id="hidden_div" style="display:none;">
+                    <div id="" style="">
                         <label class="form-label col-form-label-sm">Reason for Rejection</label>
-                        <textarea name="rejection_reason" class="form-control form-control-sm"></textarea>
+                        <textarea name="rejection_reason" class="form-control form-control-sm">{{ $complain->rejection_reason }}</textarea>
+                        <span class="text-danger col-form-label-sm">
+                            @error('rejection_reason')
+                                {{ $message }}
+                            @enderror
+                        </span>
                     </div>
                     <div class="col-6">
-                        <label for="formFileSm" class="form-label col-form-label-sm">file input</label>
+                        <label for="formFileSm" class="form-label col-form-label-sm">Update Work Of Proof</label>
                         <input class="form-control form-control-sm" name="update_file" id="formFileSm"
-                            type="file">
+                            type="file" onchange="readURL(this);" accept="image/*" >
                         <span class="text-danger col-form-label-sm">
                             @error('file')
                                 {{ $message }}
                             @enderror
                         </span>
                     </div>
+                    <div class="col-md-5 ms-2">
+                        <div>
+                            <label for="formFileSm" class="form-label col-form-label-sm">Uploaded Image
+                                Preview</label>
+                        </div>
+                        <img class="img-fluid img-thumbnail" style="width: 15vw;" id="blah" src="#" />
+                    </div>
                     <div class="col-12 mt-3 mb-3 d-flex justify-content-center">
-                        <button type="submit" class="btn btn-primary">Edit complain</button>
-                        <a href="{{ url('/deptlogin/deptdash') . '/' . $de }}" class="btn btn-primary ms-2">Back</a>
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-pencil me-1"></i>Edit complain</button>
+                        <a href="{{ url('/deptlogin/deptdash') }}" class="btn btn-warning ms-2"><i class="bi bi-x-circle me-1"></i>Cancel</a>
                     </div>
                 </form>
         </div>
@@ -209,15 +243,7 @@
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
     </script>
 
-    <script type="text/javascript">
-        function showDiv(select) {
-            if (select.value == 3) {
-                document.getElementById('hidden_div').style.display = "block";
-            } else {
-                document.getElementById('hidden_div').style.display = "none";
-            }
-        }
-    </script>
+    <script src="{{ asset('/js/dept.js') }}"></script>
 
 </body>
 

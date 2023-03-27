@@ -4,8 +4,8 @@ function validateForm() {
     var firstName = document.forms["reg-form"]["name"].value;
     var email = document.forms["reg-form"]["email"].value;
     var mob = document.forms["reg-form"]["mob"].value;
-    var passward = document.forms["reg-form"]["passward"].value;
-    var passward_confirmation = document.forms["reg-form"]["passward_confirmation"].value;
+    var password = document.forms["reg-form"]["password"].value;
+    var password_confirmation = document.forms["reg-form"]["password_confirmation"].value;
     
     // Check if any of the fields are empty
     if (firstName == "") {
@@ -30,15 +30,15 @@ function validateForm() {
         document.getElementById("numError").innerHTML = "";
       }
     
-      if (passward == "") {
-        document.getElementById("passError").innerHTML = "Please enter your passward.";
+      if (password == "") {
+        document.getElementById("passError").innerHTML = "Please enter your password.";
         return false; // prevent the form from being submitted
       } else {
         document.getElementById("passError").innerHTML = "";
       }
 
-      if (passward_confirmation != passward) {
-        document.getElementById("conpassError").innerHTML = "canform Passward did not match.";
+      if (password_confirmation != password) {
+        document.getElementById("conpassError").innerHTML = "Confirm password did not match.";
         return false; // prevent the form from being submitted
       } else {
         document.getElementById("conpassError").innerHTML = "";

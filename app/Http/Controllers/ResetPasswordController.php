@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Hash;
 
-class ResetPasswardController extends Controller
+class ResetpasswordController extends Controller
 {
 
     public function resetPassView()
@@ -39,8 +39,8 @@ class ResetPasswardController extends Controller
             $data['url'] = $url;
             $data['name'] = $cname;
             $data['email'] = $email;
-            $data['title'] = "Reset passward";
-            $data['body'] = "click to change your passward";
+            $data['title'] = "Reset password";
+            $data['body'] = "click to change your password";
 
             Mail::send('resetPassTemp', ['data' => $data], function ($message) use ($data) {
                 $message->to($data['email'])->subject($data['title']);
@@ -74,14 +74,14 @@ class ResetPasswardController extends Controller
 
         $request->validate(
             [
-                'passward' => 'required|confirmed',
-                'passward_confirmation' => 'required'
+                'password' => 'required|confirmed',
+                'password_confirmation' => 'required'
             ]
         );
 
-        // $passward = $request['passward'];
-        // $canform_passward = $request['canform_passward'];
-        $hashPass = Hash::make($request['passward']);
+        // $password = $request['password'];
+        // $canform_password = $request['canform_password'];
+        $hashPass = Hash::make($request['password']);
         // $customer = customer::where('customer_id', $cid)->get();
         $customer = customer::where('remember_token', $tokan)->first();
         echo "<pre>";
@@ -92,7 +92,7 @@ class ResetPasswardController extends Controller
             // $customer = Customer::find($customer[0]['customer_id']);
             // $customer->email_verified_at = $datetime;
             $customer->remember_token = "";
-            $customer->passward = $hashPass;
+            $customer->password = $hashPass;
             $customer->save();
 
             return redirect('/login');

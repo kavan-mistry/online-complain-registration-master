@@ -55,6 +55,11 @@ class EmailController extends Controller
     {
         // $email = $email;
         $customer = customer::where('email', $email)->first();
+        $a_email = session()->get('new_mail');
+        // echo "<pre>";
+        // var_dump($customer);
+        // die;
+
         $random = Str::random(40);
         $domain = URL::to('/');
         $url = $domain . '/verify' . '/' . $random;
@@ -75,7 +80,14 @@ class EmailController extends Controller
         return redirect()->back()->with('success', 'Mail send successfully.');
     }
 
-    public function resetMail(Request $request){
+    public function resetMail(Request $request)
+    {
+
+        $request->validate(
+            [
+                'email' => 'email|required',
+            ]
+        );
 
         $new_email = $request->email;
         $email = $request->old_email;
@@ -90,37 +102,54 @@ class EmailController extends Controller
         $data['title'] = "Reset Email verification";
         $data['body'] = "click to verify your email";
 
-        Mail::send('emailTemp', ['data' => $data], function ($message) use ($data) {
-            $message->to($data['email'])->subject($data['title']);
-        });
-        // echo $email;
-        // echo $sendmail;
-        $customer->remember_token = $random;
-        $customer->email = $new_email;
-        $customer->save();
+        $customer_new_valid = customer::where('email', $new_email)->first();
+        var_dump($customer_new_valid);
+        // die;
+        if($customer_new_valid == null){
+            echo "inside";
+            Mail::send('emailTemp', ['data' => $data], function ($message) use ($data) {
+                $message->to($data['email'])->subject($data['title']);
+            });
+            // echo $email;
+            // echo $sendmail;
+            $customer->remember_token = $random;
+            $customer->email = $new_email;
+            $customer->save();
+            session()->put( 'new_email' ,$new_email);
 
-        return redirect()->back()->with('success', 'Mail send successfully.');
+            $url = '/resend-verify-email' . '/' . $new_email;
+
+            return redirect($url)->with('success', 'Mail send successfully.');
+
+        }
+        else{
+            echo "outside";
+            return redirect()->back()->with('error', 'Mail already exists! try new mail id');
+        }
 
     }
 
     public function VerifyMail($tokan)
     {
 
-        $customer = customer::where('remember_token', $tokan)->get();
-
-        if (count($customer) > 0) {
-
+        $customer = customer::where('remember_token', $tokan)->first();
+        
+        // echo "<pre>";
+        // print_r($customer);        
+        // die;
+        if (isset($customer)) {
             $datetime = now();
             $customer = Customer::find($customer[0]['customer_id']);
             $customer->email_verified_at = $datetime;
             $customer->remember_token = "";
             $customer->is_verified = 1;
             $customer->save();
-
-            return redirect('/login');
+            
+            return redirect('/login')->with('success', 'Verified successfully.');
             // echo "<pre>";
             // print_r($customer);
-        } else {
+        } 
+        else {
             return view('404');
         }
     }

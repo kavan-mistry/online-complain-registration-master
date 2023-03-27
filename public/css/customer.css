@@ -2,4 +2,33 @@
 
 * {
   font-family: 'Ubuntu', sans-serif;
+  /* font-size: small; */
+}
+
+.nvr {
+  background: rgba(162, 162, 162, 0.09);
+  /* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); */
+  backdrop-filter: blur(15px);
+  /* border: 1px solid rgba(162, 162, 162, 0.32); */
+}
+
+.add-place::placeholder{
+  color: rgb(219, 219, 219);
+}
+
+a{
+  text-decoration: none;
+}
+
+.foo{
+  font-size: small;
+  align-items: center;
+  justify-content:space-between;
+  display: flex;
+  background-color: rgba(162, 162, 162, 0.09);;
+}
+
+#dash-head{
+  border-radius: 10px;
+  margin-top: 10px;
 }
