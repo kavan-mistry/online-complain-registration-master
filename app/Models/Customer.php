@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class customer extends Authenticatable
 {
     use HasFactory;
+    use SoftDeletes;
     protected $table = "customers";
     protected $primaryKey = "customer_id";
     

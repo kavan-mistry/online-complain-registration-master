@@ -9,5 +9,10 @@ class department extends Model
 {
     use HasFactory;
     protected $table = "department";
-    protected $primaryKey = "email";
+    protected $primaryKey = "department_id";
+
+    public function problem_types()
+    {
+        return $this->belongsTo('App\Models\Problem_types', 'department_id', 'department');
+    }
 }

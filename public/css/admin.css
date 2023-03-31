@@ -1,0 +1,28 @@
+.dataTables_info {
+    font-size: small;
+}
+
+.pagination {
+    --bs-pagination-padding-x: 0.5rem !important;
+    /* --bs-pagination-padding-y: 0.25rem; */
+    --bs-pagination-font-size: 0.875rem !important;
+    --bs-pagination-border-radius: 0.25rem !important;
+}
+
+#myTable_length {
+    font-size: small;
+}
+
+.dropdown-z{
+    /* box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2); */
+    z-index: 3;
+}
+
+.table-z{
+    z-index: 0;
+}
+
+.er{
+    /* font-size: small; */
+    height: 15px;
+}

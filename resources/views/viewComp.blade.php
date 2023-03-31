@@ -13,12 +13,17 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
+    {{-- data table --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" />
+
     <link rel="stylesheet" href="{{ asset('/css/customer.css') }}">
 </head>
 
 <body>
     <header>
-        <section class="">
+        <section class="position-relative dropdown-z">
             <nav class="navbar nvr navbar-expand-lg">
                 <div class="container-fluid">
                     <h3>
@@ -49,7 +54,7 @@
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
                                         class="bi bi-person-circle"></i> {{ ucwords($user) }} </a>
                                 <div class="dropdown-menu dropdown-menu-end">
-                                    {{-- <a href="/reset-pass" class="dropdown-item"><i class="bi bi-envelope-exclamation me-1"></i>Change Email</a> --}}
+                                    <a href="/login/edit_profile" class="dropdown-item"><i class="bi bi-person-fill-gear me-1"></i>Edit Profile</a>
                                     <a href="/reset-pass" class="dropdown-item"><i
                                             class="bi bi-arrow-clockwise me-1"></i>Change password</a>
                                     <div class="dropdown-divider"></div>
@@ -132,17 +137,17 @@
     <div class="container d-flex row m-auto">
 
         <div class="table-responsive mt-4">
-            <table class="table table-striped table-hover align-middle">
+            <table class="table table-striped table-hover align-middle" id="myTable">
                 <thead class="table-light">
                     <tr>
-                        <th>@sortablelink('complain_id', 'id')</th>
-                        <th>@sortablelink('name')</th>
-                        <th>@sortablelink('email')</th>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Email</th>
                         <th>Mobile</th>
                         {{-- <th>@sortablelink('address')</th> --}}
                         {{-- <th>@sortablelink('city')</th> --}}
-                        <th>@sortablelink('state')</th>
-                        <th>Problem type</th>
+                        <th>State</th>
+                        <th>Problem Type</th>
                         {{-- <th>@sortablelink('dept', 'department')</th> --}}
                         <th>Status</th>
                         <th>Action</th>
@@ -175,12 +180,15 @@
                                     @endif
                                 </td>
                                 <td>
+
                                     <a href="{{ route('detail.view', ['comp_id' => $complains->complain_id]) }}">
                                         <button type="button" class="btn btn-sm btn-outline-success"><i
                                                 class="bi bi-eye-fill me-1"></i>view</button>
                                         <a href="{{ route('complain.close', ['id' => $complains->complain_id]) }}"
-                                            onclick="return confirm('Are you sure you want to Close this complain ?')"><button
-                                                type="button" class="btn btn-sm btn-outline-danger"><i
+                                            onclick="return confirm(`Are you sure you want to Close
+Id : {{ $complains->complain_id }}  
+Problem : {{ $complains->pt }} ?`)">
+                                            <button type="button" class="btn btn-sm btn-outline-danger"><i
                                                     class="bi bi-x-circle-fill me-1"></i>close</button></a>
                                     </a>
                                 </td>
@@ -195,15 +203,25 @@
         <div class="row justify-content-center">
             {{-- {{ $complain->links() }} --}}
             {{-- {!! $complain->appends(\Request::except('page'))->render() !!} --}}
-            {{ $complain->appends(['search' => $search, 'pt' => $pt])->links() }}
+            {{-- {{ $complain->appends(['search' => $search, 'pt' => $pt])->links() }} --}}
         </div>
     </div>
 
-    <footer class="foo container-fluid fixed-bottom justify-content-center p-1">
+    <footer class="foo container-fluid justify-content-center p-1 mt-2">
         <div>
             Made with 💖 &emsp; | &emsp; ® OCR &emsp; | &emsp; © all rights recieved .
         </div>
     </footer>
+
+    {{-- jquery --}}
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+        integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+
+    {{-- data tables --}}
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+    <script src="{{ asset('/js/customer.js') }}"></script>
     <!-- Bootstrap JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
         integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">

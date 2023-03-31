@@ -13,12 +13,19 @@
 
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+
     <link rel="stylesheet" href="{{ asset('/css/login.css') }}">
+    <link rel="stylesheet" href="{{ asset('/css/admin.css') }}">
+
+    {{-- data table --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" />
 </head>
 
 <body>
 
-    <section class="">
+    <section class="position-relative dropdown-z">
         <nav class="navbar nvr navbar-expand-lg">
             <div class="container-fluid">
                 <h3>
@@ -32,16 +39,29 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-end justify-self-end" id="main_nav">
                     <ul class="navbar-nav align-items-center">
-
                         <li class="nav-item"><a class="nav-link active" href="{{ url('/adlogin/addash') . '/view' }}">
                                 <i class="bi bi-card-list me-1"></i>Complain list </a>
                         </li>
-                        <li class="nav-item"><a class="nav-link active">
-                                <i class="bi bi-person-circle"></i> Admin </a>
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
+                                    class="bi bi-person-circle"></i> Admin </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a href="{{ url('/adlogin/addash/problem_list') }}" class="dropdown-item"><i
+                                        class="bi bi-exclamation-circle me-1"></i>Problem list</a>
+                                <a class="dropdown-item" href="{{ url('/adlogin/addash/customer_list') }}"><i
+                                        class="bi bi-people-fill me-1"></i></i>Customer list </a>
+                                <a class="dropdown-item" href="{{ url('/adlogin/addash/customer_list_blocked') }}">
+                                    <i class="bi bi-person-fill-slash me-1"></i>Blocked Customer list </a>
+                                <a href="/adlogin/addash/department" class="dropdown-item"><i
+                                        class="bi bi-gear-fill me-1"></i>Department</a>
+                                <div class="dropdown-divider"></div>
+                                <div class="d-flex justify-content-center">
+                                    <a name="" id="" class="btn btn-danger" href="{{ url('/logout') }}"
+                                        role="button"><i class="bi bi-door-open"></i>
+                                        Log out</a>
+                                </div>
+                            </div>
                         </li>
-                        <li class="nav-item"><a name="" id="" class="btn btn-danger my-3"
-                                href="{{ url('/logout') }}" role="button"><i class="bi bi-door-open"></i>
-                                Log out</a></li>
                     </ul>
                 </div> <!-- navbar-collapse.// -->
             </div> <!-- container-fluid.// -->
@@ -62,8 +82,8 @@
             <div class="row justify-content-center mt-3">
 
                 <div class="form-group d-flex col-lg-2">
-                    <input type="search" name="search" class="form-control form-control-sm"
-                        placeholder="search here" value="{{ $search }}">
+                    <input type="search" name="search" class="form-control form-control-sm" placeholder="search here"
+                        value="{{ $search }}">
                 </div>
 
                 <div class="form-group d-flex col-lg-5">
@@ -71,15 +91,15 @@
                     @if (isset($pt))
                         <select name="pt" class="form-select form-select-sm">
                             @foreach ($problem_types as $pt1)
-                                <option value="{{ $pt1 }}" {{ $pt == $pt1 ? 'selected' : '' }}>
-                                    {{ $pt1 }}</option>
+                                <option value="{{ $pt1->problems }}" {{ $pt == $pt1->problems ? 'selected' : '' }}>
+                                    {{ $pt1->problems }}</option>
                             @endforeach
                         </select>
                     @else
                         <select name="pt" class="form-select form-select-sm">
                             <option value="">Choose...</option>
                             @foreach ($problem_types as $p_t)
-                                <option value="{{ $p_t }}">{{ $p_t }}</option>
+                                <option value="{{ $p_t->problems }}">{{ $p_t->problems }}</option>
                             @endforeach
                         </select>
                     @endif
@@ -93,16 +113,17 @@
                                 <option value="{{ $dept1 }}" {{ $dept == $dept1 ? 'selected' : '' }}>
                                     {{ $dept1 }}</option>
                             @endforeach
+                            @foreach ($departments as $dept1)
+                                <option value="{{ $dept1->department }}" {{ $dept == $dept1->department ? 'selected' : '' }}>
+                                    {{ $dept1->department }}</option>
+                            @endforeach
                         </select>
                     @else
                         <select name="dept" class="form-select form-select-sm">
                             <option value="">Choose...</option>
-                            <option value="water">water</option>
-                            <option value="electricity">electricity</option>
-                            <option value="disaster">disaster</option>
-                            <option value="general">general</option>
-                            <option value="cleaning">cleaning</option>
-                            <option value="repair">repair</option>
+                            @foreach ($departments as $dept)
+                                <option value="{{ $dept->department }}">{{ $dept->department }}</option>
+                            @endforeach
                         </select>
                     @endif
                 </div>
@@ -117,22 +138,22 @@
 
             </div>
         </form>
-        <div class="container-fluid">
+        <div class="container-fluid table-z">
             <div class="table-responsive mt-4" style="width: 100%;">
-                <table class="table table-striped table-hover align-middle">
+                <table class="table table-striped table-hover align-middle" id="myTable">
                     <thead class="table-light">
                         <tr>
-                            <th class="text-wrap">@sortablelink('complain_id', 'id')</th>
-                            <th class="text-wrap">@sortablelink('name')</th>
-                            <th>@sortablelink('email')</th>
-                            <th class="text-wrap">Mobile</th>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Mobile</th>
                             {{-- <th class="w-100">@sortablelink('address')</th> --}}
                             {{-- <th class="text-wrap">@sortablelink('city')</th> --}}
-                            <th class="text-wrap">@sortablelink('state')</th>
-                            <th class="text-wrap">@sortablelink('pt','Problem type')</th>
-                            <th class="text-wrap">@sortablelink('dept', 'department')</th>
-                            <th class="text-wrap">Status</th>
-                            <th class="text-wrap">Action</th>
+                            <th>State</th>
+                            <th>Problem Type</th>
+                            <th>Department</th>
+                            <th>Status</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody class="">
@@ -183,15 +204,25 @@
         </div>
         <div class="row justify-content-center">
             {{-- {{ $complain->links() }} --}}
-            {!! $complain->appends(\Request::except('page'))->render() !!}
+            {{-- {!! $complain->appends(\Request::except('page'))->render() !!} --}}
         </div>
     </div>
 
-    <footer class="foo container-fluid justify-content-center p-1">
+    <footer class="foo container-fluid justify-content-center p-1 mt-2">
         <div>
             Made with 💖 &emsp; | &emsp; ® OCR &emsp; | &emsp; © all rights recieved .
         </div>
     </footer>
+
+    {{-- jquery --}}
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+        integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+
+    {{-- data tables --}}
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+    <script src="{{ asset('/js/customer.js') }}"></script>
 
     <!-- Bootstrap JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"

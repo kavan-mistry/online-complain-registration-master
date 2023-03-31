@@ -21,7 +21,7 @@
     <style>
         #forimg {
 
-            background-image: url("{{ asset('/img/bg.avif') }}");
+            background-image: url("{{ asset('/img/bg.png') }}");
             background-repeat: no-repeat;
             background-size: contain;
             background-position: left;

@@ -37,7 +37,7 @@ class DeptLoginController extends Controller
     {
         $department= session()->get('department');
         // if(!is_null($de, $request)){
-        $complaints = Complain::where('dept', $department)->sortable()->paginate(5);
+        $complaints = Complain::where('dept', $department)->get();
 
         $search = $request['search'] ?? "";
         // echo $search;
@@ -45,13 +45,13 @@ class DeptLoginController extends Controller
         // $dept = $request['dept'];
         if ($search != "") {
             // echo 'this one';
-            $complaints = Complain::sortable()->where([
+            $complaints = Complain::where([
                 ['name', 'LIKE', "%$search%"],
                 ['dept', '=', "$department"]
             ])->orWhere([
                 ['email', 'LIKE', "%$search%"],
                 ['dept', '=', "$department"]
-                ])->paginate(5);
+                ])->get();
             // $complain = Complain::sortable()->where('name', 'LIKE', "%$search%")->orWhere('email', 'LIKE', "%$search%")->paginate(6);
         }
         // elseif ($dept != "") {
@@ -71,7 +71,7 @@ class DeptLoginController extends Controller
         //     // ])->paginate(6);
         // } 
         else {
-            $complaints = Complain::where('dept', $department)->sortable()->paginate(5);
+            $complaints = Complain::where('dept', $department)->get();
             // echo 'not this';
         }
 

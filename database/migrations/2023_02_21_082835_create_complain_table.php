@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('complain', function (Blueprint $table) {
             $table->id('complain_id');
+            $table->unsignedBigInteger('customer_id');
             $table->foreign('customer_id')->references('customer_id')->on('customers')->onDelete('cascade');
             $table->string('name', 100);
             $table->string('email', 100);
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->string('pd');
             $table->string('file');
             $table->string('status');
+            $table->string('rejection_reason');
             $table->string('file_update');
             $table->string('department_id');
             $table->timestamps();

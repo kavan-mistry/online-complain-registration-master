@@ -8,6 +8,9 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\viewDetailsController;
 use App\Http\Controllers\ResetpasswordController;
+use App\Http\Controllers\editProfileController;
+use App\Http\Controllers\AdminProblemController;
+use App\Http\Controllers\AdminDepartmentController;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
@@ -46,6 +49,9 @@ Route::post('/reset-pass', [ResetpasswordController::class, 'resetPassSend']);
 Route::get('/reset-pass/{cid}/{tokan}', [ResetpasswordController::class, 'resetPassEnter']);
 Route::post('/reset-pass/{cid}/{tokan}', [ResetpasswordController::class, 'resetPass']);
 
+Route::get('/login/edit_profile', [editProfileController::class, 'edit_profile_view'])->middleware('guard', 'VerifiedEmail');
+Route::post('/login/edit_profile', [editProfileController::class, 'edit_profile'])->middleware('guard');
+
 Route::get('/login/dash/', [CustomerLoginController::class, 'dash'])->middleware('guard', 'VerifiedEmail');
 Route::post('/login/dash/', [complainController::class, 'complain']);
 Route::get('/login/dash/view', [CustomerLoginController::class, 'viewComp'])->middleware('guard', 'VerifiedEmail');
@@ -58,6 +64,22 @@ Route::post('/adlogin', [AdminLoginController::class, 'adlogin']);
 
 Route::get('/adlogin/addash', [AdminLoginController::class, 'adhome'])->middleware('guard');
 Route::get('/adlogin/addash/view', [AdminLoginController::class, 'addash'])->middleware('guard');
+
+Route::get('/adlogin/addash/problem_list', [AdminProblemController::class, 'problem_list_view'])->middleware('guard');
+Route::post('/adlogin/addash/problem_list', [AdminProblemController::class, 'problem_list_add'])->middleware('guard');
+Route::get('/adlogin/addash/problem_list/delete/{id}', [AdminProblemController::class, 'admin_department_delete'])->name('problem_list.delete')->middleware('guard');
+
+Route::get('/adlogin/addash/customer_list', [AdminLoginController::class, 'ad_cust_list'])->middleware('guard');
+Route::get('/adlogin/addash/customer_list/block/{id}', [AdminLoginController::class, 'ad_cust_block'])->name('customer.block')->middleware('guard');
+Route::get('/adlogin/addash/customer_list/unblock/{id}', [AdminLoginController::class, 'ad_cust_unblock'])->name('customer.unblock')->middleware('guard');
+Route::get('/adlogin/addash/customer_list/delete/{id}', [AdminLoginController::class, 'ad_cust_delete'])->name('customer.delete')->middleware('guard');
+
+Route::get('/adlogin/addash/customer_list_blocked', [AdminLoginController::class, 'ad_cust_list_blocked'])->middleware('guard');
+
+Route::get('/adlogin/addash/department', [AdminDepartmentController::class, 'admin_department_view'])->middleware('guard');
+Route::post('/adlogin/addash/department', [AdminDepartmentController::class, 'admin_department_add'])->middleware('guard');
+Route::get('/adlogin/addash/department/delete/{id}', [AdminDepartmentController::class, 'admin_department_delete'])->name('department.delete')->middleware('guard');
+
 Route::get('/adlogin/addash/view/delete/{id}', [AdminLoginController::class, 'delete'])->name('complain.delete')->middleware('guard');
 Route::get('/adlogin/addash/view/edit/{id}', [AdminLoginController::class, 'edit'])->name('complain.edit')->middleware('guard');
 Route::post('/adlogin/addash/view/update/{id}', [AdminLoginController::class, 'update'])->name('complain.update')->middleware('guard');

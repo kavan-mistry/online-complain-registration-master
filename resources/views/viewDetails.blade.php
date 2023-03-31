@@ -150,8 +150,10 @@
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
-                            <img src="{{ asset('storage/' . str_replace('public/', '', $complain->file)) }}"
-                                class="img-fluid img-thumbnail" id="up-img2" alt="Complaint Image">
+                            @foreach ($images as $image)
+                                <img src="{{ asset('storage/' . str_replace('public/', '', $image->url)) }}"
+                                    class="img-fluid img-thumbnail" id="up-img2" alt="Complaint Image">
+                            @endforeach
                         </li>
                     </ul>
                     @if (isset($complain->file_update))
@@ -179,24 +181,6 @@
             @endforeach
 
         </div>
-        {{-- <div>
-                <p>Complaint ID: {{ $complain->complain_id }}</p>
-                <p>Name: {{ $complain->name }}</p>
-                <p>Email: {{ $complain->email }}</p>
-                <p>Address: {{ $complain->address }}</p>
-                <p>City: {{ $complain->city }}</p>
-                <p>State: {{ $complain->state }}</p>
-                <p>Zip: {{ $complain->zip }}</p>
-                <p>Problem Type: {{ $complain->pt }}</p>
-                <p>Department: {{ $complain->dept }}</p>
-                <p>Mobile Number: {{ $complain->mob }}</p>
-                <p>Problem Description: {{ $complain->pd }}</p> --}}
-        {{-- <img src="{{ url('storage/app/' . $complain->file) }}" class="img-thumbnail" alt="Complaint Image"> --}}
-        {{-- <img src="{{ asset('storage/' . str_replace('public/', '', $complain->file)) }}"
-                    class="img-fluid img-thumbnail" alt="Complaint Image">
-            </div> --}}
-
-        {{-- <button type="submit" class="btn btn-primary m-3" url={{ url('login/dash') . '/' . $cid . '/view' }}>back</button> --}}
 
     </div>
 

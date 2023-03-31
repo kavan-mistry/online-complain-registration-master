@@ -42,19 +42,19 @@
                                 <i class="bi bi-card-list me-1"></i>Complain list </a>
                         </li>
                         <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
-                                        class="bi bi-person-circle"></i> {{ ucwords($customer->name) }} </a>
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    {{-- <a href="/reset-pass" class="dropdown-item"><i class="bi bi-envelope-exclamation me-1"></i>Change Email</a> --}}
-                                    <a href="/reset-pass" class="dropdown-item"><i class="bi bi-arrow-clockwise me-1"></i>Change password</a>
-                                    <div class="dropdown-divider"></div>
-                                    <div class="d-flex justify-content-center">
-                                        <a name="" id="" class="btn btn-danger"
-                                        href="{{ url('/logout') }}" role="button"><i class="bi bi-door-open"></i>
-                                        Log out</a>
-                                    </div>
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
+                                    class="bi bi-person-circle"></i> {{ ucwords($customer->name) }} </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a href="/login/edit_profile" class="dropdown-item"><i class="bi bi-person-fill-gear me-1"></i>Edit Profile</a>
+                                <a href="/reset-pass" class="dropdown-item"><i class="bi bi-arrow-clockwise me-1"></i>Change password</a>
+                                <div class="dropdown-divider"></div>
+                                <div class="d-flex justify-content-center">
+                                    <a name="" id="" class="btn btn-danger"
+                                    href="{{ url('/logout') }}" role="button"><i class="bi bi-door-open"></i>
+                                    Log out</a>
                                 </div>
-                            </li>
+                            </div>
+                        </li>
                     </ul>
                 </div> <!-- navbar-collapse.// -->
             </div> <!-- container-fluid.// -->
@@ -134,56 +134,25 @@
                     </span>
                 </div>
                 <div class="col-md-4">
-                    <label for="inputState" class="form-label col-form-label-sm">Problem type</label>
-                    <select id="inputState" name="pt" class="form-select form-select-sm">
-                        <option selected value="0">Choose...</option>
+                    <label class="form-label col-form-label-sm">Problem type</label>
+                    
+                    <select name="pt" class="form-select form-select-sm">
+                        <option value="">Choose...</option>
                         @foreach ($problem_types as $p_t)
-                            <option value="{{ $p_t }}">{{ $p_t }}</option>
+                            <option value="{{ $p_t->problems }}" {{ old('pt') == $p_t->problems ? 'selected' : '' }}>
+                                {{ $p_t->problems }}
+                            </option>
                         @endforeach
                     </select>
+                    
                     <span class="text-danger col-form-label-sm">
                         @error('pt')
                             {{ $message }}
                         @enderror
                     </span>
                 </div>
-                <div class="col-md-4">
-                    <label for="inputStateDept" class="form-label col-form-label-sm" hidden>Department</label>
-                    <input type="hidden" id="inputStateDept" name="dept" value="">
-                    <select id="inputStateDeptVisible" class="form-select form-select-sm" hidden>
-                        <option selected value="0">Choose...</option>
-                        <option>water</option>
-                        <option>electricity</option>
-                        <option>genaral</option>
-                        <option>cleaning</option>
-                        <option>repair</option>
-                    </select>
-                    <span class="text-danger col-form-label-sm" hidden>
-                        @error('dept')
-                            {{ $message }}
-                        @enderror
-                    </span>
-                </div>
+                
 
-                <script>
-                    $(function() {
-                        var inputStatePt = $('#inputState[name="pt"]');
-                        var inputStateDeptVisible = $('#inputStateDeptVisible');
-                        var inputStateDept = $('#inputStateDept');
-
-                        inputStatePt.on('change', function() {
-                            var problemType = $(this).val();
-                            var department = problemToDept[problemType];
-                            if (department) {
-                                inputStateDeptVisible.val(department).attr('disabled', true);
-                                inputStateDept.val(department);
-                            } else {
-                                inputStateDeptVisible.val('0').attr('disabled', false);
-                                inputStateDept.val('');
-                            }
-                        });
-                    });
-                </script>
 
                 <div class="col-md-4">
                     <label for="inputPassword4" class="form-label col-form-label-sm">Contact number</label>
@@ -207,8 +176,8 @@
                 </div>
                 <div class="col-6">
                     <label for="formFileSm" class="form-label col-form-label-sm">Upload Problem Image</label>
-                    <input class="form-control form-control-sm" name="file" id="formFileSm" type="file" onchange="readURL(this);"
-                        accept="image/*">
+                    <input class="form-control form-control-sm" name="file[]" id="files" type="file" onchange="loadFile(event);"
+                        accept="image/*" multiple>
                     <span class="text-danger col-form-label-sm">
                         @error('file')
                             {{ $message }}
@@ -219,7 +188,9 @@
                     <div>
                         <label for="formFileSm" class="form-label col-form-label-sm">Uploaded Image Preview</label>
                     </div>
-                    <img class="img-fluid img-thumbnail" style="width: 15vw;" id="blah" src="#"  />
+                    {{-- <img class="img-fluid img-thumbnail" style="width: 15vw;" id="blah" src="#"  /> --}}
+                    <div id="preview"></div>
+                    {{-- <ul id="image-list"></ul> --}}
                 </div>
                 <div class="col-12 mt-3 mb-3 d-flex justify-content-center">
                     <button type="submit" class="btn btn-primary"><i class="bi bi-arrow-up-circle me-1"></i>Submit complain</button>
@@ -237,6 +208,8 @@
     </footer> --}}
 
     <script src="{{ asset('/js/dash.js') }}"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">

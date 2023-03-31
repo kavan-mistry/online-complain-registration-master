@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Complain;
 use App\Models\customer;
+use App\Models\Problem_types;
 use App\Models\User;
 use PharIo\Manifest\Url;
 use Error;
@@ -58,36 +59,14 @@ class   CustomerLoginController extends Controller
         'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'West Bengal'
     ];
 
-    public $problem_types = [
-        'Ac-Fridge-water cooler etc. not working ( Muni Hospital-Office Bldg)',
-        'Any Ele. Problem in Swimminig Pool OR releated Pump,Motor Etc.',
-        'Application done but not resolved-Property Tax',
-        'Application Not Yet Approved - Swimming',
-        'Applied For Entry But Still Not Approved - GYM',
-        'Applied For The License But Not Yet Received',
-        'Balvatika',
-        'Basic Needs Like Water, Light and Fan Repairing - Library',
-        'Cleaners Not Coming - SWM',
-        'Clearing off the Big Dead Animals',
-        'Clearing off the Dead Animals',
-        'Coach is Irregular/Remains Absent - Swimming',
-        'Contaminated Water/Dirty Surroundings Causes Mosquito Reproduction',
-        'Deep Pit - Large settlement of road',
-        'Delay In Issuing The certificates -  - Birth/Death/Marriage Certificate',
-        'Emptying The Dustbins',
-        'Footpath Repairing Required',
-        'Watering is Not Proper/Regular - Garden',
-        'Waterlogged Due To Rain',
-        'Water timing related'
-    ];
-
+    
     public function dash()
     {
         $cid = session()->get('cid');
         $customer = customer::where('customer_id', $cid)->first();
 
         $states = $this->states;
-        $problem_types = $this->problem_types;
+        $problem_types = Problem_types::get();
 
         $data = compact('cid', 'customer', 'states', 'problem_types');
         return view('dash')->with($data);
@@ -96,7 +75,7 @@ class   CustomerLoginController extends Controller
     public function viewComp(Request $request)
     {
         // $this->problem_types[] = 'problem_types';
-        $problem_types = $this->problem_types;
+        $problem_types = Problem_types::get();
         $search = $request['search'] ?? "";
         $pt = $request['pt'];
         //print_r($dept);
@@ -104,19 +83,19 @@ class   CustomerLoginController extends Controller
         // print_r($customer_id);
         $user = Customer::where('customer_id', $customer_id)->value('name');
         session()->put('user',$user);
-        $complain = Complain::where('customer_id', $customer_id)->orderBy('complain_id' ,'desc')->sortable()->paginate(7);
+        $complain = Complain::where('customer_id', $customer_id)->orderBy('complain_id' ,'desc')->get();
         //if ($request->isMethod('post')) {
         if ($pt != "" && $search != "") {
             // print_r("sss");
             // echo $search;
             // echo $dept;
             // die;
-            $complain = Complain::sortable()->where([
+            $complain = Complain::where([
                 // ['customer_id', '=', $customer_id],
                 ['name', 'LIKE', "%$search%"],
                 ['pt', '=', "$pt"],
                 ['customer_id', $customer_id]
-            ])->orderBy('complain_id' ,'desc')->paginate(7)->appends(['pt' => $pt, 'search' => $search]);
+            ])->orderBy('complain_id' ,'desc')->get();
             /* echo "<pre>";
                 print_r($complain);
                 die; */
@@ -124,16 +103,16 @@ class   CustomerLoginController extends Controller
             // print_r("jjii");
             // echo 'hi';
             // die;
-            $complain = Complain::sortable()->where([
+            $complain = Complain::where([
                 ['pt', '=', "$pt"],
                 ['customer_id', $customer_id]
-            ])->orderBy('complain_id' ,'desc')->paginate(7)->appends(['pt' => $pt]);
+            ])->orderBy('complain_id' ,'desc')->get();
         } elseif ($search != "") {
             // print_r("qaqaqa");
-            $complain = Complain::sortable()->where([
+            $complain = Complain::where([
                 ['name', 'LIKE', "%$search%"],
                 ['customer_id', $customer_id]
-            ])->orWhere('email', 'LIKE', "%$search%")->orderBy('complain_id' ,'desc')->paginate(7);
+            ])->orWhere('email', 'LIKE', "%$search%")->orderBy('complain_id' ,'desc')->get();
         }
         //}
 

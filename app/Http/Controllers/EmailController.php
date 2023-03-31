@@ -106,7 +106,7 @@ class EmailController extends Controller
         var_dump($customer_new_valid);
         // die;
         if($customer_new_valid == null){
-            echo "inside";
+            // echo "inside";
             Mail::send('emailTemp', ['data' => $data], function ($message) use ($data) {
                 $message->to($data['email'])->subject($data['title']);
             });
@@ -123,7 +123,7 @@ class EmailController extends Controller
 
         }
         else{
-            echo "outside";
+            // echo "outside";
             return redirect()->back()->with('error', 'Mail already exists! try new mail id');
         }
 
@@ -139,7 +139,7 @@ class EmailController extends Controller
         // die;
         if (isset($customer)) {
             $datetime = now();
-            $customer = Customer::find($customer[0]['customer_id']);
+            $customer = Customer::find($customer['customer_id']);
             $customer->email_verified_at = $datetime;
             $customer->remember_token = "";
             $customer->is_verified = 1;

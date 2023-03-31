@@ -9,9 +9,12 @@ use Kyslik\ColumnSortable\Sortable;
 
 class Complain extends Model
 {
-    use HasFactory, Sortable;
+    use HasFactory;
     protected $table = "complain";
     protected $primaryKey = "complain_id";
 
-    public $sortable = ['complain_id', 'name', 'email', 'address' , 'city' , 'pt' , 'state' , 'zip' , 'dept'];
+    public function images()
+    {
+        return $this->hasMany('App\Image', 'complain_id');
+    }
 }
