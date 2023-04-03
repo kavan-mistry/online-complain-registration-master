@@ -6,6 +6,7 @@ use App\Models\admin;
 use App\Models\Complain;
 use App\Models\customer;
 use App\Models\department;
+use App\Models\Image;
 use App\Models\Problem_types;
 use Illuminate\Http\Request;
 
@@ -138,7 +139,8 @@ class AdminLoginController extends Controller
             $states = $this->states;
             $problem_types = Problem_types::get('problems');
             $url = url('/adlogin/addash/view/update') . "/" . $id;
-            $data = compact('complain', 'url', 'states', 'problem_types');
+            $images = Image::where('complain_id', $id)->get();
+            $data = compact('complain', 'url', 'states', 'problem_types', 'images');
             // print_r($data);
             return view('editComplain')->with($data, $url);
         }

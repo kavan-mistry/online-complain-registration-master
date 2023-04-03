@@ -101,15 +101,15 @@
                             @if (isset($pt))
                                 <select name="pt" class="form-select form-select-sm ms-2">
                                     @foreach ($problem_types as $pt1)
-                                        <option value="{{ $pt1 }}" {{ $pt == $pt1 ? 'selected' : '' }}>
-                                            {{ $pt1 }}</option>
+                                        <option value="{{ $pt1 }}" {{ $pt == $pt1->problems ? 'selected' : '' }}>
+                                            {{ $pt1->problems }}</option>
                                     @endforeach
                                 </select>
                             @else
                                 <select name="pt" class="form-select form-select-sm">
                                     <option value="">Choose...</option>
                                     @foreach ($problem_types as $p_t)
-                                        <option value="{{ $p_t }}">{{ $p_t }}</option>
+                                        <option value="{{ $p_t->problems }}" >{{ $p_t->problems }}</option>
                                     @endforeach
                                 </select>
                             @endif
@@ -182,13 +182,14 @@
                                 <td>
 
                                     <a href="{{ route('detail.view', ['comp_id' => $complains->complain_id]) }}">
-                                        <button type="button" class="btn btn-sm btn-outline-success"><i
+                                        <button type="button" class="btn btn-sm btn-outline-success m-1"><i
                                                 class="bi bi-eye-fill me-1"></i>view</button>
+                                    </a>
                                         <a href="{{ route('complain.close', ['id' => $complains->complain_id]) }}"
                                             onclick="return confirm(`Are you sure you want to Close
 Id : {{ $complains->complain_id }}  
 Problem : {{ $complains->pt }} ?`)">
-                                            <button type="button" class="btn btn-sm btn-outline-danger"><i
+                                            <button type="button" class="btn btn-sm btn-outline-danger m-1"><i
                                                     class="bi bi-x-circle-fill me-1"></i>close</button></a>
                                     </a>
                                 </td>

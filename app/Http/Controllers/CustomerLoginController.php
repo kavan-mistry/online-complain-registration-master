@@ -101,12 +101,13 @@ class   CustomerLoginController extends Controller
                 die; */
         } elseif ($pt != "") {
             // print_r("jjii");
-            // echo 'hi';
-            // die;
             $complain = Complain::where([
                 ['pt', '=', "$pt"],
                 ['customer_id', $customer_id]
-            ])->orderBy('complain_id' ,'desc')->get();
+                ])->get();
+                // echo "<pre>";
+                // print_r($complain);
+                // die;
         } elseif ($search != "") {
             // print_r("qaqaqa");
             $complain = Complain::where([

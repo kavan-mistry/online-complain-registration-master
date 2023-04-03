@@ -104,9 +104,6 @@
                         <label for="inputState" class="form-label col-form-label-sm">State</label>
                         <select id="inputState" name="state" class="form-select form-select-sm" disabled>
                             <option>{{ $complain->state }}</option>
-                            <option>Gujarat</option>
-                            <option>Rajasthan</option>
-                            <option>panjab</option>
                         </select>
                         <span class="text-danger col-form-label-sm">
                             @error('state')
@@ -128,9 +125,6 @@
                         <label for="inputState" class="form-label col-form-label-sm">problem type</label>
                         <select id="inputState" name="pt" class="form-select form-select-sm" disabled>
                             <option>{{ $complain->pt }}</option>
-                            <option>water leakage</option>
-                            <option>electric wire brokan</option>
-                            <option>dranage problem</option>
                         </select>
                         <span class="text-danger col-form-label-sm">
                             @error('pt')
@@ -142,9 +136,6 @@
                         <label for="inputState" class="form-label col-form-label-sm">Department</label>
                         <select id="inputState" name="dept" class="form-select form-select-sm" disabled>
                             <option>{{ $complain->dept }}</option>
-                            <option>water</option>
-                            <option>electricity</option>
-                            <option>disaster</option>
                         </select>
                         <span class="text-danger col-form-label-sm">
                             @error('dept')
@@ -172,10 +163,12 @@
                             @enderror
                         </span>
                     </div>
-                    <div class="col-6 m-auto mt-3">
+                    <div class="col-9 m-auto mt-3">
                         <label class="form-label col-form-label-sm">Customer Uploaded Image</label>
-                        <img src="{{ asset('storage/' . str_replace('public/', '', $complain->file)) }}"
-                            class="img-thumbnail" id="up-img" alt="Complaint Image">
+                        @foreach ($images as $image)
+                            <img src="{{ asset('storage/' . str_replace('public/', '', $image->url)) }}"
+                                class="img-fluid img-thumbnail" id="up-img3" alt="Complaint Image">
+                        @endforeach
                     </div>
                     @if (isset($complain->file_update))
                         <div class="col-6 m-auto mt-3">
@@ -184,7 +177,7 @@
                                 class="img-thumbnail" id="up-img" alt="Complaint Image">
                         </div>
                     @endif
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <label class="form-label col-form-label-sm">Status</label>
                         <label for="" hidden>
                             {{ session()->get('status') }}
@@ -218,7 +211,7 @@
                     <div class="col-6">
                         <label for="formFileSm" class="form-label col-form-label-sm">Update Work Of Proof</label>
                         <input class="form-control form-control-sm" name="update_file" id="formFileSm"
-                            type="file" onchange="readURL(this);" accept="image/*" >
+                            type="file" onchange="readURL(this);" accept="image/*">
                         <span class="text-danger col-form-label-sm">
                             @error('file')
                                 {{ $message }}
@@ -233,8 +226,10 @@
                         <img class="img-fluid img-thumbnail" style="width: 15vw;" id="blah" src="#" />
                     </div>
                     <div class="col-12 mt-3 mb-3 d-flex justify-content-center">
-                        <button type="submit" class="btn btn-primary"><i class="bi bi-pencil me-1"></i>Edit complain</button>
-                        <a href="{{ url('/deptlogin/deptdash') }}" class="btn btn-warning ms-2"><i class="bi bi-x-circle me-1"></i>Cancel</a>
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-pencil me-1"></i>Edit
+                            complain</button>
+                        <a href="{{ url('/deptlogin/deptdash') }}" class="btn btn-warning ms-2"><i
+                                class="bi bi-x-circle me-1"></i>Cancel</a>
                     </div>
                 </form>
         </div>

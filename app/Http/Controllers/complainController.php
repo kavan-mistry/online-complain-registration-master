@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Complain;
 use App\Models\department;
 use App\Models\Image;
+use App\Models\Problem_types;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class complainController extends Controller
     public function complain(Request $request)
     {
         $cid = Session()->get('cid');
-        // $prt = $request['prt'];
+        $prt = $request['pt'];
         // echo $prt;
         // die('x');
         // $aa = $request->all();
@@ -38,13 +39,22 @@ class complainController extends Controller
                 'state' => 'required|not_in:0',
                 'zip' => 'required',
                 'pt' => 'required|not_in:0',
-                'dept' => 'required|not_in:0',
+                // 'dept' => 'required|not_in:0',
                 'pd' => 'required',
-                // 'file' => 'required|mimes:jpeg,png,jpg'
+                'file' => 'required'
             ]
         );
 
-        $department_id = department::where('department', $request['dept'])->value('department_id');
+        $department_id = Problem_types::where('problems',$prt)->first();
+        foreach($department_id->departments as $p){
+            $p->department;
+            $departmentName = $p->department;
+        }
+        // echo"<pre>";
+        // print_r($departmentName);
+        // die;
+
+          
 
         // echo "<pre>";
         // print_r($request->all());
@@ -65,9 +75,9 @@ class complainController extends Controller
         $complain->city = $request['city'];
         $complain->state = $request['state'];
         $complain->zip = $request['zip'];
-        $complain->pt = $request['prt'];
-        $complain->dept = $request['dept'];
-        $complain->department_id = $department_id;
+        $complain->pt = $prt;
+        $complain->dept = $departmentName;
+        $complain->department_id = $department_id['department'];
         $complain->pd = $request['pd'];
         $complain->save();
         

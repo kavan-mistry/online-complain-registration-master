@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\department;
 use App\Models\Complain;
+use App\Models\Image;
 use Illuminate\Http\Request;
 
 class DeptLoginController extends Controller
@@ -83,6 +84,7 @@ class DeptLoginController extends Controller
     public function deptedit($de, $id)
     {
         $complain = Complain::find($id);
+        $images = Image::where('complain_id', $id)->get();
         if (is_null($complain)) {
             $url = url('/deptlogin/deptdash') . "/" . $de;
             return redirect($url, $de);
@@ -90,7 +92,7 @@ class DeptLoginController extends Controller
             $url = url('/deptlogin/deptdash') . "/" . $de . "/update" . "/" . $id;
             // $url = url('/deptlogin/deptdash/{de}/update/{id}') ."/". $id;
             // echo $url;
-            $data = compact('complain', 'url', 'de', 'id');
+            $data = compact('complain', 'url', 'de', 'id', 'images');
             // echo "<pre>";
             // print_r($data);
             return view('deptEditComplain')->with($data, $url, $de);

@@ -99,7 +99,8 @@
                     <select id="inputState" name="state" class="form-select form-select-sm">
                         <option selected value="0">Choose...</option>
                         @foreach ($states as $state)
-                            <option value="{{ $state }}" {{ old('state', $complain->state) == $state ? 'selected' : '' }}>
+                            <option value="{{ $state }}"
+                                {{ old('state', $complain->state) == $state ? 'selected' : '' }}>
                                 {{ $state }}</option>
                         @endforeach
                     </select>
@@ -124,7 +125,8 @@
                     <select id="inputState" name="pt" class="form-select form-select-sm" disabled>
                         <option selected value="0">Choose...</option>
                         @foreach ($problem_types as $p_t)
-                            <option value="{{ $p_t }}" {{ old('pt', $complain->pt) == $p_t ? 'selected' : '' }}>{{ $p_t }}</option>
+                            <option value="{{ $p_t }}"
+                                {{ old('pt', $complain->pt) == $p_t ? 'selected' : '' }}>{{ $p_t }}</option>
                         @endforeach
                     </select>
                     <span class="text-danger col-form-label-sm">
@@ -137,7 +139,8 @@
                     <label for="inputState" class="form-label col-form-label-sm">Department</label>
                     <select id="inputState" name="dept" class="form-select form-select-sm" disabled>
                         @foreach (['water', 'electricity', 'general', 'cleaning', 'repair'] as $dept)
-                            <option value="{{ $dept }}" {{ old('dept',$complain->dept) == $dept ? 'selected' : '' }}>
+                            <option value="{{ $dept }}"
+                                {{ old('dept', $complain->dept) == $dept ? 'selected' : '' }}>
                                 {{ ucfirst($dept) }}</option>
                         @endforeach
                     </select>
@@ -167,13 +170,15 @@
                         @enderror
                     </span>
                 </div>
-                <div class="col-6 m-auto m-3">
+                <div class="col-12 m-auto">
                     <label class="form-label col-form-label-sm">Customer Uploaded Image</label>
-                    <img id="up-img" src="{{ asset('storage/' . str_replace('public/', '', $complain->file)) }}"
-                        class="img-thumbnail mt-2" alt="Complaint Image">
+                    @foreach ($images as $image)
+                        <img src="{{ asset('storage/' . str_replace('public/', '', $image->url)) }}"
+                            class="img-fluid img-thumbnail" id="up-img4" alt="Complaint Image">
+                    @endforeach
                 </div>
                 @if (isset($complain->file_update))
-                    <div class="col-6 m-auto mt-3">
+                    <div class="col-12 m-auto mt-3">
                         <label class="form-label col-form-label-sm">Department Work Proof Image</label>
                         <img id="up-img"
                             src="{{ asset('storage/' . str_replace('public/', '', $complain->file_update)) }}"
@@ -182,11 +187,16 @@
                 @endif
                 <div class="col-md-4">
                     <label for="inputEmail4" class="form-label col-form-label-sm">Status</label>
-                    <select id="inputState" name="status" class="form-select form-select-sm" onchange="showDiv(this)">
-                        <option value="1" {{ old( 'status' ,$complain->status) == 1 ? 'selected' : '' }}>active</option>
-                        <option value="0" {{ old( 'status' ,$complain->status) == 0 ? 'selected' : '' }}>solved</option>
-                        <option value="2" {{ old( 'status' ,$complain->status) == 2 ? 'selected' : '' }}>pending</option>
-                        <option value="3" {{ old( 'status' ,$complain->status) == 3 ? 'selected' : '' }}>rejected</option>
+                    <select id="inputState" name="status" class="form-select form-select-sm"
+                        onchange="showDiv(this)">
+                        <option value="1" {{ old('status', $complain->status) == 1 ? 'selected' : '' }}>active
+                        </option>
+                        <option value="0" {{ old('status', $complain->status) == 0 ? 'selected' : '' }}>solved
+                        </option>
+                        <option value="2" {{ old('status', $complain->status) == 2 ? 'selected' : '' }}>pending
+                        </option>
+                        <option value="3" {{ old('status', $complain->status) == 3 ? 'selected' : '' }}>rejected
+                        </option>
                     </select>
                     <span class="text-danger col-form-label-sm">
                         @error('state')
@@ -194,7 +204,7 @@
                         @enderror
                     </span>
                 </div>
-                <div >
+                <div>
                     <label class="form-label col-form-label-sm">Reason for Rejection</label>
                     <textarea name="rejection_reason" class="form-control form-control-sm">{{ $complain->rejection_reason }}
                     </textarea>
