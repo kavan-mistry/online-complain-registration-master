@@ -3,6 +3,7 @@
 
 <head>
     <title>complain view</title>
+    @notifyCss
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -54,7 +55,8 @@
                                         class="bi bi-people-fill me-1"></i></i>Customer list </a>
                                 <a class="dropdown-item" href="{{ url('/adlogin/addash/customer_list_blocked') }}">
                                     <i class="bi bi-person-fill-slash me-1"></i>Blocked Customer list </a>
-
+                                <a href="" data-bs-toggle="modal" data-bs-target="#staticBackdrop3"
+                                    class="dropdown-item"><i class="bi bi-unlock me-1"></i>Edit password</a>
                                 <div class="dropdown-divider"></div>
                                 <div class="d-flex justify-content-center">
                                     <a name="" id="" class="btn btn-danger" href="{{ url('/logout') }}"
@@ -69,13 +71,72 @@
         </nav>
     </section>
 
-    @if (session('success'))
-        <div class="container d-flex alert alert-success alert-dismissible fade show my-3 text-center justify-content-center"
-            role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    @include('notify::components.notify')
+    <x-notify::notify />
+    @notifyJs
+
+    {{--------- edit password model --------}}
+
+    <div class="modal fade" id="staticBackdrop3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form action="{{ url('/adlogin/addash/change_pass') }}" method="post">
+                    @csrf
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Password</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="" class="form-label">New Password</label>
+                            <input type="password" class="form-control" name="password" id="password">
+                            <i class="bi bi-eye-slash" id="togglePassword"
+                                style="
+                                position: relative;
+                                bottom: 30px;
+                                right: -27rem;"></i>
+                            <div class="er d-flex" style="position: relative; top: -21px">
+                                <span class="form-text text-danger">
+                                    @error('password')
+                                        {{ $message }}
+                                    @enderror
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="" class="form-label">Confirm new password</label>
+                            <input type="password" class="form-control" name="password_confirmation" id="password2">
+                            <i class="bi bi-eye-slash" id="togglePassword2"
+                                style="
+                                position: relative;
+                                bottom: 30px;
+                                right: -27rem;"></i>
+                            <div class="er d-flex" style="position: relative; top: -21px">
+                                <span class="form-text text-danger">
+                                    @error('password_confirmation')
+                                        {{ $message }}
+                                    @enderror
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i
+                                class="bi bi-x-circle me-1"></i>Cancel</button>
+                        <button type="submit" class="btn btn-success"><i
+                                class="bi bi-check2-circle me-1"></i>Change</button>
+                    </div>
+                </form>
+            </div>
         </div>
-    @endif
+    </div>
+
+    {{----------- end edit password model ------------}}
+
 
     <div class="mt-3 d-flex justify-content-center">
         <div class="col-lg-10  d-flex justify-content-end">
@@ -87,10 +148,10 @@
     </div>
 
 
-    <!-- Modal HTML Markup -->
+    <!-- Modal 1 HTML Markup -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <form action="{{ url('/adlogin/addash/department') }}" method="post">
                     <div class="modal-header">
@@ -101,7 +162,7 @@
                         @csrf
                         <div class="mb-3">
                             <label for="" class="form-label">Department Name</label>
-                            <input type="text" class="form-control" name="department_name" id="">
+                            <input type="text" class="form-control" name="department_name">
                             <div class="er d-flex">
                                 <span class="form-text text-danger">
                                     @error('department_name')
@@ -113,7 +174,7 @@
 
                         <div class="mb-3">
                             <label for="" class="form-label">Department Email</label>
-                            <input type="email" class="form-control" name="department_email" id="">
+                            <input type="email" class="form-control" name="department_email">
                             <div class="er d-flex">
                                 <span class="form-text text-danger">
                                     @error('department_email')
@@ -123,9 +184,14 @@
                             </div>
                         </div>
 
-                        <div class="mb-3">
+                        <div class="">
                             <label for="" class="form-label">Password</label>
-                            <input type="password" class="form-control" name="password" id="">
+                            <input type="password" class="form-control" name="password" id="password">
+                            <i class="bi bi-eye-slash" id="togglePassword"
+                                style="
+                                position: relative;
+                                bottom: 31px;
+                                right: -27rem;"></i>
                             <div class="er d-flex">
                                 <span class="form-text text-danger">
                                     @error('password')
@@ -135,9 +201,14 @@
                             </div>
                         </div>
 
-                        <div class="mb-3">
+                        <div class="">
                             <label for="" class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" name="password_confirmation" id="">
+                            <input type="password" class="form-control" name="password_confirmation" id="password2">
+                            <i class="bi bi-eye-slash" id="togglePassword2"
+                                style="
+                                position: relative;
+                                bottom: 31px;
+                                right: -27rem;"></i>
                             <div class="er d-flex">
                                 <span class="form-text text-danger">
                                     @error('password_confirmation')
@@ -159,6 +230,91 @@
         </div>
     </div>
 
+    {{-- ----------- model 1 end ------------ --}}
+
+
+    <!------------- Modal 2 HTML Markup ------------->
+    @foreach ($department_data as $department)
+        <div class="modal fade" id="staticBackdrop2{{ $department->department_id }}" data-bs-backdrop="static"
+            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content ">
+                    <form action="{{ url('/adlogin/addash/department/') . '/' . $department->department_id }}"
+                        method="post">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Department</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="" class="form-label">Department Name</label>
+                                <input type="text" class="form-control" name="department_name"
+                                    value="{{ $department->department }}">
+                                <div class="er d-flex">
+                                    <span class="form-text text-danger">
+                                        @error('department_name')
+                                            {{ $message }}
+                                        @enderror
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="" class="form-label">Department Email</label>
+                                <input type="email" class="form-control" name="department_email"
+                                    value="{{ $department->email }}">
+                                <div class="er d-flex">
+                                    <span class="form-text text-danger">
+                                        @error('department_email')
+                                            {{ $message }}
+                                        @enderror
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label for="" class="form-label">Change Password</label>
+                                <input type="password" class="form-control" name="password" id="password3">
+
+                                <div class="er d-flex">
+                                    <span class="form-text text-danger">
+                                        @error('password')
+                                            {{ $message }}
+                                        @enderror
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <label for="" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" name="password_confirmation"
+                                    id="password4">
+
+                                <div class="er d-flex">
+                                    <span class="form-text text-danger">
+                                        @error('password_confirmation')
+                                            {{ $message }}
+                                        @enderror
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i
+                                    class="bi bi-x-circle me-1"></i>Cancel</button>
+                            <button type="submit" class="btn btn-success"><i
+                                    class="bi bi-check2-circle me-1"></i>Edit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endforeach
+    {{-- ----------- model 2 end ------------ --}}
+
 
     <div class="container-sm position-relative table-z">
         <div class="table-responsive mt-4" style="width: 100%;">
@@ -169,7 +325,7 @@
                         <th>Department Name</th>
                         <th>Department Email</th>
                         {{-- <th>Password</th> --}}
-                        <th>Action</th>
+                        <th class="no-sort">Action</th>
                     </tr>
                 </thead>
                 <tbody class="">
@@ -182,12 +338,17 @@
                                 {{-- <td>{{ $department->password }}</td> --}}
                                 <td>
                                     <div class="container gap-2 d-flex">
+
+                                        <button type="button" class="btn btn-sm btn-outline-primary"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#staticBackdrop2{{ $department->department_id }}">
+                                            <i class="bi bi-pencil me-1"></i>Edit
+                                        </button>
+
                                         <a href="{{ route('department.delete', ['id' => $department->department_id]) }}"
-                                            onclick="return confirm(`Are you sure you want to delete department ?
-Id : {{ $department->department_id }}
-Name : {{ $department->department }} `)">
-                                        <button type="button" class="btn btn-sm btn-outline-danger"><i
-                                                class="bi bi-person-slash me-1"></i>Delete</button>
+                                            onclick="return confirm(`Are you sure you want to delete {{ $department->department }} department ? `)">
+                                            <button type="button" class="btn btn-sm btn-outline-danger"><i
+                                                    class="bi bi-person-slash me-1"></i>Delete</button>
                                         </a>
                                     </div>
                                 </td>

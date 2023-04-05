@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Complain;
 use App\Models\department;
 use Error;
+use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 
 class WaterDepartmentMiddleware
@@ -30,7 +31,7 @@ class WaterDepartmentMiddleware
         );
         
         if(isset($user)){
-            if($request['password'] == $user['password']){
+            if(Hash::check($request['password'], $user['password'])){
                 $department = $user->department;
                 session()->put('department', $department);
                 return $next($request);

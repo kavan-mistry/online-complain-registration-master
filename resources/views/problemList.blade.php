@@ -3,6 +3,7 @@
 
 <head>
     <title>complain view</title>
+    @notifyCss
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -56,6 +57,8 @@
                                     <i class="bi bi-person-fill-slash me-1"></i>Blocked Customer list </a>
                                 <a href="/adlogin/addash/department" class="dropdown-item"><i
                                         class="bi bi-gear-fill me-1"></i>Department</a>
+                                <a href="" data-bs-toggle="modal" data-bs-target="#staticBackdrop3"
+                                    class="dropdown-item"><i class="bi bi-unlock me-1"></i>Edit password</a>
                                 <div class="dropdown-divider"></div>
                                 <div class="d-flex justify-content-center">
                                     <a name="" id="" class="btn btn-danger" href="{{ url('/logout') }}"
@@ -70,14 +73,17 @@
         </nav>
     </section>
 
+    @include('notify::components.notify')
+    <x-notify::notify />
+    @notifyJs
 
-    @if (session('success'))
+    {{-- @if (session('success'))
         <div class="container d-flex alert alert-success alert-dismissible fade show my-3 text-center justify-content-center"
             role="alert">
             {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    @endif
+    @endif --}}
 
     <div class="mt-3 d-flex justify-content-center">
         <div class="col-lg-10  d-flex justify-content-end">
@@ -88,11 +94,74 @@
         </div>
     </div>
 
+    {{--------- edit password model --------}}
 
-    <!-- Modal HTML Markup -->
+    <div class="modal fade" id="staticBackdrop3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form action="{{ url('/adlogin/addash/change_pass') }}" method="post">
+                    @csrf
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Password</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="" class="form-label">New Password</label>
+                            <input type="password" class="form-control" name="password" id="password">
+                            <i class="bi bi-eye-slash" id="togglePassword"
+                                style="
+                                position: relative;
+                                bottom: 30px;
+                                right: -27rem;"></i>
+                            <div class="er d-flex" style="position: relative; top: -21px">
+                                <span class="form-text text-danger">
+                                    @error('password')
+                                        {{ $message }}
+                                    @enderror
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="" class="form-label">Confirm new password</label>
+                            <input type="password" class="form-control" name="password_confirmation" id="password2">
+                            <i class="bi bi-eye-slash" id="togglePassword2"
+                                style="
+                                position: relative;
+                                bottom: 30px;
+                                right: -27rem;"></i>
+                            <div class="er d-flex" style="position: relative; top: -21px">
+                                <span class="form-text text-danger">
+                                    @error('password_confirmation')
+                                        {{ $message }}
+                                    @enderror
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i
+                                class="bi bi-x-circle me-1"></i>Cancel</button>
+                        <button type="submit" class="btn btn-success"><i
+                                class="bi bi-check2-circle me-1"></i>Change</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{----------- end edit password model ------------}}
+
+
+    <!---------------- Modal 1 HTML Markup -------------->
+
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <form action="{{ url('/adlogin/addash/problem_list') }}" method="post">
                     <div class="modal-header">
@@ -142,6 +211,72 @@
         </div>
     </div>
 
+    {{-- ---------- model 1 end ------------- --}}
+
+    <!---------------- Modal 2 HTML Markup -------------->
+
+    @foreach ($problem_types as $problems)
+        <div class="modal fade" id="staticBackdrop2{{ $problems->id }}" data-bs-backdrop="static"
+            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form action="{{ url('/adlogin/addash/problem_list') . '/' . $problems->id }}" method="post">
+                        @csrf
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Problem and It's Department
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="" class="form-label">Problem Type</label>
+                                <input type="text" class="form-control" name="problem_type"
+                                    value="{{ $problems->problems }}">
+                                <div class="er d-flex">
+                                    <span class="form-text text-danger">
+                                        @error('problem_type')
+                                            {{ $message }}
+                                        @enderror
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="" class="form-label">Department</label>
+                                <select name="department" class="form-select">
+                                    @foreach ($departments as $dt)
+                                        {{-- <option value="{{ $dt->department_id }}">{{ $dt->department }}</option> --}}
+                                        <option value="{{ $dt->department_id }}"
+                                            {{ $dt->department_id == $problems->department ? 'selected' : '' }}>
+                                            {{ $dt->department }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <div class="er d-flex">
+                                    <span class="form-text text-danger">
+                                        @error('department')
+                                            {{ $message }}
+                                        @enderror
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i
+                                    class="bi bi-x-circle me-1"></i>Cancel</button>
+                            <button type="submit" class="btn btn-success"><i
+                                    class="bi bi-check2-circle me-1"></i>Edit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endforeach
+
+    {{-- ---------- model 2 end ------------- --}}
+
 
     <div class="container-sm position-relative table-z">
         <div class="table-responsive mt-4" style="width: 100%;">
@@ -151,7 +286,7 @@
                         <th>Id</th>
                         <th>Problem Type</th>
                         <th>Department</th>
-                        <th>Action</th>
+                        <th class="no-sort">Action</th>
                     </tr>
                 </thead>
                 <tbody class="">
@@ -167,11 +302,17 @@
                                 </td>
                                 <td>
                                     <div class="container gap-2 d-flex">
+                                        {{-- <a class="btn btn-sm btn-outline-primary" href="" role="button"><i class="bi bi-pencil me-1"></i>Edit</a> --}}
+                                        <button type="button" class="btn btn-sm btn-outline-primary"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#staticBackdrop2{{ $problems->id }}">
+                                            <i class="bi bi-pencil me-1"></i>Edit
+                                        </button>
+
                                         <a href="{{ route('problem_list.delete', ['id' => $problems->id]) }}"
-                                            onclick="return confirm(`Are you sure you want to block customer ?
-Id : {{ $problems->id }}
-Name : {{ $problems->problems }} `)">
-                                            <button type="button" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash3 me-1"></i>Delete</button>
+                                            onclick="return confirm(`Are you sure you want to delete {{ $problems->problems }} problem ? `)">
+                                            <button type="button" class="btn btn-sm btn-outline-danger"><i
+                                                    class="bi bi-trash3 me-1"></i>Delete</button>
                                         </a>
                                     </div>
                                 </td>

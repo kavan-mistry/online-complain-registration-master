@@ -31,16 +31,16 @@ use function GuzzleHttp\Promise\all;
 */
 
 
-Route::get('/', [LoginController::class, 'index']);
-Route::post('/', [LoginController::class, 'register']);
+Route::get('/', [LoginController::class, 'index'])->middleware('NotReturn');
+Route::post('/', [LoginController::class, 'register'])->middleware('NotReturn');
 
-Route::get('/login', [CustomerLoginController::class, 'index'])->name('login')->middleware('NotReturn');;
+Route::get('/login', [CustomerLoginController::class, 'index'])->name('login')->middleware('NotReturn');
 Route::post('/login', [CustomerLoginController::class, 'login'])->middleware('customerLogin', 'NotReturn');
 
 Route::get('send-verify-email/{email}', [EmailController::class, 'sendVerifyMail']);
 Route::get('verify/{tokan}', [EmailController::class, 'VerifyMail']);
-Route::get('resend-verify-email/{email}', [EmailController::class, 'resendVerifyMailView']);
-Route::post('resend-verify-email/{email}', [EmailController::class, 'resendVerifyMail']);
+Route::get('resend-verify-email/{email}', [EmailController::class, 'resendVerifyMailView'])->middleware('guard');
+Route::post('resend-verify-email/{email}', [EmailController::class, 'resendVerifyMail'])->middleware('guard');
 
 Route::post('/reset-email', [EmailController::class, 'resetMail']);
 
@@ -62,11 +62,14 @@ Route::get('/login/dash/view/details/{comp_id}', [viewDetailsController::class, 
 Route::get('/adlogin', [AdminLoginController::class, 'index'])->middleware('NotReturn');;
 Route::post('/adlogin', [AdminLoginController::class, 'adlogin']);
 
+Route::post('/adlogin/addash/change_pass', [AdminLoginController::class, 'change_pass'])->middleware('guard');
+
 Route::get('/adlogin/addash', [AdminLoginController::class, 'adhome'])->middleware('guard');
 Route::get('/adlogin/addash/view', [AdminLoginController::class, 'addash'])->middleware('guard');
 
 Route::get('/adlogin/addash/problem_list', [AdminProblemController::class, 'problem_list_view'])->middleware('guard');
 Route::post('/adlogin/addash/problem_list', [AdminProblemController::class, 'problem_list_add'])->middleware('guard');
+Route::post('/adlogin/addash/problem_list/{id}', [AdminProblemController::class, 'problem_list_edit'])->middleware('guard');
 Route::get('/adlogin/addash/problem_list/delete/{id}', [AdminProblemController::class, 'admin_department_delete'])->name('problem_list.delete')->middleware('guard');
 
 Route::get('/adlogin/addash/customer_list', [AdminLoginController::class, 'ad_cust_list'])->middleware('guard');
@@ -78,6 +81,7 @@ Route::get('/adlogin/addash/customer_list_blocked', [AdminLoginController::class
 
 Route::get('/adlogin/addash/department', [AdminDepartmentController::class, 'admin_department_view'])->middleware('guard');
 Route::post('/adlogin/addash/department', [AdminDepartmentController::class, 'admin_department_add'])->middleware('guard');
+Route::post('/adlogin/addash/department/{id}', [AdminDepartmentController::class, 'admin_department_edit'])->middleware('guard');
 Route::get('/adlogin/addash/department/delete/{id}', [AdminDepartmentController::class, 'admin_department_delete'])->name('department.delete')->middleware('guard');
 
 Route::get('/adlogin/addash/view/delete/{id}', [AdminLoginController::class, 'delete'])->name('complain.delete')->middleware('guard');

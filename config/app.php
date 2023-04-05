@@ -187,6 +187,7 @@ return [
          */
 
         Kyslik\ColumnSortable\ColumnSortableServiceProvider::class,
+        Mckenziearts\Notify\LaravelNotifyServiceProvider::class,
 
         /*
          * Application Service Providers...

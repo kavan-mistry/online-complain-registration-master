@@ -186,9 +186,9 @@
                             onchange="showDiv(this)">
                             <option value="1" {{ old('status', $complain->status) == 1 ? 'selected' : '' }}>
                                 active</option>
-                            <option value="0" {{ old('status', $complain->status) ? 'selected' : '' }}>solved
+                            <option value="0" {{ old('status', $complain->status) == 0 ? 'selected' : '' }}>solved
                             </option>
-                            <option value="2" {{ old('status', $complain->status) ? 'selected' : '' }}>pending
+                            <option value="2" {{ old('status', $complain->status) == 2 ? 'selected' : '' }}>pending
                             </option>
                             <option value="3" {{ old('status', $complain->status) == 3 ? 'selected' : '' }}>
                                 rejected</option>
@@ -199,8 +199,8 @@
                             @enderror
                         </span>
                     </div>
-                    <div id="" style="">
-                        <label class="form-label col-form-label-sm">Reason for Rejection</label>
+                    <div id="hidden_div" style="display:none">
+                        <label class="form-label col-form-label-sm">Reason for Rejection<span class="text-danger">*</span></label>
                         <textarea name="rejection_reason" class="form-control form-control-sm">{{ $complain->rejection_reason }}</textarea>
                         <span class="text-danger col-form-label-sm">
                             @error('rejection_reason')

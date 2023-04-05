@@ -3,6 +3,7 @@
 
 <head>
     <title>complain view</title>
+    @notifyCss
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -56,6 +57,10 @@
         </nav>
     </section>
 
+    @include('notify::components.notify')
+    <x-notify::notify />
+    @notifyJs
+
     <div class="container d-flex row m-auto">
 
         @if (session()->has('message'))
@@ -72,7 +77,7 @@
                     <input type="hidden" name="search" value="">
 
                     <input type="search" name="search" class="form-control form-control-sm me-4"
-                        placeholder="search here" value="{{ $search }}" autocomplete="off">
+                        placeholder="Search here" value="{{ $search }}" autocomplete="off">
                 </div>
                 <div class="form-group d-flex col-lg-2">
                     <button class="btn btn-sm btn-outline-success me-2 ms-2"><i

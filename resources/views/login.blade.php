@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>online complain registration</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{ asset('/css/login.css') }}">
     <link rel="stylesheet" href="{{ asset('/css/register.css') }}">
 
@@ -60,8 +61,13 @@
                     </span>
                 </div>
                 <div class="mb-3">
-                    <label for="" class="form-label col-form-label-sm">password</label>
-                    <input type="password" name="password" class="form-control form-control-sm" id="">
+                    <label for="" class="form-label col-form-label-sm">Password</label>
+                    <input type="password" name="password" class="form-control form-control-sm" id="password">
+                    <i class="bi bi-eye-slash" id="togglePassword"
+                        style="
+                    position: relative;
+                    bottom: 24px;
+                    right: -30rem;"></i>
                     <span class="text-danger col-form-label-sm" id="passError"></span>
                     <span class="text-danger col-form-label-sm">
                         @if (Session::has('errorPass'))

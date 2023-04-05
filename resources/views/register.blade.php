@@ -96,7 +96,7 @@
     </a>
     <div class="container-fluid d-flex mb-3 reg-two" id="reg-two" style="height: 110vh">
         <div class="container m-auto p-auto d-flex justify-content-center align-items-center row reg-three p-3"
-            style="max-height: 100vh">
+            style="max-height: 110vh">
             <h1 class="col ms-5">Customer Registration</h1>
 
 
@@ -104,7 +104,8 @@
                 class="align-self-center row-cols-lg-auto w-50 card p-4 shadow d-flex justify-content-center">
                 @csrf
                 <div class="mb-2">
-                    <label for="" class="form-label col-form-label-sm">Name</label>
+                    <label for="" class="form-label col-form-label-sm">Name<span
+                            class="text-danger">*</span></label>
                     <input type="text" name="name" class="form-control form-control-sm"
                         value="{{ old('name') }}">
                     <div class="error">
@@ -117,7 +118,8 @@
                     </div>
                 </div>
                 <div class="mb-2">
-                    <label for="" class="form-label col-form-label-sm">Email address</label>
+                    <label for="" class="form-label col-form-label-sm">Email address<span
+                            class="text-danger">*</span></label>
                     <input type="email" name="email" class="form-control form-control-sm"
                         value="{{ old('email') }}">
                     <div class="error">
@@ -133,7 +135,8 @@
                     </div>
                 </div>
                 <div class="mb-2">
-                    <label for="" class="form-label col-form-label-sm">Mobile number</label>
+                    <label for="" class="form-label col-form-label-sm">Mobile number<span
+                            class="text-danger">*</span></label>
                     <input type="tel" name="mob" pattern="\d{10}" class="form-control form-control-sm"
                         value="{{ old('mob') }}">
                     <div class="error">
@@ -146,8 +149,14 @@
                     </div>
                 </div>
                 <div class="mb-2">
-                    <label for="" class="form-label col-form-label-sm">Password</label>
-                    <input type="password" name="password" class="form-control form-control-sm">
+                    <label for="" class="form-label col-form-label-sm">Password<span
+                            class="text-danger">*</span></label>
+                    <input type="password" name="password" id="password" class="form-control form-control-sm" />
+                    <i class="bi bi-eye-slash" id="togglePassword"
+                        style="
+                    position: relative;
+                    bottom: 24px;
+                    right: -30rem;"></i>
                     <div class="error">
                         <span class="text-danger col-form-label-sm" id="passError"></span>
                         <span class="text-danger col-form-label-sm">
@@ -158,8 +167,14 @@
                     </div>
                 </div>
                 <div class="mb-2">
-                    <label for="" class="form-label col-form-label-sm">Confirm password</label>
-                    <input type="password" name="password_confirmation" class="form-control form-control-sm">
+                    <label for="" class="form-label col-form-label-sm">Confirm password<span
+                            class="text-danger">*</span></label>
+                    <input type="password" name="password_confirmation" id="password2" class="form-control form-control-sm" />
+                    <i class="bi bi-eye-slash" id="togglePassword2"
+                        style="
+                    position: relative;
+                    bottom: 24px;
+                    right: -30rem;"></i>
                     <div class="error">
                         <span class="text-danger col-form-label-sm" id="conpassError"></span>
                         <span class="text-danger col-form-label-sm">

@@ -37,7 +37,8 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-end justify-self-end" id="main_nav">
                     <ul class="navbar-nav align-items-center">
-                        <li class="nav-item"><a href="/login/edit_profile" class="nav-link active"><i class="bi bi-person-fill-gear me-1"></i>Edit Profile</a>
+                        <li class="nav-item"><a href="/login/edit_profile" class="nav-link active"><i
+                                    class="bi bi-person-fill-gear me-1"></i>Edit Profile</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
@@ -74,7 +75,8 @@
                 </div>
                 <div class="col-lg-6 m-2">
                     <label for="">Name</label>
-                    <input type="text" name="name" class="form-control" id="" value="{{ $customer->name }}">
+                    <input type="text" name="name" class="form-control"
+                        value="{{ $customer->name }}">
                     <div class="text-danger col-form-label-sm ff">
                         @error('name')
                             {{ $message }}
@@ -82,8 +84,10 @@
                     </div>
                 </div>
                 <div class="col-lg-6 m-2">
-                    <label for="">Email</label><span class="text-danger warning"> &nbsp; You must validate your email after updating it.</span>
-                    <input type="email" name="email" class="form-control" id="" value="{{ $customer->email }}">
+                    <label for="">Email</label><span class="text-danger warning"> &nbsp; You must validate your
+                        email after updating it.</span>
+                    <input type="email" name="email" class="form-control" 
+                        value="{{ $customer->email }}">
                     <div class="text-danger col-form-label-sm ff">
                         @error('email')
                             {{ $message }}
@@ -92,34 +96,54 @@
                 </div>
                 <div class="col-lg-6 m-2">
                     <label for="">Mobile</label>
-                    <input type="tel" name="mob" class="form-control" id="" value="{{ $customer->mob }}">
+                    <input type="tel" name="mob" class="form-control"
+                        value="{{ $customer->mob }}">
                     <div class="text-danger col-form-label-sm ff">
                         @error('mob')
                             {{ $message }}
                         @enderror
                     </div>
                 </div>
-                <div class="col-lg-6 m-2">
+                <div class="col-lg-6 m-2" style="height:84px">
                     <label for="">New Password</label>
-                    <input type="text" name="password" class="form-control" id="" >
-                    <div class="text-danger col-form-label-sm ff">
+                    <input type="password" name="password" class="form-control" id="password">
+                    <i class="bi bi-eye-slash" id="togglePassword"
+                        style="
+                    position: relative;
+                    bottom: 31px;
+                    right: -38rem;"></i>
+                    <div class="text-danger col-form-label-sm ff"
+                        style="
+                    position: relative;
+                    top: -25px;">
                         @error('password')
                             {{ $message }}
                         @enderror
                     </div>
                 </div>
-                <div class="col-lg-6 m-2">
+                <div class="col-lg-6 m-2" style="height: 84px">
                     <label for="">Confirm Password</label>
-                    <input type="text" name="password_confirmation" class="form-control" id="" >
-                    <div class="text-danger col-form-label-sm ff">
+                    <input type="password" name="password_confirmation" class="form-control" id="password2">
+                    <i class="bi bi-eye-slash" id="togglePassword2"
+                        style="
+                    position: relative;
+                    bottom: 31px;
+                    right: -38rem;"></i>
+                    <div class="text-danger col-form-label-sm ff"
+                        style="
+                    position: relative;
+                    top: -25px;">
                         @error('confirm_password')
                             {{ $message }}
                         @enderror
                     </div>
                 </div>
                 <div class="col-lg-6 m-2 d-flex justify-content-center gap-2 align-items-center">
-                    <button name="submit" id="" class="btn btn-outline-success" type="submit"><i class="bi bi-pencil-square me-1"></i>Edit</button>
-                    <a name="cancel" id="" class="btn btn-outline-danger" href="{{ url('/login/dash') . '/view' }}" role="button"><i class="bi bi-x-circle me-1"></i>Cancel</a>
+                    <button name="submit" id="" class="btn btn-outline-success" type="submit"><i
+                            class="bi bi-pencil-square me-1"></i>Edit</button>
+                    <a name="cancel" id="" class="btn btn-outline-danger"
+                        href="{{ url('/login/dash') . '/view' }}" role="button"><i
+                            class="bi bi-x-circle me-1"></i>Cancel</a>
                 </div>
             </div>
         </form>
@@ -142,6 +166,8 @@
     </script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <script src="{{ asset('/js/editProfile.js') }}"></script>
 </body>
 
 </html>

@@ -9,6 +9,7 @@ use App\Models\department;
 use App\Models\Image;
 use App\Models\Problem_types;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AdminLoginController extends Controller
 {
@@ -42,12 +43,36 @@ class AdminLoginController extends Controller
         // die;
         if (empty($user->all())) {
             return redirect('/adlogin')->with('errorEmail', 'Invalid email');
-        } elseif ($user[0]->password == $request->input('password')) {
+        } elseif (Hash::check($request->input('password'), $user[0]->password)) {
             session()->put('admin_id', 1);
             return redirect('/adlogin/addash');
         } else {
             return redirect('/adlogin')->with('errorPass', 'Invalid password');
         }
+    }
+
+    public function change_pass(Request $request)
+    {
+        // echo "<pre>";
+        // print_r($request->all());
+
+        $request->validate(
+            [
+                'password' => 'required|confirmed',
+                'password_confirmation' => 'required',
+            ]
+        );
+
+        $hashPass = Hash::make($request['password']);
+
+        $admin = admin::where('id',1)->first();
+        echo $admin;
+        // die;
+        $admin->password = $hashPass;
+        $admin->save();
+
+        notify()->success('Password chnaged successfully');
+        return redirect()->back();
     }
 
     // public function addash()
@@ -80,7 +105,7 @@ class AdminLoginController extends Controller
     {
         $problem_types = Problem_types::get();
         $departments = department::get();
-       
+
         $search = $request['search'] ?? "";
         $pt = $request['pt'];
         $dept = $request['dept'];
@@ -127,17 +152,20 @@ class AdminLoginController extends Controller
         if (!is_null($complain)) {
             $complain->delete();
         }
-        return redirect('/adlogin/addash/view')->with('success', 'Complain deleted successfully.');
+        notify()->success('Complain Deleted successfully.');
+        return redirect('/adlogin/addash/view');
     }
 
     public function edit($id)
     {
         $complain = Complain::find($id);
+        // echo $complain;
+        // die;
         if (is_null($complain)) {
             return redirect('/adlogin/addash/view');
         } else {
             $states = $this->states;
-            $problem_types = Problem_types::get('problems');
+            $problem_types = Problem_types::get();
             $url = url('/adlogin/addash/view/update') . "/" . $id;
             $images = Image::where('complain_id', $id)->get();
             $data = compact('complain', 'url', 'states', 'problem_types', 'images');
@@ -153,19 +181,30 @@ class AdminLoginController extends Controller
                 'name' => 'required',
                 'email' => 'email|required',
                 'mob' => 'required|min:10|max:11',
-                'address' => 'required',
-                'city' => 'required',
+                'address' => 'required|max:255',
+                'city' => 'required|regex:([a-zA-Z- ])',
                 'state' => 'required|not_in:0',
                 'zip' => 'required',
                 // 'pt' => 'required|not_in:0',
                 // 'dept' => 'required|not_in:0',
-                'pd' => 'required',
+                'pd' => 'required|max:1000',
+            ],
+            [
+                'mob.required' => 'The contact number field is required.',
+                'pd.max' => 'The problem description must not be greater than 1000 characters.',
+                'pd.required' => 'The problem description field is required.',
             ]
         );
 
         $status = $request['status'];
         session()->put('status', $status);
 
+        $complain1 = Complain::where('complain_id', $id)->value('pt');
+        $comp_str = $complain1 . " : edited successfully";
+        // echo $id;
+        // echo $comp_str;
+        // die;
+        // die($complain1);
         $complain = Complain::find($id);
         $complain->name = $request['name'];
         $complain->email = $request['email'];
@@ -187,8 +226,10 @@ class AdminLoginController extends Controller
             );
             $complain->rejection_reason = $request['rejection_reason'];
         }
+        // $data = compact('complain1');
         $complain->save();
-        return redirect('/adlogin/addash/view')->with('success', 'Complain edited successfully.');
+        notify()->success($comp_str);
+        return redirect('/adlogin/addash/view');
     }
 
 
@@ -199,6 +240,7 @@ class AdminLoginController extends Controller
         if (!is_null($customer)) {
             $customer->delete();
         }
+        notify()->success('Customer Blocked successfully.');
         return redirect()->back();
     }
 
@@ -209,6 +251,7 @@ class AdminLoginController extends Controller
         if (!is_null($customer)) {
             $customer->restore();
         }
+        notify()->success('Customer Unblocked successfully.');
         return redirect()->back();
     }
 
@@ -219,6 +262,8 @@ class AdminLoginController extends Controller
         if (!is_null($customer)) {
             $customer->forceDelete();
         }
+
+        notify()->success('Customer Deleted successfully.');
         return redirect()->back();
     }
 }

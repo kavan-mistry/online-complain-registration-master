@@ -136,7 +136,8 @@ class   CustomerLoginController extends Controller
         if (!is_null($complain)) {
             $complain->delete();
         }
-        return redirect()->back()->with('success', 'Complain Closed successfully.');
+        smilify('success', 'Complain Closed successfully.');
+        return redirect()->back();
     }
 
 }

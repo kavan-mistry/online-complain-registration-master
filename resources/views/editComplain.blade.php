@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <section class="">
+    <section class="position-relative dropdown-z">
         <nav class="navbar nvr navbar-expand-lg">
             <div class="container-fluid">
                 <h3>
@@ -27,16 +27,29 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-end justify-self-end" id="main_nav">
                     <ul class="navbar-nav align-items-center">
-
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/adlogin/addash') . '/view' }}">
+                        <li class="nav-item"><a class="nav-link active" href="{{ url('/adlogin/addash') . '/view' }}">
                                 <i class="bi bi-card-list me-1"></i>Complain list </a>
                         </li>
-                        <li class="nav-item"><a class="nav-link active">
-                                <i class="bi bi-person-circle"></i> Admin </a>
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
+                                    class="bi bi-person-circle"></i> Admin </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a href="{{ url('/adlogin/addash/problem_list') }}" class="dropdown-item"><i
+                                        class="bi bi-exclamation-circle me-1"></i>Problem list</a>
+                                <a class="dropdown-item" href="{{ url('/adlogin/addash/customer_list') }}"><i
+                                        class="bi bi-people-fill me-1"></i></i>Customer list </a>
+                                <a class="dropdown-item" href="{{ url('/adlogin/addash/customer_list_blocked') }}">
+                                    <i class="bi bi-person-fill-slash me-1"></i>Blocked Customer list </a>
+                                <a href="/adlogin/addash/department" class="dropdown-item"><i
+                                        class="bi bi-gear-fill me-1"></i>Department</a>
+                                <div class="dropdown-divider"></div>
+                                <div class="d-flex justify-content-center">
+                                    <a name="" id="" class="btn btn-danger" href="{{ url('/logout') }}"
+                                        role="button"><i class="bi bi-door-open"></i>
+                                        Log out</a>
+                                </div>
+                            </div>
                         </li>
-                        <li class="nav-item"><a name="" id="" class="btn btn-danger my-3"
-                                href="{{ url('/logout') }}" role="button"><i class="bi bi-door-open"></i>
-                                Log out</a></li>
                     </ul>
                 </div> <!-- navbar-collapse.// -->
             </div> <!-- container-fluid.// -->
@@ -55,7 +68,8 @@
             <form class="row g-1" method="post" action="{{ $url }}" enctype="multipart/form-data">
                 @csrf
                 <div class="col-md-6">
-                    <label for="inputEmail4" class="form-label col-form-label-sm">Name</label>
+                    <label for="inputEmail4" class="form-label col-form-label-sm">Name<span
+                            class="text-danger">*</span></label>
                     <input type="text" name="name" class="form-control form-control-sm" id="inputEmail4"
                         value="{{ $complain->name }}">
                     <span class="text-danger col-form-label-sm">
@@ -65,7 +79,8 @@
                     </span>
                 </div>
                 <div class="col-md-6">
-                    <label for="inputEmail4" class="form-label col-form-label-sm">Email</label>
+                    <label for="inputEmail4" class="form-label col-form-label-sm">Email<span
+                            class="text-danger">*</span></label>
                     <input type="email" name="email" class="form-control form-control-sm" id="inputEmail4"
                         value="{{ $complain->email }}">
                     <span class="text-danger col-form-label-sm">
@@ -75,7 +90,8 @@
                     </span>
                 </div>
                 <div class="col-12">
-                    <label for="inputAddress" class="form-label col-form-label-sm">Address</label>
+                    <label for="inputAddress" class="form-label col-form-label-sm">Address<span
+                            class="text-danger">*</span></label>
                     <input type="text" name="address" class="form-control form-control-sm" id="inputAddress"
                         placeholder="1234 Main St" value="{{ $complain->address }}">
                     <span class="text-danger col-form-label-sm">
@@ -85,7 +101,8 @@
                     </span>
                 </div>
                 <div class="col-md-6">
-                    <label for="inputCity" class="form-label col-form-label-sm">City</label>
+                    <label for="inputCity" class="form-label col-form-label-sm">City<span
+                            class="text-danger">*</span></label>
                     <input type="text" name="city" class="form-control form-control-sm" id="inputCity"
                         value="{{ $complain->city }}">
                     <span class="text-danger col-form-label-sm">
@@ -95,7 +112,8 @@
                     </span>
                 </div>
                 <div class="col-md-4">
-                    <label for="inputState" class="form-label col-form-label-sm">State</label>
+                    <label for="inputState" class="form-label col-form-label-sm">State<span
+                            class="text-danger">*</span></label>
                     <select id="inputState" name="state" class="form-select form-select-sm">
                         <option selected value="0">Choose...</option>
                         @foreach ($states as $state)
@@ -111,7 +129,8 @@
                     </span>
                 </div>
                 <div class="col-md-2">
-                    <label for="inputZip" class="form-label col-form-label-sm">Zip</label>
+                    <label for="inputZip" class="form-label col-form-label-sm">Zip<span
+                            class="text-danger">*</span></label>
                     <input type="text" name="zip" class="form-control form-control-sm" id="inputZip"
                         value="{{ $complain->zip }}">
                     <span class="text-danger col-form-label-sm">
@@ -123,11 +142,10 @@
                 <div class="col-md-4">
                     <label for="inputState" class="form-label col-form-label-sm">problem type</label>
                     <select id="inputState" name="pt" class="form-select form-select-sm" disabled>
-                        <option selected value="0">Choose...</option>
-                        @foreach ($problem_types as $p_t)
-                            <option value="{{ $p_t }}"
-                                {{ old('pt', $complain->pt) == $p_t ? 'selected' : '' }}>{{ $p_t }}</option>
-                        @endforeach
+                        {{-- <option selected value="0">Choose...</option> --}}
+                        {{-- @foreach ($problem_types as $p_t) --}}
+                        <option value="{{ $complain->pt }}">{{ $complain->pt }}</option>
+                        {{-- @endforeach --}}
                     </select>
                     <span class="text-danger col-form-label-sm">
                         @error('pt')
@@ -151,7 +169,8 @@
                     </span>
                 </div>
                 <div class="col-md-4">
-                    <label for="inputPassword4" class="form-label col-form-label-sm">Contact number</label>
+                    <label for="inputPassword4" class="form-label col-form-label-sm">Contact number<span
+                            class="text-danger">*</span></label>
                     <input type="number" name="mob" class="form-control form-control-sm" id="inputPassword4"
                         value="{{ $complain->mob }}">
                     <span class="text-danger col-form-label-sm">
@@ -161,7 +180,8 @@
                     </span>
                 </div>
                 <div class="col-12">
-                    <label for="inputAddress2" class="form-label col-form-label-sm">Problem description</label>
+                    <label for="inputAddress2" class="form-label col-form-label-sm">Problem description<span
+                            class="text-danger">*</span></label>
                     <textarea class="form-control form-control-sm" name="pd" placeholder="Write a problem here"
                         id="floatingTextarea2" style="height: 100px">{{ $complain->pd }}</textarea>
                     <span class="text-danger col-form-label-sm">
@@ -170,7 +190,7 @@
                         @enderror
                     </span>
                 </div>
-                <div class="col-12 m-auto">
+                <div class="col-12 m-auto mt-3">
                     <label class="form-label col-form-label-sm">Customer Uploaded Image</label>
                     @foreach ($images as $image)
                         <img src="{{ asset('storage/' . str_replace('public/', '', $image->url)) }}"
@@ -189,13 +209,13 @@
                     <label for="inputEmail4" class="form-label col-form-label-sm">Status</label>
                     <select id="inputState" name="status" class="form-select form-select-sm"
                         onchange="showDiv(this)">
-                        <option value="1" {{ old('status', $complain->status) == 1 ? 'selected' : '' }}>active
+                        <option value="1" {{ old('status', $complain->status) == 1 ? 'selected' : '' }}>Active
                         </option>
-                        <option value="0" {{ old('status', $complain->status) == 0 ? 'selected' : '' }}>solved
+                        <option value="0" {{ old('status', $complain->status) == 0 ? 'selected' : '' }}>Solved
                         </option>
-                        <option value="2" {{ old('status', $complain->status) == 2 ? 'selected' : '' }}>pending
+                        <option value="2" {{ old('status', $complain->status) == 2 ? 'selected' : '' }}>Pending
                         </option>
-                        <option value="3" {{ old('status', $complain->status) == 3 ? 'selected' : '' }}>rejected
+                        <option value="3" {{ old('status', $complain->status) == 3 ? 'selected' : '' }}>Rejected
                         </option>
                     </select>
                     <span class="text-danger col-form-label-sm">
@@ -204,10 +224,10 @@
                         @enderror
                     </span>
                 </div>
-                <div>
-                    <label class="form-label col-form-label-sm">Reason for Rejection</label>
-                    <textarea name="rejection_reason" class="form-control form-control-sm">{{ $complain->rejection_reason }}
-                    </textarea>
+                <div id="hidden_div" style="display: none">
+                    <label class="form-label col-form-label-sm">Reason for Rejection<span
+                            class="text-danger">*</span></label>
+                    <textarea name="rejection_reason" class="form-control form-control-sm col-2 ">{{$complain->rejection_reason}}</textarea>
                     <span class="text-danger col-form-label-sm">
                         @error('rejection_reason')
                             {{ $message }}
@@ -215,9 +235,11 @@
                     </span>
                 </div>
                 <div class="row-2 mt-3 mb-3 d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary">Edit complain</button>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-pencil me-2"></i>Edit
+                        complain</button>
                     <a name="" id="" class="btn btn-danger ms-2"
-                        href="{{ url('/adlogin/addash/view') }}" role="button">
+                        href="{{ url('/adlogin/addash/view') }}" role="button"><i
+                            class="bi bi-caret-left-fill me-1"></i>
                         Back</a></li>
                 </div>
             </form>

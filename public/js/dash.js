@@ -1,51 +1,56 @@
-// var problemToDept = {
-//     'Ac-Fridge-water cooler etc. not working ( Muni Hospital-Office Bldg)': 'electricity',
-//     'Any Ele. Problem in Swimminig Pool OR releated Pump,Motor Etc.': 'electricity',
-//     'Application done but not resolved-Property Tax': 'general',
-//     'Application Not Yet Approved - Swimming': 'general',
-//     'Applied For Entry But Still Not Approved - GYM': 'general',
-//     'Applied For The License But Not Yet Received': 'general',
-//     'Balvatika': 'general',
-//     'Basic Needs Like Water, Light and Fan Repairing - Library': 'electricity',
-//     'Cleaners Not Coming - SWM': 'cleaning',
-//     'Clearing off the Big Dead Animals': 'cleaning',
-//     'Clearing off the Dead Animals': 'cleaning',
-//     'Coach is Irregular/Remains Absent - Swimming': 'general',
-//     'Contaminated Water/Dirty Surroundings Causes Mosquito Reproduction': 'cleaning',
-//     'Deep Pit - Large settlement of road': 'repair',
-//     'Delay In Issuing The certificates -  - Birth/Death/Marriage Certificate': 'general',
-//     'Emptying The Dustbins': 'cleaning',
-//     'Footpath Repairing Required': 'repair',
-//     'Watering is Not Proper/Regular - Garden': 'water',
-//     'Waterlogged Due To Rain': 'water',
-//     'Water timing related': 'water'
-// };
+const fileInput = document.getElementById('fileInput');
+const preview = document.getElementById('preview');
 
-// function readURL(input) {
-//     if (input.files && input.files[0]) {
-//         var reader = new FileReader();
+fileInput.addEventListener('change', () => {
+  preview.innerHTML = '';
 
-//         reader.onload = function (e) {
-//             $('#blah')
-//                 .attr('src', e.target.result);
-//         };
+  for (const file of fileInput.files) {
+    const reader = new FileReader();
 
-//         reader.readAsDataURL(input.files[0]);
-//     }
-// }
+    reader.onload = () => {
+      const previewItem = document.createElement('div');
+      previewItem.classList.add('preview-item');
 
-const preview = (file) => {
-    const fr = new FileReader();
-    fr.onload = () => {
-        const img = document.createElement("img");
-        img.src = fr.result;  // String Base64 
-        img.alt = file.name;
-        document.querySelector('#preview').append(img);
+      const img = document.createElement('img');
+      img.src = reader.result;
+      previewItem.appendChild(img);
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.classList.add('delete-btn');
+      deleteBtn.innerHTML = 'x';
+      deleteBtn.addEventListener('click', () => {
+        previewItem.remove();
+
+        const newFiles = Array.from(fileInput.files).filter(f => f !== file);
+        const dt = new DataTransfer();
+        for (const newFile of newFiles) {
+          dt.items.add(newFile);
+        }
+        fileInput.files = dt.files;
+      });
+      previewItem.appendChild(deleteBtn);
+
+      preview.appendChild(previewItem);
     };
-    fr.readAsDataURL(file);
-};
 
-document.querySelector("#files").addEventListener("change", (ev) => {
-    if (!ev.target.files) return; // Do nothing.
-    [...ev.target.files].forEach(preview);
+    reader.readAsDataURL(file);
+  }
+});
+
+preview.addEventListener('click', (event) => {
+  if (event.target.classList.contains('delete-btn')) {
+    const previewItem = event.target.parentNode;
+    const fileUrl = previewItem.querySelector('img').src;
+
+    previewItem.remove();
+
+    const fileName = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+    const newFiles = Array.from(fileInput.files).filter(f => f.name !== fileName);
+
+    const dt = new DataTransfer();
+    for (const newFile of newFiles) {
+      dt.items.add(newFile);
+    }
+    fileInput.files = dt.files;
+  }
 });

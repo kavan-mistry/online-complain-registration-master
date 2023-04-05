@@ -3,6 +3,7 @@
 
 <head>
     <title>complain view</title>
+    @notifyCss
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -54,6 +55,8 @@
                                     <i class="bi bi-person-fill-slash me-1"></i>Blocked Customer list </a>
                                 <a href="/adlogin/addash/department" class="dropdown-item"><i
                                         class="bi bi-gear-fill me-1"></i>Department</a>
+                                <a href="" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                    class="dropdown-item"><i class="bi bi-unlock me-1"></i>Edit password</a>
                                 <div class="dropdown-divider"></div>
                                 <div class="d-flex justify-content-center">
                                     <a name="" id="" class="btn btn-danger" href="{{ url('/logout') }}"
@@ -68,6 +71,10 @@
         </nav>
     </section>
 
+    @include('notify::components.notify')
+    <x-notify::notify />
+    @notifyJs
+
     @if (session('success'))
         <div class="container d-flex alert alert-success alert-dismissible fade show my-3 text-center justify-content-center"
             role="alert">
@@ -76,14 +83,74 @@
         </div>
     @endif
 
+    <!-- Modal HTML Markup -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form action="{{ url('/adlogin/addash/change_pass') }}" method="post">
+                    @csrf
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Password</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="" class="form-label">New Password</label>
+                            <input type="password" class="form-control" name="password" id="password">
+                            <i class="bi bi-eye-slash" id="togglePassword"
+                                style="
+                                position: relative;
+                                bottom: 30px;
+                                right: -27rem;"></i>
+                            <div class="er d-flex" style="position: relative; top: -21px">
+                                <span class="form-text text-danger">
+                                    @error('password')
+                                        {{ $message }}
+                                    @enderror
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="" class="form-label">Confirm new password</label>
+                            <input type="password" class="form-control" name="password_confirmation" id="password2">
+                            <i class="bi bi-eye-slash" id="togglePassword2"
+                                style="
+                                position: relative;
+                                bottom: 30px;
+                                right: -27rem;"></i>
+                            <div class="er d-flex" style="position: relative; top: -21px">
+                                <span class="form-text text-danger">
+                                    @error('password_confirmation')
+                                        {{ $message }}
+                                    @enderror
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i
+                                class="bi bi-x-circle me-1"></i>Cancel</button>
+                        <button type="submit" class="btn btn-success"><i
+                                class="bi bi-check2-circle me-1"></i>Change</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{-------- model end --------}}
+
     <div class="container justify-content-center d-flex row m-auto">
 
         <form action="" id="ad-form">
             <div class="row justify-content-center mt-3">
 
                 <div class="form-group d-flex col-lg-2">
-                    <input type="search" name="search" class="form-control form-control-sm" placeholder="search here"
-                        value="{{ $search }}">
+                    <input type="search" name="search" class="form-control form-control-sm"
+                        placeholder="Search here" value="{{ $search }}">
                 </div>
 
                 <div class="form-group d-flex col-lg-5">
@@ -114,7 +181,8 @@
                                     {{ $dept1 }}</option>
                             @endforeach
                             @foreach ($departments as $dept1)
-                                <option value="{{ $dept1->department }}" {{ $dept == $dept1->department ? 'selected' : '' }}>
+                                <option value="{{ $dept1->department }}"
+                                    {{ $dept == $dept1->department ? 'selected' : '' }}>
                                     {{ $dept1->department }}</option>
                             @endforeach
                         </select>
@@ -152,8 +220,8 @@
                             <th>State</th>
                             <th>Problem Type</th>
                             <th>Department</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th class="no-sort">Status</th>
+                            <th class="no-sort">Action</th>
                         </tr>
                     </thead>
                     <tbody class="">

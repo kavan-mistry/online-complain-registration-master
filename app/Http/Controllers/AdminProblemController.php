@@ -14,7 +14,7 @@ class AdminProblemController extends Controller
         $problem_types = Problem_types::with('departments')->get();
         
         $departments  = department::get();
-        
+
         // echo "<pre>";
         // echo($problem_types);
         // echo "</pre>";
@@ -42,7 +42,29 @@ class AdminProblemController extends Controller
         $problem_types->department = $request['department'];
         $problem_types->save();
 
-        return redirect('/adlogin/addash/problem_list')->with('success', 'New Problem entered successfully !');
+        smilify('success', 'New Problem entered successfully !');
+        // connectify('success', 'Problem Entered', 'New Problem entered successfully !');
+        return redirect('/adlogin/addash/problem_list');
+
+    }
+
+    public function problem_list_edit(Request $request, $id){
+
+        $request->validate(
+            [
+                'problem_type' => 'required',
+                'department' => 'required'
+            ]
+        );
+
+        $problem_types = Problem_types::find($id);
+
+        $problem_types->problems = $request['problem_type'];
+        $problem_types->department = $request['department'];
+        $problem_types->save();
+
+        smilify('success', 'Problem edited successfully !');
+        return redirect('/adlogin/addash/problem_list');
 
     }
 
@@ -54,7 +76,9 @@ class AdminProblemController extends Controller
             $problem_data->delete();
         }
 
-        return redirect()->back()->with('success', 'Problem deleted successfully.');
+        smilify('success', 'Problem deleted successfully.');
+        // connectify('success', 'Problem Deleted', 'Problem Deleted successfully !');
+        return redirect()->back();
     }
 
 }

@@ -87,7 +87,9 @@ class editProfileController extends Controller
                 $customer->save();
 
                 $url1 = '/login/dash/view';
-                return redirect($url1)->with('success', 'New Details saved successfully !');
+
+                notify()->success('New Details saved successfully !');
+                return redirect($url1);
             } else {
                 return redirect()->back()->with('error', 'Mail already exists! try new mail id');
             }
@@ -116,7 +118,8 @@ class editProfileController extends Controller
                 $customer->save();
 
                 $url1 = '/login/dash/view';
-                return redirect($url1)->with('success', 'New Details saved successfully !');
+                notify()->success('New Details saved successfully !');
+                return redirect($url1);
             } else {
                 return redirect()->back()->with('error', 'Mail already exists! try new mail id');
             }

@@ -3,6 +3,7 @@
 
 <head>
     <title>customer list</title>
+    @notifyCss
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -55,6 +56,8 @@
                                         class="bi bi-gear-fill me-1"></i>Department</a>
                                 <a href="{{ url('/adlogin/addash/problem_list') }}" class="dropdown-item"><i
                                         class="bi bi-exclamation-circle me-1"></i>Problem list</a>
+                                <a href="" data-bs-toggle="modal" data-bs-target="#staticBackdrop3"
+                                    class="dropdown-item"><i class="bi bi-unlock me-1"></i>Edit password</a>
                                 <div class="dropdown-divider"></div>
                                 <div class="d-flex justify-content-center">
                                     <a name="" id="" class="btn btn-danger" href="{{ url('/logout') }}"
@@ -69,6 +72,71 @@
         </nav>
     </section>
 
+    @include('notify::components.notify')
+    <x-notify::notify />
+    @notifyJs
+
+    {{--------- edit password model --------}}
+
+    <div class="modal fade" id="staticBackdrop3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form action="{{ url('/adlogin/addash/change_pass') }}" method="post">
+                    @csrf
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Password</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="" class="form-label">New Password</label>
+                            <input type="password" class="form-control" name="password" id="password">
+                            <i class="bi bi-eye-slash" id="togglePassword"
+                                style="
+                                position: relative;
+                                bottom: 30px;
+                                right: -27rem;"></i>
+                            <div class="er d-flex" style="position: relative; top: -21px">
+                                <span class="form-text text-danger">
+                                    @error('password')
+                                        {{ $message }}
+                                    @enderror
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="" class="form-label">Confirm new password</label>
+                            <input type="password" class="form-control" name="password_confirmation" id="password2">
+                            <i class="bi bi-eye-slash" id="togglePassword2"
+                                style="
+                                position: relative;
+                                bottom: 30px;
+                                right: -27rem;"></i>
+                            <div class="er d-flex" style="position: relative; top: -21px">
+                                <span class="form-text text-danger">
+                                    @error('password_confirmation')
+                                        {{ $message }}
+                                    @enderror
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i
+                                class="bi bi-x-circle me-1"></i>Cancel</button>
+                        <button type="submit" class="btn btn-success"><i
+                                class="bi bi-check2-circle me-1"></i>Change</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{----------- end edit password model ------------}}
 
     <div class="container-sm position-relative table-z">
         <div class="table-responsive mt-4" style="width: 100%;">
@@ -79,7 +147,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Mobile</th>
-                        <th>Varified</th>
+                        <th>Verified</th>
                         <th>Action</th>
                     </tr>
                 </thead>

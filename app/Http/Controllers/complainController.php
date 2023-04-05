@@ -34,14 +34,20 @@ class complainController extends Controller
                 'name' => 'required',
                 'email' => 'email|required',
                 'mob' => 'required|min:10|max:11',
-                'address' => 'required',
-                'city' => 'required',
+                'address' => 'required|max:255',
+                'city' => 'required|regex:/^[a-zA-Z]+$/u',
                 'state' => 'required|not_in:0',
                 'zip' => 'required',
                 'pt' => 'required|not_in:0',
                 // 'dept' => 'required|not_in:0',
-                'pd' => 'required',
-                'file' => 'required'
+                'pd' => 'required|max:1000',
+                'file' => 'required|max:5'
+            ],
+            [
+                'mob.required' => 'The contact number field is required.',
+                'pt.required' => 'The problem type field is required.',
+                'pd.max' => 'The problem description must not be greater than 1000 characters.',
+                'pd.required' => 'The problem description field is required.',
             ]
         );
 
@@ -94,7 +100,7 @@ class complainController extends Controller
             $image->url = $fileloc;
             $image->save();
         }
-        
+        notify()->success('Complain registered successfully.');
         // $data = compact('prt');
         return redirect('/login/dash/view')->with('success', 'Complain registered successfully.');
         // return view('dash',compact('prt'));

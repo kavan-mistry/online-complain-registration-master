@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class DeptLoginController extends Controller
 {
 
-    
+
 
     public function index()
     {
@@ -36,7 +36,7 @@ class DeptLoginController extends Controller
 
     public function viewdash(Request $request)
     {
-        $department= session()->get('department');
+        $department = session()->get('department');
         // if(!is_null($de, $request)){
         $complaints = Complain::where('dept', $department)->get();
 
@@ -52,7 +52,7 @@ class DeptLoginController extends Controller
             ])->orWhere([
                 ['email', 'LIKE', "%$search%"],
                 ['dept', '=', "$department"]
-                ])->get();
+            ])->get();
             // $complain = Complain::sortable()->where('name', 'LIKE', "%$search%")->orWhere('email', 'LIKE', "%$search%")->paginate(6);
         }
         // elseif ($dept != "") {
@@ -101,11 +101,15 @@ class DeptLoginController extends Controller
 
     public function deptupdate($id, Request $request, $de)
     {
+        $complain1 = Complain::where('complain_id', $de)->value('pt');
+        $comp_str = $complain1 . " : edited successfully";
+        // echo $de;
+        // die($comp_str);
 
         $status = $request['status'];
         session()->put('status', $status);
-        
-        if($status == 3){
+
+        if ($status == 3) {
             $request->validate(
                 [
                     'rejection_reason' => 'required',
@@ -127,16 +131,18 @@ class DeptLoginController extends Controller
             $complain->save();
             // echo "<pre>";
             // print_r($complain);
-            session()->flash('message', 'Edited successfully.');
-            $url = url('/deptlogin/deptdash') ;
+            // session()->flash('message', 'Edited successfully.');
+
+            notify()->success($comp_str);
+            $url = url('/deptlogin/deptdash');
             return redirect($url);
         } else {
             $complain = Complain::find($de);
             $complain->status = $request['status'];
             $complain->rejection_reason = $request['rejection_reason'];
             $complain->save();
-            session()->flash('message', 'Edited successfully.');
-            $url = url('/deptlogin/deptdash') ;
+            notify()->success($comp_str);
+            $url = url('/deptlogin/deptdash');
             return redirect($url);
         }
     }

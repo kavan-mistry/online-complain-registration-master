@@ -7,13 +7,13 @@
     <title>online complain registration | customer dashbord</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <script src="{{ asset('js/app.js') }}"></script>
 
-    <link class="jsbin" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
-    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>    
+    {{-- <link class="jsbin" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" /> --}}
+    {{-- <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script> --}}
+    {{-- <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>     --}}
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{ asset('/css/customer.css') }}">
 </head>
@@ -46,7 +46,6 @@
                                     class="bi bi-person-circle"></i> {{ ucwords($customer->name) }} </a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a href="/login/edit_profile" class="dropdown-item"><i class="bi bi-person-fill-gear me-1"></i>Edit Profile</a>
-                                <a href="/reset-pass" class="dropdown-item"><i class="bi bi-arrow-clockwise me-1"></i>Change password</a>
                                 <div class="dropdown-divider"></div>
                                 <div class="d-flex justify-content-center">
                                     <a name="" id="" class="btn btn-danger"
@@ -69,7 +68,7 @@
             <form class="row g-1" method="post" action="{{ url('/login/dash') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="col-md-6">
-                    <label for="inputEmail4" class="form-label col-form-label-sm">Name</label>
+                    <label for="inputEmail4" class="form-label col-form-label-sm">Name<span class="text-danger">*</span></label>
                     <input type="text" name="name" class="form-control form-control-sm" id="inputEmail4"
                         value="{{ $customer->name }}">
                     <span class="text-danger col-form-label-sm">
@@ -79,7 +78,7 @@
                     </span>
                 </div>
                 <div class="col-md-6">
-                    <label for="inputEmail4" class="form-label col-form-label-sm">Email</label>
+                    <label for="inputEmail4" class="form-label col-form-label-sm">Email<span class="text-danger">*</span></label>
                     <input type="email" name="email" class="form-control form-control-sm" id="inputEmail4"
                         value="{{ $customer->email }}">
                     <span class="text-danger col-form-label-sm">
@@ -89,7 +88,7 @@
                     </span>
                 </div>
                 <div class="col-12">
-                    <label for="inputAddress" class="form-label col-form-label-sm">Address</label>
+                    <label for="inputAddress" class="form-label col-form-label-sm">Address<span class="text-danger">*</span></label>
                     <input type="text" name="address" class="form-control form-control-sm add-place" id="inputAddress"
                         placeholder="1234 Main St" value="{{ old('address') }}">
                     <span class="text-danger col-form-label-sm">
@@ -99,7 +98,7 @@
                     </span>
                 </div>
                 <div class="col-md-6">
-                    <label for="inputCity" class="form-label col-form-label-sm">City</label>
+                    <label for="inputCity" class="form-label col-form-label-sm">City<span class="text-danger">*</span></label>
                     <input type="text" name="city" class="form-control form-control-sm" id="inputCity"
                         value="{{ old('city') }}">
                     <span class="text-danger col-form-label-sm">
@@ -109,7 +108,7 @@
                     </span>
                 </div>
                 <div class="col-md-4">
-                    <label for="inputState" class="form-label col-form-label-sm">State</label>
+                    <label for="inputState" class="form-label col-form-label-sm">State<span class="text-danger">*</span></label>
                     <select id="inputState" name="state" class="form-select form-select-sm">
                         <option selected value="0">Choose...</option>
                         @foreach ($states as $state)
@@ -124,7 +123,7 @@
                     </span>
                 </div>
                 <div class="col-md-2">
-                    <label for="inputZip" class="form-label col-form-label-sm">Zip</label>
+                    <label for="inputZip" class="form-label col-form-label-sm">Zip<span class="text-danger">*</span></label>
                     <input type="text" name="zip" class="form-control form-control-sm" id="inputZip"
                         value="{{ old('zip') }}">
                     <span class="text-danger col-form-label-sm">
@@ -134,7 +133,7 @@
                     </span>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label col-form-label-sm">Problem type</label>
+                    <label class="form-label col-form-label-sm">Problem type<span class="text-danger">*</span></label>
                     
                     <select name="pt" class="form-select form-select-sm">
                         <option value="">Choose...</option>
@@ -155,7 +154,7 @@
 
 
                 <div class="col-md-4">
-                    <label for="inputPassword4" class="form-label col-form-label-sm">Contact number</label>
+                    <label for="inputPassword4" class="form-label col-form-label-sm">Contact number<span class="text-danger">*</span></label>
                     <input type="number" name="mob" class="form-control form-control-sm" id="inputPassword4"
                         value="{{ $customer->mob }}">
                     <span class="text-danger col-form-label-sm">
@@ -165,7 +164,7 @@
                     </span>
                 </div>
                 <div class="col-12">
-                    <label for="inputAddress2" class="form-label col-form-label-sm">Problem description</label>
+                    <label for="inputAddress2" class="form-label col-form-label-sm">Problem description<span class="text-danger">*</span></label>
                     <textarea class="form-control form-control-sm" name="pd" placeholder="Write a problem here"
                         id="floatingTextarea2" style="height: 100px">{{ old('pd') }}</textarea>
                     <span class="text-danger col-form-label-sm">
@@ -175,8 +174,8 @@
                     </span>
                 </div>
                 <div class="col-6">
-                    <label for="formFileSm" class="form-label col-form-label-sm">Upload Problem Image</label>
-                    <input class="form-control form-control-sm" name="file[]" id="files" type="file" onchange="loadFile(event);"
+                    <label for="formFileSm" class="form-label col-form-label-sm">Upload Problem Image<span class="text-danger">*</span></label>
+                    <input class="form-control form-control-sm" name="file[]" id="fileInput" type="file" 
                         accept="image/*" multiple>
                     <span class="text-danger col-form-label-sm">
                         @error('file')

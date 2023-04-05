@@ -26,3 +26,9 @@
     /* font-size: small; */
     height: 15px;
 }
+
+
+#laravel-notify{
+    position: relative;
+    z-index: 3;
+  }

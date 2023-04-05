@@ -3,6 +3,7 @@
 
 <head>
     <title>complain view</title>
+    @notifyCss
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -17,6 +18,14 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" />
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" />
+
+   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+        integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css"
+        integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="stylesheet" href="{{ asset('/css/customer.css') }}">
 </head>
@@ -37,9 +46,6 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-end justify-self-end" id="main_nav">
                         <ul class="navbar-nav align-items-center">
-                            <li class="nav-item active"> <a class="nav-link" href="{{ url('/login/dash') }}">
-                                    <i class="bi bi-plus-lg me-1"></i>Add complain
-                                </a> </li>
 
                             <li class="nav-item"><a class="nav-link active" href="{{ url('/login/dash') . '/view' }}">
                                     <i class="bi bi-card-list me-1"></i>Complain list </a>
@@ -54,9 +60,9 @@
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
                                         class="bi bi-person-circle"></i> {{ ucwords($user) }} </a>
                                 <div class="dropdown-menu dropdown-menu-end">
-                                    <a href="/login/edit_profile" class="dropdown-item"><i class="bi bi-person-fill-gear me-1"></i>Edit Profile</a>
-                                    <a href="/reset-pass" class="dropdown-item"><i
-                                            class="bi bi-arrow-clockwise me-1"></i>Change password</a>
+                                    <a href="/login/edit_profile" class="dropdown-item"><i
+                                            class="bi bi-person-fill-gear me-1"></i>Edit Profile</a>
+
                                     <div class="dropdown-divider"></div>
                                     <div class="d-flex justify-content-center">
                                         <a name="" id="" class="btn btn-danger"
@@ -73,18 +79,22 @@
 
 
     </header>
-    @if (session('success'))
-        <div class="container d-flex alert alert-success alert-dismissible fade show my-3 text-center justify-content-center"
+    @include('notify::components.notify')
+    <x-notify::notify />
+    @notifyJs
+    {{-- @if (session('success')) --}}
+        {{-- <div class="container d-flex alert alert-success alert-dismissible fade show my-3 text-center justify-content-center"
             role="alert">
             {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+        </div> --}}
+        
+    {{-- @endif --}}
     <form method="post" action="" class="d-flex mt-4 align-items-center">
         @csrf
         <div class="container justify-content-end d-flex">
             <div class="row d-flex justify-content-between w-100">
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <h2>
                         @csrf
                         <div class="form-group">
@@ -101,7 +111,8 @@
                             @if (isset($pt))
                                 <select name="pt" class="form-select form-select-sm ms-2">
                                     @foreach ($problem_types as $pt1)
-                                        <option value="{{ $pt1 }}" {{ $pt == $pt1->problems ? 'selected' : '' }}>
+                                        <option value="{{ $pt1 }}"
+                                            {{ $pt == $pt1->problems ? 'selected' : '' }}>
                                             {{ $pt1->problems }}</option>
                                     @endforeach
                                 </select>
@@ -109,14 +120,14 @@
                                 <select name="pt" class="form-select form-select-sm">
                                     <option value="">Choose...</option>
                                     @foreach ($problem_types as $p_t)
-                                        <option value="{{ $p_t->problems }}" >{{ $p_t->problems }}</option>
+                                        <option value="{{ $p_t->problems }}">{{ $p_t->problems }}</option>
                                     @endforeach
                                 </select>
                             @endif
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <div class="form-group">
                         <button class="btn btn-sm btn-outline-success me-2"><i
                                 class="bi bi-search me-1"></i>Search</button>
@@ -126,7 +137,7 @@
                         </a>
                         <a href="{{ url('/login/dash') }}">
                             <button class="btn btn-sm btn-outline-warning ms-2" type="button"><i
-                                    class="bi bi-plus-lg me-1"></i>Add</button>
+                                    class="bi bi-plus-lg me-1"></i>Add Complain</button>
                         </a>
                     </div>
                 </div>
@@ -149,8 +160,8 @@
                         <th>State</th>
                         <th>Problem Type</th>
                         {{-- <th>@sortablelink('dept', 'department')</th> --}}
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th class="no-sort">Status</th>
+                        <th class="no-sort">Action</th>
                     </tr>
                 </thead>
                 <tbody class="">
@@ -185,13 +196,17 @@
                                         <button type="button" class="btn btn-sm btn-outline-success m-1"><i
                                                 class="bi bi-eye-fill me-1"></i>view</button>
                                     </a>
-                                        <a href="{{ route('complain.close', ['id' => $complains->complain_id]) }}"
-                                            onclick="return confirm(`Are you sure you want to Close
+
+                                    @if ($complains->status == 1)    
+                                    <a href="{{ route('complain.close', ['id' => $complains->complain_id]) }}"
+                                        onclick="return confirm(`Are you sure you want to Close
 Id : {{ $complains->complain_id }}  
 Problem : {{ $complains->pt }} ?`)">
-                                            <button type="button" class="btn btn-sm btn-outline-danger m-1"><i
-                                                    class="bi bi-x-circle-fill me-1"></i>close</button></a>
+                                        <button type="button" class="btn btn-sm btn-outline-danger m-1"><i
+                                                class="bi bi-x-circle-fill me-1"></i>close</button></a>
                                     </a>
+                                    @endif
+
                                 </td>
                             </tr>
                         @endforeach
