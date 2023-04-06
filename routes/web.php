@@ -62,48 +62,48 @@ Route::get('/login/dash/view/details/{comp_id}', [viewDetailsController::class, 
 Route::get('/adlogin', [AdminLoginController::class, 'index'])->middleware('NotReturn');;
 Route::post('/adlogin', [AdminLoginController::class, 'adlogin']);
 
-Route::post('/adlogin/addash/change_pass', [AdminLoginController::class, 'change_pass'])->middleware('guard');
+Route::post('/adlogin/addash/change_pass', [AdminLoginController::class, 'change_pass'])->middleware('guardAdmin');
 
-Route::get('/adlogin/addash', [AdminLoginController::class, 'adhome'])->middleware('guard');
-Route::get('/adlogin/addash/view', [AdminLoginController::class, 'addash'])->middleware('guard');
+Route::get('/adlogin/addash', [AdminLoginController::class, 'adhome'])->middleware('guardAdmin');
+Route::get('/adlogin/addash/view', [AdminLoginController::class, 'addash'])->middleware('guardAdmin');
 
-Route::get('/adlogin/addash/problem_list', [AdminProblemController::class, 'problem_list_view'])->middleware('guard');
-Route::post('/adlogin/addash/problem_list', [AdminProblemController::class, 'problem_list_add'])->middleware('guard');
-Route::post('/adlogin/addash/problem_list/{id}', [AdminProblemController::class, 'problem_list_edit'])->middleware('guard');
-Route::get('/adlogin/addash/problem_list/delete/{id}', [AdminProblemController::class, 'admin_department_delete'])->name('problem_list.delete')->middleware('guard');
+Route::get('/adlogin/addash/problem_list', [AdminProblemController::class, 'problem_list_view'])->middleware('guardAdmin');
+Route::post('/adlogin/addash/problem_list', [AdminProblemController::class, 'problem_list_add'])->middleware('guardAdmin');
+Route::post('/adlogin/addash/problem_list/{id}', [AdminProblemController::class, 'problem_list_edit'])->middleware('guardAdmin');
+Route::get('/adlogin/addash/problem_list/delete/{id}', [AdminProblemController::class, 'admin_department_delete'])->name('problem_list.delete')->middleware('guardAdmin');
 
-Route::get('/adlogin/addash/customer_list', [AdminLoginController::class, 'ad_cust_list'])->middleware('guard');
-Route::get('/adlogin/addash/customer_list/block/{id}', [AdminLoginController::class, 'ad_cust_block'])->name('customer.block')->middleware('guard');
-Route::get('/adlogin/addash/customer_list/unblock/{id}', [AdminLoginController::class, 'ad_cust_unblock'])->name('customer.unblock')->middleware('guard');
-Route::get('/adlogin/addash/customer_list/delete/{id}', [AdminLoginController::class, 'ad_cust_delete'])->name('customer.delete')->middleware('guard');
+Route::get('/adlogin/addash/customer_list', [AdminLoginController::class, 'ad_cust_list'])->middleware('guardAdmin');
+Route::get('/adlogin/addash/customer_list/block/{id}', [AdminLoginController::class, 'ad_cust_block'])->name('customer.block')->middleware('guardAdmin');
+Route::get('/adlogin/addash/customer_list/unblock/{id}', [AdminLoginController::class, 'ad_cust_unblock'])->name('customer.unblock')->middleware('guardAdmin');
+Route::get('/adlogin/addash/customer_list/delete/{id}', [AdminLoginController::class, 'ad_cust_delete'])->name('customer.delete')->middleware('guardAdmin');
 
-Route::get('/adlogin/addash/customer_list_blocked', [AdminLoginController::class, 'ad_cust_list_blocked'])->middleware('guard');
+Route::get('/adlogin/addash/customer_list_blocked', [AdminLoginController::class, 'ad_cust_list_blocked'])->middleware('guardAdmin');
 
-Route::get('/adlogin/addash/department', [AdminDepartmentController::class, 'admin_department_view'])->middleware('guard');
-Route::post('/adlogin/addash/department', [AdminDepartmentController::class, 'admin_department_add'])->middleware('guard');
-Route::post('/adlogin/addash/department/{id}', [AdminDepartmentController::class, 'admin_department_edit'])->middleware('guard');
-Route::get('/adlogin/addash/department/delete/{id}', [AdminDepartmentController::class, 'admin_department_delete'])->name('department.delete')->middleware('guard');
+Route::get('/adlogin/addash/department', [AdminDepartmentController::class, 'admin_department_view'])->middleware('guardAdmin');
+Route::post('/adlogin/addash/department', [AdminDepartmentController::class, 'admin_department_add'])->middleware('guardAdmin');
+Route::post('/adlogin/addash/department/{id}', [AdminDepartmentController::class, 'admin_department_edit'])->middleware('guardAdmin');
+Route::get('/adlogin/addash/department/delete/{id}', [AdminDepartmentController::class, 'admin_department_delete'])->name('department.delete')->middleware('guardAdmin');
 
-Route::get('/adlogin/addash/view/delete/{id}', [AdminLoginController::class, 'delete'])->name('complain.delete')->middleware('guard');
-Route::get('/adlogin/addash/view/edit/{id}', [AdminLoginController::class, 'edit'])->name('complain.edit')->middleware('guard');
-Route::post('/adlogin/addash/view/update/{id}', [AdminLoginController::class, 'update'])->name('complain.update')->middleware('guard');
+Route::get('/adlogin/addash/view/delete/{id}', [AdminLoginController::class, 'delete'])->name('complain.delete')->middleware('guardAdmin');
+Route::get('/adlogin/addash/view/edit/{id}', [AdminLoginController::class, 'edit'])->name('complain.edit')->middleware('guardAdmin');
+Route::post('/adlogin/addash/view/update/{id}', [AdminLoginController::class, 'update'])->name('complain.update')->middleware('guardAdmin');
 
 Route::get('/deptlogin', [DeptLoginController::class, 'index'])->middleware('NotReturn');;
 Route::post('/deptlogin', [DeptLoginController::class, 'deptlogin'])->middleware('waterdepartment');
-Route::get('/deptlogin/deptdash/', [DeptLoginController::class, 'viewdash'])->middleware('guard');
-Route::post('/deptlogin/deptdash/', [DeptLoginController::class, 'viewdash'])->middleware('guard');
-Route::get('/deptlogin/deptdash/{de}/edit/{id}', [DeptLoginController::class, 'deptedit'])->name('deptcomplain.edit')->middleware('guard');
-Route::post('/deptlogin/deptdash/{de}/update/{id}', [DeptLoginController::class, 'deptupdate'])->name('deptcomplain.update')->middleware('guard');
+Route::get('/deptlogin/deptdash/', [DeptLoginController::class, 'viewdash'])->middleware('guardDepartment');
+Route::post('/deptlogin/deptdash/', [DeptLoginController::class, 'viewdash'])->middleware('guardDepartment');
+Route::get('/deptlogin/deptdash/{de}/edit/{id}', [DeptLoginController::class, 'deptedit'])->name('deptcomplain.edit')->middleware('guardDepartment');
+Route::post('/deptlogin/deptdash/{de}/update/{id}', [DeptLoginController::class, 'deptupdate'])->name('deptcomplain.update')->middleware('guardDepartment');
 
 // Route::middleware(['auth', 'waterdepartment'])->get('/deptlogin/deptdash', [DeptLoginController::class, 'deptdash']);
 
 // Route::get('/deptlogin/deptdash', [DeptLoginController::class, 'deptdash']);
 
 Route::get('/logout', function () {
-    session()->forget('customer_id');
-    session()->forget('dept_id');
-    session()->forget('admin_id');
-    session()->forget('cid');
     session()->flush();
     return redirect('/login');
 })->name('logout');
+
+Route::fallback(function () {
+    return view('404');
+});

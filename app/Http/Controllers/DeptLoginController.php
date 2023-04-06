@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\department;
 use App\Models\Complain;
+use App\Models\dept_images;
 use App\Models\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class DeptLoginController extends Controller
 {
@@ -84,18 +86,23 @@ class DeptLoginController extends Controller
     public function deptedit($de, $id)
     {
         $complain = Complain::find($id);
+        $complain1 = Complain::where('complain_id', $id)->first();
         $images = Image::where('complain_id', $id)->get();
+        $dept_images = dept_images::where('complain_id', $id)->get();
         if (is_null($complain)) {
             $url = url('/deptlogin/deptdash') . "/" . $de;
             return redirect($url, $de);
-        } else {
+        } elseif ($de == $complain1['dept']) {
             $url = url('/deptlogin/deptdash') . "/" . $de . "/update" . "/" . $id;
             // $url = url('/deptlogin/deptdash/{de}/update/{id}') ."/". $id;
             // echo $url;
-            $data = compact('complain', 'url', 'de', 'id', 'images');
+            $data = compact('complain', 'url', 'de', 'id', 'images', 'dept_images');
             // echo "<pre>";
             // print_r($data);
             return view('deptEditComplain')->with($data, $url, $de);
+        } else {
+            smilify('error', 'Complaint not exist.');
+            return redirect()->back();
         }
     }
 
@@ -122,16 +129,24 @@ class DeptLoginController extends Controller
         // die;
         if (isset($request['update_file'])) {
 
-            $fileName = time() . "-ocrs-" . date('d-m-y') . "." . $request->file('update_file')->getClientOriginalExtension();
-            $fileloc = $request->file('update_file')->storeAs('public/uploads/update', $fileName);
             $complain = Complain::find($de);
             $complain->status = $request['status'];
             $complain->rejection_reason = $request['rejection_reason'];
-            $complain->file_update = $fileloc;
             $complain->save();
             // echo "<pre>";
             // print_r($complain);
             // session()->flash('message', 'Edited successfully.');
+            foreach ($request->file('update_file') as $imagefile) {
+
+                $random = Str::random(7);
+                $fileName = time() . "-ocrs-work-proof-" . "-" . $random . "-" . date('d-m-y') . "." . $imagefile->getClientOriginalExtension();
+                $fileloc = $imagefile->storeAs('public/uploads/update/', $fileName);
+
+                $dept_image = new dept_images;
+                $dept_image->complain_id = $complain->complain_id;
+                $dept_image->url = $fileloc;
+                $dept_image->save();
+            }
 
             notify()->success($comp_str);
             $url = url('/deptlogin/deptdash');

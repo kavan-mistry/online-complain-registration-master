@@ -197,12 +197,13 @@
                             class="img-fluid img-thumbnail" id="up-img4" alt="Complaint Image">
                     @endforeach
                 </div>
-                @if (isset($complain->file_update))
+                @if (isset($dept_images))
                     <div class="col-12 m-auto mt-3">
                         <label class="form-label col-form-label-sm">Department Work Proof Image</label>
-                        <img id="up-img"
-                            src="{{ asset('storage/' . str_replace('public/', '', $complain->file_update)) }}"
-                            class="img-thumbnail mt-2" alt="Complaint Image">
+                        @foreach ($dept_images as $dimage)
+                            <img src="{{ asset('storage/' . str_replace('public/', '', $dimage->url)) }}"
+                                class="img-fluid img-thumbnail" id="up-img4" alt="Complaint Image">
+                        @endforeach
                     </div>
                 @endif
                 <div class="col-md-4">
@@ -227,7 +228,7 @@
                 <div id="hidden_div" style="display: none">
                     <label class="form-label col-form-label-sm">Reason for Rejection<span
                             class="text-danger">*</span></label>
-                    <textarea name="rejection_reason" class="form-control form-control-sm col-2 ">{{$complain->rejection_reason}}</textarea>
+                    <textarea name="rejection_reason" class="form-control form-control-sm col-2 ">{{ $complain->rejection_reason }}</textarea>
                     <span class="text-danger col-form-label-sm">
                         @error('rejection_reason')
                             {{ $message }}

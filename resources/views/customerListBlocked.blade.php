@@ -152,7 +152,6 @@
                     </tr>
                 </thead>
                 <tbody class="">
-                    @if (!$customers->isEmpty())
                         @foreach ($customers as $customer)
                             <tr class="">
                                 <td>{{ $customer->customer_id }}</td>
@@ -184,9 +183,6 @@ Name : {{ $customer->name }} `)">
                                 </td>
                             </tr>
                         @endforeach
-                    @else
-                        <td colspan="11" class="text-center">No data found !</td>
-                    @endif
                 </tbody>
             </table>
         </div>

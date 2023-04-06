@@ -42,9 +42,9 @@
                 <div class="collapse navbar-collapse justify-content-end justify-self-end" id="main_nav">
                     <ul class="navbar-nav align-items-center">
 
-                        <li class="nav-item"><a class="nav-link active" href="{{ url('/deptlogin/deptdash') }}">
+                        {{-- <li class="nav-item"><a class="nav-link active" href="{{ url('/deptlogin/deptdash') }}">
                                 <i class="bi bi-card-list me-1"></i>Complain list </a>
-                        </li>
+                        </li> --}}
                         <li class="nav-item"><a class="nav-link active">
                                 <i class="bi bi-person-circle"></i> {{ $department }} department </a>
                         </li>
@@ -105,11 +105,11 @@
                         <th>Problem Type</th>
                         {{-- <th>department</th> --}}
                         <th>Status</th>
-                        <th>Action</th>
+                        <th class="no-sort">Action</th>
                     </tr>
                 </thead>
                 <tbody class="">
-                    @if (!$complaints->isEmpty())
+                    {{-- @if (!$complaints->isEmpty()) --}}
 
                         @foreach ($complaints as $complain)
                             <tr class="">
@@ -143,9 +143,9 @@
                                 </td>
                             </tr>
                         @endforeach
-                    @else
-                        <td colspan="11" class="text-center">No data found !</td>
-                    @endif
+                    {{-- @else
+                        <td colspan="9" class="text-center">No data found !</td>
+                    @endif --}}
                 </tbody>
             </table>
         </div>

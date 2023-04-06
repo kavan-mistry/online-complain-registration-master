@@ -132,11 +132,15 @@ class   CustomerLoginController extends Controller
 
 
     public function close($id){
-        $complain = Complain::find($id);
-        if (!is_null($complain)) {
+        $customer_id = session()->get('cid');
+        $complain = Complain::where('complain_id' ,$id)->first();
+        if (!is_null($complain) && $customer_id == $complain['customer_id'] ) {
             $complain->delete();
+            smilify('success', 'Complain Closed successfully.');
         }
-        smilify('success', 'Complain Closed successfully.');
+        else{
+            smilify('error', 'Complaint not exist.');
+        }
         return redirect()->back();
     }
 

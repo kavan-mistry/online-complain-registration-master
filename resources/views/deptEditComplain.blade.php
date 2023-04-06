@@ -163,18 +163,20 @@
                             @enderror
                         </span>
                     </div>
-                    <div class="col-9 m-auto mt-3">
+                    <div class="col-6 m-auto mt-3">
                         <label class="form-label col-form-label-sm">Customer Uploaded Image</label>
                         @foreach ($images as $image)
                             <img src="{{ asset('storage/' . str_replace('public/', '', $image->url)) }}"
                                 class="img-fluid img-thumbnail" id="up-img3" alt="Complaint Image">
                         @endforeach
                     </div>
-                    @if (isset($complain->file_update))
+                    @if (isset($dept_images))
                         <div class="col-6 m-auto mt-3">
                             <label class="form-label col-form-label-sm">Department Work Proof Image</label>
-                            <img src="{{ asset('storage/' . str_replace('public/', '', $complain->file_update)) }}"
-                                class="img-thumbnail" id="up-img" alt="Complaint Image">
+                            @foreach ($dept_images as $dimages)
+                                <img src="{{ asset('storage/' . str_replace('public/', '', $dimages->url)) }}"
+                                    class="img-thumbnail" id="up-img3" alt="Complaint Image">
+                            @endforeach
                         </div>
                     @endif
                     <div class="col-md-3">
@@ -186,9 +188,11 @@
                             onchange="showDiv(this)">
                             <option value="1" {{ old('status', $complain->status) == 1 ? 'selected' : '' }}>
                                 active</option>
-                            <option value="0" {{ old('status', $complain->status) == 0 ? 'selected' : '' }}>solved
+                            <option value="0" {{ old('status', $complain->status) == 0 ? 'selected' : '' }}>
+                                solved
                             </option>
-                            <option value="2" {{ old('status', $complain->status) == 2 ? 'selected' : '' }}>pending
+                            <option value="2" {{ old('status', $complain->status) == 2 ? 'selected' : '' }}>
+                                pending
                             </option>
                             <option value="3" {{ old('status', $complain->status) == 3 ? 'selected' : '' }}>
                                 rejected</option>
@@ -200,7 +204,8 @@
                         </span>
                     </div>
                     <div id="hidden_div" style="display:none">
-                        <label class="form-label col-form-label-sm">Reason for Rejection<span class="text-danger">*</span></label>
+                        <label class="form-label col-form-label-sm">Reason for Rejection<span
+                                class="text-danger">*</span></label>
                         <textarea name="rejection_reason" class="form-control form-control-sm">{{ $complain->rejection_reason }}</textarea>
                         <span class="text-danger col-form-label-sm">
                             @error('rejection_reason')
@@ -210,8 +215,10 @@
                     </div>
                     <div class="col-6">
                         <label for="formFileSm" class="form-label col-form-label-sm">Update Work Of Proof</label>
-                        <input class="form-control form-control-sm" name="update_file" id="formFileSm"
-                            type="file" onchange="readURL(this);" accept="image/*">
+                        <input class="form-control form-control-sm" name="update_file[]" id="fileInput"
+                            type="file" accept="image/*" multiple>
+                        {{-- <input class="form-control form-control-sm" name="file[]" id="fileInput" type="file" 
+                        accept="image/*" multiple> --}}
                         <span class="text-danger col-form-label-sm">
                             @error('file')
                                 {{ $message }}
@@ -223,7 +230,7 @@
                             <label for="formFileSm" class="form-label col-form-label-sm">Uploaded Image
                                 Preview</label>
                         </div>
-                        <img class="img-fluid img-thumbnail" style="width: 15vw;" id="blah" src="#" />
+                        <div id="preview"></div>
                     </div>
                     <div class="col-12 mt-3 mb-3 d-flex justify-content-center">
                         <button type="submit" class="btn btn-primary"><i class="bi bi-pencil me-1"></i>Edit
@@ -239,6 +246,9 @@
     </script>
 
     <script src="{{ asset('/js/dept.js') }}"></script>
+    {{-- <script src="{{ asset('/js/dash.js') }}"></script> --}}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 </body>
 

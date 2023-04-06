@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class WebGuard
+class WebGuardAdmin
 {
     /**
      * Handle an incoming request.
@@ -15,8 +15,7 @@ class WebGuard
      */
     public function handle(Request $request, Closure $next): Response
     {
-
-        if (session()->has('cid'))
+        if (session()->has('admin_id'))
             return $next($request);
         else
             return redirect()->back();

@@ -165,7 +165,7 @@
                     </tr>
                 </thead>
                 <tbody class="">
-                    @if (!$complain->isEmpty())
+                    {{-- @if (!$complain->isEmpty()) --}}
 
 
                         @foreach ($complain as $complains)
@@ -210,9 +210,9 @@ Problem : {{ $complains->pt }} ?`)">
                                 </td>
                             </tr>
                         @endforeach
-                    @else
+                    {{-- @else
                         <td colspan="11" class="text-center">No data found !</td>
-                    @endif
+                    @endif --}}
                 </tbody>
             </table>
         </div>

@@ -17,4 +17,9 @@ class Complain extends Model
     {
         return $this->hasMany('App\Image', 'complain_id');
     }
+
+    public function dept_images()
+    {
+        return $this->belongsTo('App\Models\dept_images', 'complain_id', 'complain');
+    }
 }

@@ -156,14 +156,16 @@
                             @endforeach
                         </li>
                     </ul>
-                    @if (isset($complain->file_update))
+                    @if (isset($dept_images))
                         <div class="card-header fw-bold">
                             Department Work Proof Image:
                         </div>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
-                                <img src="{{ asset('storage/' . str_replace('public/', '', $complain->file_update)) }}"
-                                    class="img-fluid img-thumbnail" id="up-img2" alt="Complaint Image">
+                                @foreach ($dept_images as $dimage)
+                                    <img src="{{ asset('storage/' . str_replace('public/', '', $dimage->url)) }}"
+                                        class="img-fluid img-thumbnail" id="up-img2" alt="Complaint Image">
+                                @endforeach
                             </li>
                         </ul>
                     @endif

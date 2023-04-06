@@ -133,10 +133,21 @@
                     </span>
                 </div>
                 <div class="col-md-4">
+                    <label for="inputPassword4" class="form-label col-form-label-sm">Contact number<span class="text-danger">*</span></label>
+                    <input type="number" name="mob" class="form-control form-control-sm" id="inputPassword4"
+                        value="{{ $customer->mob }}">
+                    <span class="text-danger col-form-label-sm">
+                        @error('mob')
+                            {{ $message }}
+                        @enderror
+                    </span>
+                </div>
+                <div class="col-md-4">
                     <label class="form-label col-form-label-sm">Problem type<span class="text-danger">*</span></label>
                     
                     <select name="pt" class="form-select form-select-sm">
-                        <option value="">Choose...</option>
+                        <option value="0">Choose...</option>
+                        <option value="1">Others</option>
                         @foreach ($problem_types as $p_t)
                             <option value="{{ $p_t->problems }}" {{ old('pt') == $p_t->problems ? 'selected' : '' }}>
                                 {{ $p_t->problems }}
@@ -153,16 +164,6 @@
                 
 
 
-                <div class="col-md-4">
-                    <label for="inputPassword4" class="form-label col-form-label-sm">Contact number<span class="text-danger">*</span></label>
-                    <input type="number" name="mob" class="form-control form-control-sm" id="inputPassword4"
-                        value="{{ $customer->mob }}">
-                    <span class="text-danger col-form-label-sm">
-                        @error('mob')
-                            {{ $message }}
-                        @enderror
-                    </span>
-                </div>
                 <div class="col-12">
                     <label for="inputAddress2" class="form-label col-form-label-sm">Problem description<span class="text-danger">*</span></label>
                     <textarea class="form-control form-control-sm" name="pd" placeholder="Write a problem here"
