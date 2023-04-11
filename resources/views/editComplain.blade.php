@@ -71,7 +71,7 @@
                     <label for="inputEmail4" class="form-label col-form-label-sm">Name<span
                             class="text-danger">*</span></label>
                     <input type="text" name="name" class="form-control form-control-sm" id="inputEmail4"
-                        value="{{ $complain->name }}">
+                        value="{{ $complain->name }}" disabled>
                     <span class="text-danger col-form-label-sm">
                         @error('name')
                             {{ $message }}
@@ -82,7 +82,7 @@
                     <label for="inputEmail4" class="form-label col-form-label-sm">Email<span
                             class="text-danger">*</span></label>
                     <input type="email" name="email" class="form-control form-control-sm" id="inputEmail4"
-                        value="{{ $complain->email }}">
+                        value="{{ $complain->email }}" disabled>
                     <span class="text-danger col-form-label-sm">
                         @error('email')
                             {{ $message }}
@@ -93,7 +93,7 @@
                     <label for="inputAddress" class="form-label col-form-label-sm">Address<span
                             class="text-danger">*</span></label>
                     <input type="text" name="address" class="form-control form-control-sm" id="inputAddress"
-                        placeholder="1234 Main St" value="{{ $complain->address }}">
+                        placeholder="1234 Main St" value="{{ $complain->address }}" disabled>
                     <span class="text-danger col-form-label-sm">
                         @error('address')
                             {{ $message }}
@@ -104,7 +104,7 @@
                     <label for="inputCity" class="form-label col-form-label-sm">City<span
                             class="text-danger">*</span></label>
                     <input type="text" name="city" class="form-control form-control-sm" id="inputCity"
-                        value="{{ $complain->city }}">
+                        value="{{ $complain->city }}" disabled>
                     <span class="text-danger col-form-label-sm">
                         @error('city')
                             {{ $message }}
@@ -114,7 +114,7 @@
                 <div class="col-md-4">
                     <label for="inputState" class="form-label col-form-label-sm">State<span
                             class="text-danger">*</span></label>
-                    <select id="inputState" name="state" class="form-select form-select-sm">
+                    <select id="inputState" name="state" class="form-select form-select-sm" disabled>
                         <option selected value="0">Choose...</option>
                         @foreach ($states as $state)
                             <option value="{{ $state }}"
@@ -132,9 +132,34 @@
                     <label for="inputZip" class="form-label col-form-label-sm">Zip<span
                             class="text-danger">*</span></label>
                     <input type="text" name="zip" class="form-control form-control-sm" id="inputZip"
-                        value="{{ $complain->zip }}">
+                        value="{{ $complain->zip }}" disabled>
                     <span class="text-danger col-form-label-sm">
                         @error('zip')
+                            {{ $message }}
+                        @enderror
+                    </span>
+                </div>
+                <div class="col-md-4">
+                    <label for="inputPassword4" class="form-label col-form-label-sm">Contact number<span
+                            class="text-danger">*</span></label>
+                    <input type="number" name="mob" class="form-control form-control-sm" id="inputPassword4"
+                        value="{{ $complain->mob }}" disabled>
+                    <span class="text-danger col-form-label-sm">
+                        @error('mob')
+                            {{ $message }}
+                        @enderror
+                    </span>
+                </div>
+                <div class="col-md-4">
+                    <label for="inputState" class="form-label col-form-label-sm">Department</label>
+                    <select id="inputState" name="dept" class="form-select form-select-sm" disabled>
+                        {{-- @foreach ($complain->department_id as $dept) --}}
+                        <option value="{{ $dept_name }}">
+                            {{ $dept_name }}</option>
+                        {{-- @endforeach --}}
+                    </select>
+                    <span class="text-danger col-form-label-sm">
+                        @error('dept')
                             {{ $message }}
                         @enderror
                     </span>
@@ -153,37 +178,37 @@
                         @enderror
                     </span>
                 </div>
+                @if (!empty($complain->opt))
                 <div class="col-md-4">
-                    <label for="inputState" class="form-label col-form-label-sm">Department</label>
-                    <select id="inputState" name="dept" class="form-select form-select-sm" disabled>
-                        @foreach (['water', 'electricity', 'general', 'cleaning', 'repair'] as $dept)
-                            <option value="{{ $dept }}"
-                                {{ old('dept', $complain->dept) == $dept ? 'selected' : '' }}>
-                                {{ ucfirst($dept) }}</option>
-                        @endforeach
-                    </select>
-                    <span class="text-danger col-form-label-sm">
-                        @error('dept')
-                            {{ $message }}
-                        @enderror
-                    </span>
-                </div>
-                <div class="col-md-4">
-                    <label for="inputPassword4" class="form-label col-form-label-sm">Contact number<span
+                    <label class="form-label col-form-label-sm">Specified problem<span
                             class="text-danger">*</span></label>
-                    <input type="number" name="mob" class="form-control form-control-sm" id="inputPassword4"
-                        value="{{ $complain->mob }}">
+                    <input type="text" class="form-control form-control-sm" name="opt" id=""
+                        value="{{ $complain->opt }}" disabled>
                     <span class="text-danger col-form-label-sm">
-                        @error('mob')
+                        @error('opt')
                             {{ $message }}
                         @enderror
                     </span>
                 </div>
+                @endif
+                @if (!empty($reopen_complain->feedback))
+                    <div class="col-12">
+                        <label class="form-label col-form-label-sm">Feedback</label>
+                        {{-- <input type="text" class="form-control form-control-sm" name="feedback" id="" value = "{{$reopen_complain->feedback}}" disabled> --}}
+                        <textarea class="form-control form-control-sm" name="feedback" id="" cols="30" rows="3"
+                            disabled>{{ $reopen_complain->feedback }}</textarea>
+                        <span class="text-danger col-form-label-sm">
+                            @error('opt')
+                                {{ $message }}
+                            @enderror
+                        </span>
+                    </div>
+                @endif
                 <div class="col-12">
                     <label for="inputAddress2" class="form-label col-form-label-sm">Problem description<span
                             class="text-danger">*</span></label>
                     <textarea class="form-control form-control-sm" name="pd" placeholder="Write a problem here"
-                        id="floatingTextarea2" style="height: 100px">{{ $complain->pd }}</textarea>
+                        id="floatingTextarea2" style="height: 100px" disabled>{{ $complain->pd }}</textarea>
                     <span class="text-danger col-form-label-sm">
                         @error('pd')
                             {{ $message }}
@@ -197,11 +222,29 @@
                             class="img-fluid img-thumbnail" id="up-img4" alt="Complaint Image">
                     @endforeach
                 </div>
-                @if (isset($dept_images))
+                @if (count($reopen_images) > 0)
+                    <div class="col-12 m-auto mt-3">
+                        <label class="form-label col-form-label-sm">Customer Uploaded Image (Re-opened)</label>
+                        @foreach ($reopen_images as $rimage)
+                            <img src="{{ asset('storage/' . str_replace('public/', '', $rimage->url)) }}"
+                                class="img-fluid img-thumbnail" id="up-img4" alt="Complaint Image">
+                        @endforeach
+                    </div>
+                @endif
+                @if (count($dept_images)>0)
                     <div class="col-12 m-auto mt-3">
                         <label class="form-label col-form-label-sm">Department Work Proof Image</label>
                         @foreach ($dept_images as $dimage)
                             <img src="{{ asset('storage/' . str_replace('public/', '', $dimage->url)) }}"
+                                class="img-fluid img-thumbnail" id="up-img4" alt="Complaint Image">
+                        @endforeach
+                    </div>
+                @endif
+                @if (count($dept_reopen_images)>0)
+                    <div class="col-12 m-auto mt-3">
+                        <label class="form-label col-form-label-sm">Department Work Proof Image (Re-opened)</label>
+                        @foreach ($dept_reopen_images as $drimage)
+                            <img src="{{ asset('storage/' . str_replace('public/', '', $drimage->url)) }}"
                                 class="img-fluid img-thumbnail" id="up-img4" alt="Complaint Image">
                         @endforeach
                     </div>
@@ -217,6 +260,8 @@
                         <option value="2" {{ old('status', $complain->status) == 2 ? 'selected' : '' }}>Pending
                         </option>
                         <option value="3" {{ old('status', $complain->status) == 3 ? 'selected' : '' }}>Rejected
+                        </option>
+                        <option value="4" {{ old('status', $complain->status) == 4 ? 'selected' : '' }}>Re-opened
                         </option>
                     </select>
                     <span class="text-danger col-form-label-sm">

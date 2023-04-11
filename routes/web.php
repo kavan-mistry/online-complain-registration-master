@@ -11,7 +11,8 @@ use App\Http\Controllers\ResetpasswordController;
 use App\Http\Controllers\editProfileController;
 use App\Http\Controllers\AdminProblemController;
 use App\Http\Controllers\AdminDepartmentController;
-
+use App\Http\Controllers\NoticeController;
+use App\Http\Controllers\ReopenController;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -59,6 +60,8 @@ Route::get('/login/dash/view/delete/{id}', [CustomerLoginController::class, 'clo
 Route::post('/login/dash/view', [CustomerLoginController::class, 'viewComp'])->middleware('guard');
 Route::get('/login/dash/view/details/{comp_id}', [viewDetailsController::class, 'detailView'])->name('detail.view')->middleware('guard');
 
+Route::post('/login/dash/view/reopen/{id}', [ReopenController::class, 'addReopen'])->name('complain.reopen')->middleware('guard');
+
 Route::get('/adlogin', [AdminLoginController::class, 'index'])->middleware('NotReturn');;
 Route::post('/adlogin', [AdminLoginController::class, 'adlogin']);
 
@@ -66,6 +69,10 @@ Route::post('/adlogin/addash/change_pass', [AdminLoginController::class, 'change
 
 Route::get('/adlogin/addash', [AdminLoginController::class, 'adhome'])->middleware('guardAdmin');
 Route::get('/adlogin/addash/view', [AdminLoginController::class, 'addash'])->middleware('guardAdmin');
+
+Route::get('/adlogin/addash/notices', [NoticeController::class, 'viewNotice'])->middleware('guardAdmin');
+Route::post('/adlogin/addash/notices', [NoticeController::class, 'addNotice'])->middleware('guardAdmin');
+Route::get('/adlogin/addash/notices/delete/{id}', [NoticeController::class, 'deleteNotice'])->name('notice.delete')->middleware('guardAdmin');
 
 Route::get('/adlogin/addash/problem_list', [AdminProblemController::class, 'problem_list_view'])->middleware('guardAdmin');
 Route::post('/adlogin/addash/problem_list', [AdminProblemController::class, 'problem_list_add'])->middleware('guardAdmin');

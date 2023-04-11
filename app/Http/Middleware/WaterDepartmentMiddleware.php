@@ -19,8 +19,8 @@ class WaterDepartmentMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        echo $request['email'];
-        echo $request['password'];
+        // echo $request['email'];
+        // echo $request['password'];
         
         $user = department::where('email', $request->input('email'))->first();
         $request->validate(

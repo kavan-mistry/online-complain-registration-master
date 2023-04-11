@@ -1,3 +1,13 @@
+
+function showDiv(select) {
+  if (select.value == 'Other') {
+      document.getElementById('hidden_div').style.display = "block";
+  } else {
+      document.getElementById('hidden_div').style.display = "none";
+  }
+}
+
+
 const fileInput = document.getElementById('fileInput');
 const preview = document.getElementById('preview');
 

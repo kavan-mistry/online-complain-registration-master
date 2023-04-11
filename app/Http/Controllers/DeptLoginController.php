@@ -6,6 +6,8 @@ use App\Models\department;
 use App\Models\Complain;
 use App\Models\dept_images;
 use App\Models\Image;
+use App\Models\Notices;
+use App\Models\Reopen_complain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -39,8 +41,10 @@ class DeptLoginController extends Controller
     public function viewdash(Request $request)
     {
         $department = session()->get('department');
+        $department_id = department::where('department', $department)->value('department_id');
+        $notices = Notices::get();
         // if(!is_null($de, $request)){
-        $complaints = Complain::where('dept', $department)->get();
+        $complaints = Complain::where('department_id', $department_id)->get();
 
         $search = $request['search'] ?? "";
         // echo $search;
@@ -56,29 +60,12 @@ class DeptLoginController extends Controller
                 ['dept', '=', "$department"]
             ])->get();
             // $complain = Complain::sortable()->where('name', 'LIKE', "%$search%")->orWhere('email', 'LIKE', "%$search%")->paginate(6);
-        }
-        // elseif ($dept != "") {
-        //     $complain = Complain::sortable()->where('dept', '=', "$dept")->paginate(5);
-        // }
-        // elseif($dept == "" && $search == ""){
-        //     $complain = Complain::sortable()->paginate(6);
-        // }
-        // elseif ($search != "") {
-        //     $complain = Complain::sortable()->where('name', 'LIKE', "%$search%")->orWhere('email', 'LIKE', "%$search%")->paginate(5);
-        //     // $complain = Complain::sortable()->where('name', 'LIKE', "%$search%")->when($search, function ($search, $dept) {
-        //     //     return $search->where('dept', $dept);
-        //     // })->paginate(6);
-        //     // $complain = Complain::sortable()->where([
-        //     //     ['name', 'LIKE', "%$search%"],
-        //     //     ['dept', '=', "$dept"]
-        //     // ])->paginate(6);
-        // } 
-        else {
-            $complaints = Complain::where('dept', $department)->get();
+        } else {
+            $complaints = Complain::where('department_id', $department_id)->get();
             // echo 'not this';
         }
 
-        $data = compact('complaints', 'department', 'search');
+        $data = compact('complaints', 'department', 'department_id', 'search', 'notices');
         return view('deptDash')->with($data, $department);
         // }
     }
@@ -86,17 +73,37 @@ class DeptLoginController extends Controller
     public function deptedit($de, $id)
     {
         $complain = Complain::find($id);
+        $reopen_complain = Reopen_complain::where('complain_id', $id)->first();
         $complain1 = Complain::where('complain_id', $id)->first();
-        $images = Image::where('complain_id', $id)->get();
-        $dept_images = dept_images::where('complain_id', $id)->get();
+        $images = Image::where([
+            ['complain_id', $id],
+            ['reopen_id', '=', 0]
+        ])->get();
+        $reopen_images = Image::where([
+            ['complain_id', $id],
+            ['reopen_id', '!=', 0]
+        ])->get();
+        $dept_images = dept_images::where([
+            ['complain_id', $id],
+            ['reopen_id', '!=', 0]
+        ])->get();
+        $dept_reopen_images = dept_images::where([
+            ['complain_id', $id],
+            ['reopen_id', 0]
+        ])->get();
+        $dept_name = department::where('department_id', $de)->value('department');
+        // echo $complain1['department_id'];
+        // echo "<br>";
+        // echo $dept_name;
+
         if (is_null($complain)) {
             $url = url('/deptlogin/deptdash') . "/" . $de;
-            return redirect($url, $de);
-        } elseif ($de == $complain1['dept']) {
+            return redirect()->back();
+        } elseif ($de == $complain1['department_id']) {
             $url = url('/deptlogin/deptdash') . "/" . $de . "/update" . "/" . $id;
             // $url = url('/deptlogin/deptdash/{de}/update/{id}') ."/". $id;
             // echo $url;
-            $data = compact('complain', 'url', 'de', 'id', 'images', 'dept_images');
+            $data = compact('complain', 'url', 'de', 'id', 'images', 'dept_images', 'dept_name', 'reopen_complain', 'reopen_images', 'dept_reopen_images');
             // echo "<pre>";
             // print_r($data);
             return view('deptEditComplain')->with($data, $url, $de);
@@ -110,8 +117,7 @@ class DeptLoginController extends Controller
     {
         $complain1 = Complain::where('complain_id', $de)->value('pt');
         $comp_str = $complain1 . " : edited successfully";
-        // echo $de;
-        // die($comp_str);
+        $reopen_id = Reopen_complain::where('complain_id', $de)->value('reopen_id');
 
         $status = $request['status'];
         session()->put('status', $status);
@@ -144,6 +150,9 @@ class DeptLoginController extends Controller
 
                 $dept_image = new dept_images;
                 $dept_image->complain_id = $complain->complain_id;
+                if (isset($reopen_id)) {
+                    $dept_image->reopen_id = $reopen_id;
+                }
                 $dept_image->url = $fileloc;
                 $dept_image->save();
             }

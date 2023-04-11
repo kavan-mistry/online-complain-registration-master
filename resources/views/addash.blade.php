@@ -51,6 +51,8 @@
                                         class="bi bi-exclamation-circle me-1"></i>Problem list</a>
                                 <a class="dropdown-item" href="{{ url('/adlogin/addash/customer_list') }}"><i
                                         class="bi bi-people-fill me-1"></i></i>Customer list </a>
+                                <a class="dropdown-item" href="{{ url('/adlogin/addash/notices') }}">
+                                    <i class="bi bi-stickies"></i> Notices </a>
                                 <a class="dropdown-item" href="{{ url('/adlogin/addash/customer_list_blocked') }}">
                                     <i class="bi bi-person-fill-slash me-1"></i>Blocked Customer list </a>
                                 <a href="/adlogin/addash/department" class="dropdown-item"><i
@@ -75,13 +77,16 @@
     <x-notify::notify />
     @notifyJs
 
-    @if (session('success'))
-        <div class="container d-flex alert alert-success alert-dismissible fade show my-3 text-center justify-content-center"
-            role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="container-sm mt-3 p-0 d-flex align-items-center justify-content-center" id="notice-div">
+        <div class="col-1 text-center py-3" id="nh"><b>Importent</b></div>
+        <div class="col-11 d-flex align-items-center">
+            <marquee>
+                @foreach ($notices as $notice)
+                    <span>{{ $notice->notice }} &emsp;&emsp; | &emsp;&emsp; </span>
+                @endforeach
+            </marquee>
         </div>
-    @endif
+    </div>
 
     <!-- Modal HTML Markup -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -141,7 +146,7 @@
             </div>
         </div>
     </div>
-    {{-------- model end --------}}
+    {{-- ------ model end ------ --}}
 
     <div class="container justify-content-center d-flex row m-auto">
 
@@ -238,27 +243,64 @@
                                     {{-- <td>{{ $complains->city }}</td> --}}
                                     <td>{{ $complains->state }}</td>
                                     <td>{{ $complains->pt }}</td>
-                                    <td>{{ ucfirst($complains->dept) }}</td>
+                                    {{-- <td>{{ ucfirst($complains->dept) }}</td> --}}
                                     <td>
-                                        @if ($complains->status == 1)
-                                            <span class="badge text-bg-info">Active</span>
-                                        @elseif($complains->status == 0)
-                                            <span class="badge text-bg-success">Solved</span>
-                                        @elseif($complains->status == 2)
-                                            <span class="badge text-bg-warning">Pending</span>
-                                        @elseif($complains->status == 3)
-                                            <span class="badge text-bg-danger">Rejected</span>
+                                        @if (!empty($complains['departmentcm']))
+                                            @foreach ($complains['departmentcm'] as $p)
+                                                {{-- {{ !empty($p->department) ? $p->department : 'N/A' }} --}}
+                                                {{ empty($p->department) ? 'N/A' : $p->department }}
+                                            @endforeach
+                                        @else
+                                            {{ 'N/A' }}
                                         @endif
                                     </td>
                                     <td>
-                                        <div class="container gap-2 d-flex">
+                                        <p class="m-auto">
+                                            @if ($complains->deleted_at != null)
+                                                <span class="badge text-bg-danger">Deleted</span>
+                                            @elseif ($complains->status == 1)
+                                                <span class="badge text-bg-info">Active</span>
+                                            @elseif($complains->status == 0)
+                                                <span class="badge text-bg-success">Solved</span>
+                                            @elseif($complains->status == 2)
+                                                <span class="badge text-bg-warning">Pending</span>
+                                            @elseif($complains->status == 3)
+                                                <span class="badge text-bg-danger">Rejected</span>
+                                            @elseif ($complains->status == 4)
+                                                <span class="badge text-bg-info">Re-opened</span>
+                                            @endif
+                                        </p>
+
+                                        @foreach ($blocked_customer as $bcust)
+                                            @if ($complains->customer_id == $bcust->customer_id)
+                                                @if (!empty($bcust->deleted_at))
+                                                    <p class="m-auto">
+                                                        <span class="badge text-bg-secondary">User Blocked</span>
+                                                    </p>
+                                                @endif
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        <div class="container gap-1 d-flex">
                                             <a href="{{ route('complain.edit', ['id' => $complains->complain_id]) }}"><button
                                                     type="button" class="btn btn-sm btn-outline-primary"><i
-                                                        class="bi bi-pencil-fill me-1"></i></button></a>
+                                                        class="bi bi-pencil-fill"></i></button></a>
                                             <a href="{{ route('complain.delete', ['id' => $complains->complain_id]) }}"
                                                 onclick="return confirm('Are you sure you want to delete complain ?')"><button
                                                     type="button" class="btn btn-sm btn-outline-danger"><i
-                                                        class="bi bi-trash me-1"></i></button></a>
+                                                        class="bi bi-trash"></i></button></a>
+                                            @foreach ($blocked_customer as $bcust)
+                                                @if ($complains->customer_id == $bcust->customer_id)
+                                                    @if (empty($bcust->deleted_at))
+                                                        <a href="{{ route('customer.block', ['id' => $complains->customer_id]) }}"
+                                                            onclick="return confirm('Are you sure you want to block {{ $complains->name }} ?')"><button
+                                                                type="button"
+                                                                class="btn btn-sm btn-outline-warning"><i
+                                                                    class="bi bi-person-fill-slash"></i></button></a>
+                                                    @endif
+                                                @endif
+                                            @endforeach
                                         </div>
                                     </td>
                                 </tr>

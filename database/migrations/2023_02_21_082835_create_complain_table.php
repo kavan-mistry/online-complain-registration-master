@@ -22,13 +22,14 @@ return new class extends Migration
             $table->string('state');
             $table->string('zip');
             $table->string('pt');
-            $table->string('dept');
+            $table->string('opt');
+            // $table->string('dept');
             $table->string('mob');
             $table->string('pd');
-            $table->string('file');
+            // $table->string('file');
             $table->string('status');
             $table->string('rejection_reason');
-            $table->string('file_update');
+            // $table->string('file_update');
             $table->string('department_id');
             $table->timestamps();
         });

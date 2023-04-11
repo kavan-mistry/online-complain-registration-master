@@ -9,26 +9,38 @@
     --bs-pagination-border-radius: 0.25rem !important;
 }
 
+#notice-div {
+    background-color: #FEEFC3;
+    border-radius: 15px;
+}
+
+#nh {
+    font: bold;
+    background-color: #FBBC04;
+    border-radius: 15px;
+}
+
+
 #myTable_length {
     font-size: small;
 }
 
-.dropdown-z{
+.dropdown-z {
     /* box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2); */
     z-index: 3;
 }
 
-.table-z{
+.table-z {
     z-index: 0;
 }
 
-.er{
+.er {
     /* font-size: small; */
     height: 15px;
 }
 
 
-#laravel-notify{
+#laravel-notify {
     position: relative;
     z-index: 3;
-  }
+}

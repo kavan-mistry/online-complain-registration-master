@@ -61,6 +61,17 @@
     <x-notify::notify />
     @notifyJs
 
+    <div class="container-sm mt-3 p-0 d-flex align-items-center justify-content-center" id="notice-div">
+        <div class="col-1 text-center p-3" id="nh"><b>Important</b></div>
+        <div class="col-11 d-flex align-items-center">
+            <marquee>
+                @foreach ($notices as $notice)
+                    <span>{{ $notice->notice }} &emsp;&emsp; | &emsp;&emsp; </span>
+                @endforeach
+            </marquee>
+        </div>
+    </div>
+
     <div class="container d-flex row m-auto">
 
         @if (session()->has('message'))
@@ -111,38 +122,40 @@
                 <tbody class="">
                     {{-- @if (!$complaints->isEmpty()) --}}
 
-                        @foreach ($complaints as $complain)
-                            <tr class="">
-                                <td>{{ $complain->complain_id }}</td>
-                                <td>{{ ucfirst($complain->name) }}</td>
-                                <td>{{ $complain->email }}</td>
-                                <td>{{ $complain->mob }}</td>
-                                {{-- <td>{{ $complain->address }}</td> --}}
-                                <td>{{ ucfirst($complain->city) }}</td>
-                                <td>{{ $complain->state }}</td>
-                                <td>{{ $complain->pt }}</td>
-                                {{-- <td>{{ $complain->dept }}</td> --}}
-                                <td>
-                                    @if ($complain->status == 1)
-                                        <span class="badge text-bg-info">Active</span>
-                                    @elseif($complain->status == 0)
-                                        <span class="badge text-bg-success">Solved</span>
-                                    @elseif($complain->status == 2)
-                                        <span class="badge text-bg-warning">Pending</span>
-                                    @elseif($complain->status == 3)
-                                        <span class="badge text-bg-danger">Rejected</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <div class="container gap-2 d-flex">
-                                        <a
-                                            href="{{ route('deptcomplain.edit', ['id' => $complain->complain_id, 'de' => $complain->dept]) }}"><button
-                                                type="button" class="btn btn-sm btn-outline-primary"><i
-                                                    class="bi bi-pencil me-1"></i></button></a>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
+                    @foreach ($complaints as $complain)
+                        <tr class="">
+                            <td>{{ $complain->complain_id }}</td>
+                            <td>{{ ucfirst($complain->name) }}</td>
+                            <td>{{ $complain->email }}</td>
+                            <td>{{ $complain->mob }}</td>
+                            {{-- <td>{{ $complain->address }}</td> --}}
+                            <td>{{ ucfirst($complain->city) }}</td>
+                            <td>{{ $complain->state }}</td>
+                            <td>{{ $complain->pt }}</td>
+                            {{-- <td>{{ $complain->dept }}</td> --}}
+                            <td>
+                                @if ($complain->status == 1)
+                                    <span class="badge text-bg-info">Active</span>
+                                @elseif($complain->status == 0)
+                                    <span class="badge text-bg-success">Solved</span>
+                                @elseif($complain->status == 2)
+                                    <span class="badge text-bg-warning">Pending</span>
+                                @elseif($complain->status == 3)
+                                    <span class="badge text-bg-danger">Rejected</span>
+                                @elseif($complain->status == 4)
+                                    <span class="badge text-bg-info">Re-opened</span>
+                                @endif
+                            </td>
+                            <td>
+                                <div class="container gap-2 d-flex">
+                                    <a
+                                        href="{{ route('deptcomplain.edit', ['id' => $complain->complain_id, 'de' => $department_id]) }}"><button
+                                            type="button" class="btn btn-sm btn-outline-primary"><i
+                                                class="bi bi-pencil me-1"></i></button></a>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
                     {{-- @else
                         <td colspan="9" class="text-center">No data found !</td>
                     @endif --}}
@@ -156,7 +169,7 @@
         </div>
     </div>
 
-    <footer class="foo container-fluid fixed-bottom justify-content-center p-1">
+    <footer class="foo container-fluid justify-content-center p-1">
         <div>
             Made with 💖 &emsp; | &emsp; ® OCR &emsp; | &emsp; © all rights recieved .
         </div>

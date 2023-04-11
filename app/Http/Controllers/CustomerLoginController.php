@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Complain;
 use App\Models\customer;
+use App\Models\Notices;
 use App\Models\Problem_types;
 use App\Models\User;
 use PharIo\Manifest\Url;
@@ -15,7 +16,7 @@ use PHPUnit\Event\Test\Passed;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Session;
 
-class   CustomerLoginController extends Controller
+class  CustomerLoginController extends Controller
 {
 
     public function complain()
@@ -76,6 +77,7 @@ class   CustomerLoginController extends Controller
     {
         // $this->problem_types[] = 'problem_types';
         $problem_types = Problem_types::get();
+        $notices = Notices::get();
         $search = $request['search'] ?? "";
         $pt = $request['pt'];
         //print_r($dept);
@@ -123,7 +125,7 @@ class   CustomerLoginController extends Controller
 
 
 
-        $data = compact('complain', 'search', 'customer_id', 'pt', 'user', 'problem_types');
+        $data = compact('complain', 'search', 'customer_id', 'pt', 'user', 'problem_types', 'notices');
         // echo $cid;
         // echo "<pre>";
         // print_r($data);

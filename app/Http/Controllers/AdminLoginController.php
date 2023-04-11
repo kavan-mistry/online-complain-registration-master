@@ -8,7 +8,9 @@ use App\Models\customer;
 use App\Models\department;
 use App\Models\dept_images;
 use App\Models\Image;
+use App\Models\Notices;
 use App\Models\Problem_types;
+use App\Models\Reopen_complain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -66,7 +68,7 @@ class AdminLoginController extends Controller
 
         $hashPass = Hash::make($request['password']);
 
-        $admin = admin::where('id',1)->first();
+        $admin = admin::where('id', 1)->first();
         echo $admin;
         // die;
         $admin->password = $hashPass;
@@ -106,7 +108,7 @@ class AdminLoginController extends Controller
     {
         $problem_types = Problem_types::get();
         $departments = department::get();
-
+        $notices = Notices::get();
         $search = $request['search'] ?? "";
         $pt = $request['pt'];
         $dept = $request['dept'];
@@ -141,9 +143,17 @@ class AdminLoginController extends Controller
             //     ['dept', '=', "$dept"]
             // ])->paginate(6);
         } else {
-            $complain = Complain::get();
+            $complain = Complain::withTrashed('departmentcm')->get();
         }
-        $data = compact('complain', 'search', 'dept', 'problem_types', 'pt', 'departments');
+
+        //echo $complain
+
+        // die;
+        $blocked_customer = customer::withTrashed()->get();
+        // echo $blocked_customer;
+        // die;
+
+        $data = compact('complain', 'search', 'dept', 'problem_types', 'pt', 'departments', 'blocked_customer', 'notices');
         return view('addash')->with($data);
     }
 
@@ -159,18 +169,34 @@ class AdminLoginController extends Controller
 
     public function edit($id)
     {
-        $complain = Complain::find($id);
-        // echo $complain;
-        // die;
+        $complain = Complain::withTrashed()->find($id);
+        $reopen_complain = Reopen_complain::where('complain_id', $id)->first();
+        // $complain1 = Complain::where('complain_id', $complain_id)->first();
+        $dept_name = department::where('department_id', $complain['department_id'])->value('department');
+        
         if (is_null($complain)) {
             return redirect('/adlogin/addash/view');
         } else {
             $states = $this->states;
             $problem_types = Problem_types::get();
             $url = url('/adlogin/addash/view/update') . "/" . $id;
-            $images = Image::where('complain_id', $id)->get();
-            $dept_images = dept_images::where('complain_id', $id)->get();
-            $data = compact('complain', 'url', 'states', 'problem_types', 'images', 'dept_images');
+            $images = Image::where([
+                ['complain_id', $id],
+                ['reopen_id', '=', 0]
+            ])->get();
+            $reopen_images = Image::where([
+                ['complain_id', $id],
+                ['reopen_id', '!=', 0]
+            ])->get();
+            $dept_images = dept_images::where([
+                ['complain_id', $id],
+                ['reopen_id', '!=', 0]
+            ])->get();
+            $dept_reopen_images = dept_images::where([
+                ['complain_id', $id],
+                ['reopen_id', 0]
+            ])->get();
+            $data = compact('complain', 'url', 'states', 'problem_types', 'images', 'dept_images', 'reopen_complain', 'reopen_images', 'dept_reopen_images', 'dept_name');
             // print_r($data);
             return view('editComplain')->with($data, $url);
         }

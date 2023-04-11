@@ -19,7 +19,7 @@
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" />
 
-   
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
         integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -82,14 +82,18 @@
     @include('notify::components.notify')
     <x-notify::notify />
     @notifyJs
-    {{-- @if (session('success')) --}}
-        {{-- <div class="container d-flex alert alert-success alert-dismissible fade show my-3 text-center justify-content-center"
-            role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div> --}}
-        
-    {{-- @endif --}}
+
+    <div class="container-sm mt-3 p-0 d-flex align-items-center justify-content-center" id="notice-div">
+        <div class="col-1 text-center py-3" id="nh"><b>Important</b></div>
+        <div class="col-11 d-flex align-items-center">
+            <marquee>
+                @foreach ($notices as $notice)
+                    <span>{{ $notice->notice }} &emsp;&emsp; | &emsp;&emsp; </span>
+                @endforeach
+            </marquee>
+        </div>
+    </div>
+
     <form method="post" action="" class="d-flex mt-4 align-items-center">
         @csrf
         <div class="container justify-content-end d-flex">
@@ -168,36 +172,38 @@
                     {{-- @if (!$complain->isEmpty()) --}}
 
 
-                        @foreach ($complain as $complains)
-                            <tr class="">
-                                <td>{{ $complains->complain_id }}</td>
-                                <td>{{ ucfirst($complains->name) }}</td>
-                                <td>{{ $complains->email }}</td>
-                                <td>{{ $complains->mob }}</td>
-                                {{-- <td>{{ $complains->address }}</td> --}}
-                                {{-- <td>{{ ucfirst($complains->city) }}</td> --}}
-                                <td>{{ $complains->state }}</td>
-                                <td>{{ $complains->pt }}</td>
-                                {{-- <td>{{ $complains->dept }}</td> --}}
-                                <td>
-                                    @if ($complains->status == 1)
-                                        <span class="badge text-bg-info">Active</span>
-                                    @elseif($complains->status == 0)
-                                        <span class="badge text-bg-success">Solved</span>
-                                    @elseif($complains->status == 2)
-                                        <span class="badge text-bg-warning">Pending</span>
-                                    @elseif($complains->status == 3)
-                                        <span class="badge text-bg-danger">Rejected</span>
-                                    @endif
-                                </td>
-                                <td>
+                    @foreach ($complain as $complains)
+                        <tr class="">
+                            <td>{{ $complains->complain_id }}</td>
+                            <td>{{ ucfirst($complains->name) }}</td>
+                            <td>{{ $complains->email }}</td>
+                            <td>{{ $complains->mob }}</td>
+                            {{-- <td>{{ $complains->address }}</td> --}}
+                            {{-- <td>{{ ucfirst($complains->city) }}</td> --}}
+                            <td>{{ $complains->state }}</td>
+                            <td>{{ $complains->pt }}</td>
+                            {{-- <td>{{ $complains->dept }}</td> --}}
+                            <td>
+                                @if ($complains->status == 1)
+                                    <span class="badge rounded-pill text-bg-info">Active</span>
+                                @elseif($complains->status == 0)
+                                    <span class="badge rounded-pill text-bg-success">Solved</span>
+                                @elseif($complains->status == 2)
+                                    <span class="badge rounded-pill text-bg-warning">Pending</span>
+                                @elseif($complains->status == 3)
+                                    <span class="badge rounded-pill text-bg-danger">Rejected</span>
+                                @elseif($complains->status == 4)
+                                    <span class="badge rounded-pill text-bg-info">Re-opened</span>
+                                @endif
+                            </td>
+                            <td>
 
-                                    <a href="{{ route('detail.view', ['comp_id' => $complains->complain_id]) }}">
-                                        <button type="button" class="btn btn-sm btn-outline-success m-1"><i
-                                                class="bi bi-eye-fill me-1"></i>view</button>
-                                    </a>
+                                <a href="{{ route('detail.view', ['comp_id' => $complains->complain_id]) }}">
+                                    <button type="button" class="btn btn-sm btn-outline-success m-1"><i
+                                            class="bi bi-eye-fill me-1"></i>view</button>
+                                </a>
 
-                                    @if ($complains->status == 1)    
+                                @if ($complains->status == 1)
                                     <a href="{{ route('complain.close', ['id' => $complains->complain_id]) }}"
                                         onclick="return confirm(`Are you sure you want to Close
 Id : {{ $complains->complain_id }}  
@@ -205,11 +211,86 @@ Problem : {{ $complains->pt }} ?`)">
                                         <button type="button" class="btn btn-sm btn-outline-danger m-1"><i
                                                 class="bi bi-x-circle-fill me-1"></i>close</button></a>
                                     </a>
-                                    @endif
+                                @endif
 
-                                </td>
-                            </tr>
-                        @endforeach
+                                @if ($complains->status == 0)
+                                    {{-- <a href="">
+                                        <button type="button" class="btn btn-sm btn-outline-primary m-1">
+                                            <i class="bi bi-node-plus-fill me-1"></i>Re-open</button></a>
+                                    </a> --}}
+                                    <button type="button" class="btn btn-sm btn-outline-primary m-1"
+                                        data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                        <i class="bi bi-node-plus-fill me-1"></i>Re-open
+                                    </button>
+
+                                    {{-- ----------------model start--------------- --}}
+
+                                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
+                                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <form
+                                                    action="{{ route('complain.reopen', ['id' => $complains->complain_id]) }}"
+                                                    method="post" enctype="multipart/form-data">
+                                                    @csrf
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Re-open
+                                                            complain
+                                                        </h1>
+                                                        <button type="button" class="btn-close"
+                                                            data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        @csrf
+                                                        <div class="mb-3">
+                                                            <label for="" class="form-label">Before you go
+                                                                please gave us feedback<span
+                                                                    class="text-danger">*</span></label>
+                                                            <textarea class="form-control" name="feedback" id="" cols="60" rows="3"></textarea>
+                                                            <div class="er d-flex"
+                                                                style="position: relative; top: -21px">
+                                                                <span class="form-text text-danger">
+                                                                    @error('feedback')
+                                                                        {{ $message }}
+                                                                    @enderror
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="formFileSm"
+                                                                class="form-label col-form-label">Upload Problem
+                                                                Image<span class="text-danger">*</span></label>
+                                                            {{-- <input class="form-control form-control-sm" name="file[]"
+                                                                id="fileInput" type="file" 
+                                                                > --}}
+                                                            <input class="form-control" id="fileInput" type="file"
+                                                                name="file[]" accept="Image/*" multiple>
+                                                            <div id="preview"></div>
+                                                            <span class="text-danger col-form-label-sm">
+                                                                @error('file')
+                                                                    {{ $message }}
+                                                                @enderror
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger"
+                                                            data-bs-dismiss="modal"><i
+                                                                class="bi bi-x-circle me-1"></i>Cancel</button>
+                                                        <button type="submit" class="btn btn-success"><i
+                                                                class="bi bi-check2-circle me-1"></i>Re-open</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- -------------------model end-------------- --}}
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
                     {{-- @else
                         <td colspan="11" class="text-center">No data found !</td>
                     @endif --}}
@@ -222,6 +303,7 @@ Problem : {{ $complains->pt }} ?`)">
             {{-- {{ $complain->appends(['search' => $search, 'pt' => $pt])->links() }} --}}
         </div>
     </div>
+
 
     <footer class="foo container-fluid justify-content-center p-1 mt-2">
         <div>
@@ -238,6 +320,8 @@ Problem : {{ $complains->pt }} ?`)">
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 
     <script src="{{ asset('/js/customer.js') }}"></script>
+    <script src="{{ asset('/js/dash.js') }}"></script>
+
     <!-- Bootstrap JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
         integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">

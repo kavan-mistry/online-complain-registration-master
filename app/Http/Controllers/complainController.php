@@ -29,30 +29,57 @@ class complainController extends Controller
         // print_r($aa);
         // die;
 
-        $request->validate(
-            [
-                'name' => 'required',
-                'email' => 'email|required',
-                'mob' => 'required|min:10|max:11',
-                'address' => 'required|max:255',
-                'city' => 'required|regex:/^[a-zA-Z]+$/u',
-                'state' => 'required|not_in:0',
-                'zip' => 'required',
-                'pt' => 'required|not_in:0',
-                // 'dept' => 'required|not_in:0',
-                'pd' => 'required|max:1000',
-                'file' => 'required|max:5'
-            ],
-            [
-                'mob.required' => 'The contact number field is required.',
-                'pt.required' => 'The problem type field is required.',
-                'pd.max' => 'The problem description must not be greater than 1000 characters.',
-                'pd.required' => 'The problem description field is required.',
-            ]
-        );
 
-        $department_id = Problem_types::where('problems',$prt)->first();
-        foreach($department_id->departments as $p){
+
+        if ($request['pt'] == 'Other') {
+            $request->validate(
+                [
+                    'name' => 'required',
+                    'email' => 'email|required',
+                    'mob' => 'required|min:10|max:11',
+                    'address' => 'required|max:255',
+                    'city' => 'required|regex:/^[a-zA-Z]+$/u',
+                    'state' => 'required|not_in:0',
+                    'zip' => 'required|max:6',
+                    'pt' => 'required|not_in:0',
+                    'pd' => 'required|max:1000',
+                    'file' => 'required|max:5',
+                    'opt' => 'required'
+                ],
+                [
+                    'mob.required' => 'The contact number field is required.',
+                    'pt.required' => 'The problem type field is required.',
+                    'pd.max' => 'The problem description must not be greater than 1000 characters.',
+                    'pd.required' => 'The problem description field is required.',
+                    'opt.required' => 'Please specify your problem.',
+                ]
+            );
+        } else {
+            $request->validate(
+                [
+                    'name' => 'required',
+                    'email' => 'email|required',
+                    'mob' => 'required|min:10|max:11',
+                    'address' => 'required|max:255',
+                    'city' => 'required|regex:/^[a-zA-Z]+$/u',
+                    'state' => 'required|not_in:0',
+                    'zip' => 'required|max:6',
+                    'pt' => 'required|not_in:0',
+                    // 'dept' => 'required|not_in:0',
+                    'pd' => 'required|max:1000',
+                    'file' => 'required|max:5'
+                ],
+                [
+                    'mob.required' => 'The contact number field is required.',
+                    'pt.required' => 'The problem type field is required.',
+                    'pd.max' => 'The problem description must not be greater than 1000 characters.',
+                    'pd.required' => 'The problem description field is required.',
+                ]
+            );
+        }
+
+        $department_id = Problem_types::where('problems', $prt)->first();
+        foreach ($department_id->departments as $p) {
             $p->department;
             $departmentName = $p->department;
         }
@@ -60,7 +87,7 @@ class complainController extends Controller
         // print_r($departmentName);
         // die;
 
-          
+
 
         // echo "<pre>";
         // print_r($request->all());
@@ -71,7 +98,7 @@ class complainController extends Controller
         // } elseif ($request['dept'] == 'disaster') {
         //     $dept_id = 3;
         // }
-        
+
         $complain = new Complain;
         $complain->customer_id = $cid;
         $complain->name = $request['name'];
@@ -82,17 +109,18 @@ class complainController extends Controller
         $complain->state = $request['state'];
         $complain->zip = $request['zip'];
         $complain->pt = $prt;
-        $complain->dept = $departmentName;
+        $complain->opt = $request['opt'];
+        // $complain->dept = $departmentName;
         $complain->department_id = $department_id['department'];
         $complain->pd = $request['pd'];
         $complain->save();
-        
+
         foreach ($request->file('file') as $imagefile) {
-            
+
             $random = Str::random(7);
             $fileName = time() . "-ocrs-" . "-" . $random . "-" . date('d-m-y') . "." . $imagefile->getClientOriginalExtension();
             $fileloc = $imagefile->storeAs('public/uploads', $fileName);
-            
+
             // $complain->file = $fileloc;
             // $complain->save();
             $image = new Image;

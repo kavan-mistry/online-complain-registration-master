@@ -15,4 +15,9 @@ class department extends Model
     {
         return $this->belongsTo('App\Models\Problem_types', 'department_id', 'department');
     }
+
+    public function complaindt()
+    {
+        return $this->belongsTo('App\Models\Complain', 'department_id', 'department_id');
+    }
 }

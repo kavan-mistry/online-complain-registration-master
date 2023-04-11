@@ -59,12 +59,18 @@
     </section>
 
     <div class="container d-flex row justify-content-center align-items-center m-auto mt-4">
-        <div class="mb-3">
-            <a name="" id="" class="btn btn-primary" href="{{ url('login/dash') . '/view' }}"
-                role="button"><i class="bi bi-caret-left-fill me-2"></i>Back</a>
-            <h3 style="background-color: lavender;" id="dash-head" class="text-center p-2">
-                Complain Details
-            </h3>
+        <div class="mb-3 d-flex justify-content-center py-2" style="background-color: lavender; border-radius: 10px;">
+            <div class="col-1 d-flex m-auto" style="z-index: 5;">
+                <a name="" id="" class="btn btn-primary" href="{{ url('login/dash') . '/view' }}"
+                    role="button"><i class="bi bi-caret-left-fill me-2"></i>Back</a>
+            </div>
+            <div class="col-11" style="
+            left: -74px;
+            position: relative;">
+                <h3 id="dash-head" class="text-center m-auto">
+                    Complain Details
+                </h3>
+            </div>
         </div>
         <div class="container w-75 mb-3">
             @foreach ($complain as $complain)
@@ -88,38 +94,20 @@
                                 <span class="badge text-bg-warning">Pending</span>
                             @elseif($complain->status == 3)
                                 <span class="badge text-bg-danger">Rejected</span>
+                            @elseif($complain->status == 4)
+                                <span class="badge text-bg-info">Re-opened</span>
                             @endif
                         </li>
                     </ul>
                     <div class="card-header fw-bold">
-                        Name:
+                        Info:
                     </div>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">{{ $complain->name }}</li>
-                    </ul>
-                    <div class="card-header fw-bold">
-                        Address:
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">{{ $complain->address }}</li>
-                    </ul>
-                    <div class="card-header fw-bold">
-                        City:
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">{{ $complain->city }}</li>
-                    </ul>
-                    <div class="card-header fw-bold">
-                        State:
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">{{ $complain->state }}</li>
-                    </ul>
-                    <div class="card-header fw-bold">
-                        Zip:
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">{{ $complain->zip }}</li>
+                        <li class="list-group-item">Name : {{ $complain->name }}</li>
+                        <li class="list-group-item">Address : {{ $complain->address }}</li>
+                        <li class="list-group-item">City : {{ $complain->city }}</li>
+                        <li class="list-group-item">State : {{ $complain->state }}</li>
+                        <li class="list-group-item">Zip : {{ $complain->zip }}</li>
                     </ul>
                     <div class="card-header fw-bold">
                         Problem Type:
@@ -131,7 +119,7 @@
                         Department:
                     </div>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">{{ $complain->dept }}</li>
+                        <li class="list-group-item">{{ $dept_name }}</li>
                     </ul>
                     <div class="card-header fw-bold">
                         Mobile Number:
@@ -156,7 +144,7 @@
                             @endforeach
                         </li>
                     </ul>
-                    @if (isset($dept_images))
+                    @if (count($dept_images) > 0)
                         <div class="card-header fw-bold">
                             Department Work Proof Image:
                         </div>
@@ -167,6 +155,62 @@
                                         class="img-fluid img-thumbnail" id="up-img2" alt="Complaint Image">
                                 @endforeach
                             </li>
+                        </ul>
+                    @endif
+                    @if (count($reopen_complain) > 0)
+                        <div class="card-header fw-bold">
+                            Reopen History:
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            @foreach ($reopen_complain as $rcomp)
+                                <li class="list-group-item">
+                                    Reopen Date & Time : {{ $rcomp->created_at }}
+                                </li>
+                                <li class="list-group-item">
+                                    {{-- Feedback : 
+                                    <li class="list-group-item">{{$rcomp->feedback}}</li> --}}
+                                    <div>
+                                        Feedback :
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">
+                                            {{ $rcomp->feedback }}
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="list-group-item">
+                                    @if (!$reopen_images == null)
+                                        <div>
+                                            Customer Uploaded Image (Re-opened) :
+                                        </div>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">
+                                                @foreach ($reopen_images as $rimage)
+                                                    <img src="{{ asset('storage/' . str_replace('public/', '', $rimage->url)) }}"
+                                                        class="img-fluid img-thumbnail" id="up-img2"
+                                                        alt="Complaint Image">
+                                                @endforeach
+                                            </li>
+                                        </ul>
+                                    @endif
+                                </li>
+                                <li class="list-group-item">
+                                    @if (!$reopen_images == null)
+                                        <div>
+                                            Department work of proof (Re-opened) :
+                                        </div>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">
+                                                @foreach ($dept_reopen_images as $drimage)
+                                                    <img src="{{ asset('storage/' . str_replace('public/', '', $drimage->url)) }}"
+                                                        class="img-fluid img-thumbnail" id="up-img2"
+                                                        alt="Complaint Image">
+                                                @endforeach
+                                            </li>
+                                        </ul>
+                                    @endif
+                                </li>
+                            @endforeach
                         </ul>
                     @endif
                     @if (isset($complain->rejection_reason))

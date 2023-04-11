@@ -38,7 +38,7 @@
                                 <i class="bi bi-card-list me-1"></i>Complain list </a>
                         </li>
                         <li class="nav-item"><a class="nav-link active">
-                                <i class="bi bi-person-circle"></i> {{ ucfirst($de) }} department </a>
+                                <i class="bi bi-person-circle"></i> {{ ucfirst($dept_name) }} department </a>
                         </li>
                         <li class="nav-item"><a name="" id="" class="btn btn-danger my-3"
                                 href="{{ url('/logout') }}" role="button"><i class="bi bi-door-open"></i>
@@ -122,6 +122,27 @@
                         </span>
                     </div>
                     <div class="col-md-4">
+                        <label for="inputPassword4" class="form-label col-form-label-sm">Contact number</label>
+                        <input type="number" name="mob" class="form-control form-control-sm"
+                            id="inputPassword4" value="{{ $complain->mob }}" disabled>
+                        <span class="text-danger col-form-label-sm">
+                            @error('mob')
+                                {{ $message }}
+                            @enderror
+                        </span>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputState" class="form-label col-form-label-sm">Department</label>
+                        <select id="inputState" name="dept" class="form-select form-select-sm" disabled>
+                            <option>{{ $dept_name }}</option>
+                        </select>
+                        <span class="text-danger col-form-label-sm">
+                            @error('dept')
+                                {{ $message }}
+                            @enderror
+                        </span>
+                    </div>
+                    <div class="col-md-4">
                         <label for="inputState" class="form-label col-form-label-sm">problem type</label>
                         <select id="inputState" name="pt" class="form-select form-select-sm" disabled>
                             <option>{{ $complain->pt }}</option>
@@ -132,27 +153,31 @@
                             @enderror
                         </span>
                     </div>
-                    <div class="col-md-4">
-                        <label for="inputState" class="form-label col-form-label-sm">Department</label>
-                        <select id="inputState" name="dept" class="form-select form-select-sm" disabled>
-                            <option>{{ $complain->dept }}</option>
-                        </select>
-                        <span class="text-danger col-form-label-sm">
-                            @error('dept')
-                                {{ $message }}
-                            @enderror
-                        </span>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="inputPassword4" class="form-label col-form-label-sm">Contact number</label>
-                        <input type="number" name="mob" class="form-control form-control-sm"
-                            id="inputPassword4" value="{{ $complain->mob }}" disabled>
-                        <span class="text-danger col-form-label-sm">
-                            @error('mob')
-                                {{ $message }}
-                            @enderror
-                        </span>
-                    </div>
+                    @if (isset($complain->opt))
+                        <div class="col-md-4">
+                            <label class="form-label col-form-label-sm">Specified problem<span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" name="opt" id=""
+                                value="{{ $complain->opt }}" disabled>
+                            <span class="text-danger col-form-label-sm">
+                                @error('opt')
+                                    {{ $message }}
+                                @enderror
+                            </span>
+                        </div>
+                    @endif
+                    @if ($reopen_complain != null)
+                        <div class="col-12">
+                            <label class="form-label col-form-label-sm">Feedback</label>
+                            <textarea class="form-control form-control-sm" name="feedback" id="" cols="30" rows="3"
+                                disabled>{{ $reopen_complain->feedback }}</textarea>
+                            <span class="text-danger col-form-label-sm">
+                                @error('opt')
+                                    {{ $message }}
+                                @enderror
+                            </span>
+                        </div>
+                    @endif
                     <div class="col-12">
                         <label for="inputAddress2" class="form-label col-form-label-sm">Problem description</label>
                         <textarea class="form-control form-control-sm" name="pd" placeholder="Write a problem here"
@@ -163,18 +188,36 @@
                             @enderror
                         </span>
                     </div>
-                    <div class="col-6 m-auto mt-3">
+                    <div class="col-12 m-auto mt-3">
                         <label class="form-label col-form-label-sm">Customer Uploaded Image</label>
                         @foreach ($images as $image)
                             <img src="{{ asset('storage/' . str_replace('public/', '', $image->url)) }}"
                                 class="img-fluid img-thumbnail" id="up-img3" alt="Complaint Image">
                         @endforeach
                     </div>
-                    @if (isset($dept_images))
-                        <div class="col-6 m-auto mt-3">
+                    @if (count($reopen_images)>0)
+                        <div class="col-12 m-auto mt-3">
+                            <label class="form-label col-form-label-sm">Customer Uploaded Image (Re-opened)</label>
+                            @foreach ($reopen_images as $rimages)
+                                <img src="{{ asset('storage/' . str_replace('public/', '', $rimages->url)) }}"
+                                    class="img-thumbnail" id="up-img3" alt="Complaint Image">
+                            @endforeach
+                        </div>
+                    @endif
+                    @if (count($dept_images)>0)
+                        <div class="col-12 m-auto mt-3">
                             <label class="form-label col-form-label-sm">Department Work Proof Image</label>
                             @foreach ($dept_images as $dimages)
                                 <img src="{{ asset('storage/' . str_replace('public/', '', $dimages->url)) }}"
+                                    class="img-thumbnail" id="up-img3" alt="Complaint Image">
+                            @endforeach
+                        </div>
+                    @endif
+                    @if (isset($dept_reopen_images))
+                        <div class="col-12 m-auto mt-3">
+                            <label class="form-label col-form-label-sm">Department Work Proof Image (Re-opened)</label>
+                            @foreach ($dept_reopen_images as $drimages)
+                                <img src="{{ asset('storage/' . str_replace('public/', '', $drimages->url)) }}"
                                     class="img-thumbnail" id="up-img3" alt="Complaint Image">
                             @endforeach
                         </div>
@@ -187,15 +230,17 @@
                         <select id="inputStateSelection" name="status" class="form-select form-select-sm"
                             onchange="showDiv(this)">
                             <option value="1" {{ old('status', $complain->status) == 1 ? 'selected' : '' }}>
-                                active</option>
+                                Active</option>
                             <option value="0" {{ old('status', $complain->status) == 0 ? 'selected' : '' }}>
-                                solved
+                                Solved
                             </option>
                             <option value="2" {{ old('status', $complain->status) == 2 ? 'selected' : '' }}>
-                                pending
+                                Pending
                             </option>
                             <option value="3" {{ old('status', $complain->status) == 3 ? 'selected' : '' }}>
-                                rejected</option>
+                                Rejected</option>
+                            <option value="4" {{ old('status', $complain->status) == 4 ? 'selected' : '' }}>
+                                Re-opened</option>
                         </select>
                         <span class="text-danger col-form-label-sm">
                             @error('state')
