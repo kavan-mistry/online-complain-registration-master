@@ -79,7 +79,7 @@
     @notifyJs
 
     <div class="container-sm mt-3 p-0 d-flex align-items-center justify-content-center" id="notice-div">
-        <div class="col-1 text-center p-3" id="nh"><b>Important</b></div>
+        <div class="col-1 text-center py-3" id="nh"><b>Important</b></div>
         <div class="col-11 d-flex align-items-center">
             <marquee>
                 @foreach ($notices as $notice)

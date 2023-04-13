@@ -40,9 +40,27 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-end justify-self-end" id="main_nav">
                     <ul class="navbar-nav align-items-center">
-                        <li class="nav-item"><a class="nav-link active" href="{{ url('/adlogin/addash') . '/view' }}">
-                                <i class="bi bi-card-list me-1"></i>Complain list </a>
+                        <li class="nav-item nav-link active">
+                            <form action="" id="ad-form">
+                                <button type="submit">Active</button>
+                                <input type="text" name="status" value="1" hidden>
+                                <span class="badge rounded-pill bg-primary">
+                                    {{ $active }}
+                                </span>
+                            </form>
                         </li>
+                        <li class="nav-item nav-link active">
+                            <form action="" id="ad-form">
+                                <button type="submit">Re-opened</button>
+                                <input type="text" name="status" value="4" hidden>
+                                <span class="badge rounded-pill bg-info">
+                                    {{ $re_opened }}
+                                </span>
+                            </form>
+                        </li>
+                        {{-- <li class="nav-item"><a class="nav-link active" href="{{ url('/adlogin/addash') . '/view' }}">
+                                <i class="bi bi-card-list me-1"></i>Complain list </a>
+                        </li> --}}
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
                                     class="bi bi-person-circle"></i> Admin </a>
@@ -97,7 +115,8 @@
                     @csrf
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Password</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         @csrf
@@ -158,7 +177,7 @@
                         placeholder="Search here" value="{{ $search }}">
                 </div>
 
-                <div class="form-group d-flex col-lg-5">
+                <div class="form-group d-flex col-lg-4">
                     <label class="me-1">Problem</label>
                     @if (isset($pt))
                         <select name="pt" class="form-select form-select-sm">
@@ -181,10 +200,10 @@
                     <label class="form-label-sm me-1">Department</label>
                     @if (isset($dept))
                         <select name="dept" class="form-select form-select-sm">
-                            @foreach (['water', 'electricity', 'disaster', 'general', 'cleaning', 'repair'] as $dept1)
+                            {{-- @foreach (['water', 'electricity', 'disaster', 'general', 'cleaning', 'repair'] as $dept1)
                                 <option value="{{ $dept1 }}" {{ $dept == $dept1 ? 'selected' : '' }}>
                                     {{ $dept1 }}</option>
-                            @endforeach
+                            @endforeach --}}
                             @foreach ($departments as $dept1)
                                 <option value="{{ $dept1->department }}"
                                     {{ $dept == $dept1->department ? 'selected' : '' }}>
@@ -202,10 +221,21 @@
                 </div>
 
                 <div class="form-group d-flex col-lg-2">
-                    <button class="btn btn-sm btn-outline-success"><i class="bi bi-search me-1"></i>Search</button>
+                    <label class="form-lable-sm me-1">Status</label>
+                    <select name="status" class="form-select form-select-sm">
+                        <option value="0" {{ $status == 0 ? 'selected' : '' }}>Solved</option>
+                        <option value="1" {{ $status == 1 ? 'selected' : '' }}>Active</option>
+                        <option value="2" {{ $status == 2 ? 'selected' : '' }}>Panding</option>
+                        <option value="3" {{ $status == 3 ? 'selected' : '' }}>Rejected</option>
+                        <option value="4" {{ $status == 4 ? 'selected' : '' }}>Re-opened</option>
+                    </select>
+                </div>
+
+                <div class="form-group d-flex col-lg-1">
+                    <button class="btn btn-sm btn-outline-success"><i class="bi bi-search"></i></button>
                     <a href="{{ url('/adlogin/addash/view') }}">
                         <button class="btn btn-sm btn-outline-danger ms-1" type="button"><i
-                                class="bi bi-arrow-clockwise me-1"></i>Reset</button>
+                                class="bi bi-arrow-clockwise"></i></button>
                     </a>
                 </div>
 
@@ -225,7 +255,7 @@
                             <th>State</th>
                             <th>Problem Type</th>
                             <th>Department</th>
-                            <th class="no-sort">Status</th>
+                            <th>Status</th>
                             <th class="no-sort">Action</th>
                         </tr>
                     </thead>

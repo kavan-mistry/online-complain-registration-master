@@ -112,13 +112,18 @@ class AdminLoginController extends Controller
         $search = $request['search'] ?? "";
         $pt = $request['pt'];
         $dept = $request['dept'];
+        $status = $request['status'];
 
-        if ($dept != "" && $search != "" && $pt != "") {
+        $active = Complain::where('status', 1)->count();
+        $re_opened = Complain::where('status', 4)->count();
+
+        if ($dept != "" && $search != "" && $pt != "" && $status != "") {
             $complain = Complain::where([
                 ['name', 'LIKE', "%$search%"],
                 ['mob', 'LIKE', "%$search%"],
                 ['pt', '=', "$pt"],
-                ['dept', '=', "$dept"]
+                ['dept', '=', "$dept"],
+                ['status', '=', "$status"]
             ])->get();
             // $complain = Complain::sortable()->where('name', 'LIKE', "%$search%")->orWhere('email', 'LIKE', "%$search%")->paginate(6);
         } elseif ($pt != "" && $search != "") {
@@ -142,7 +147,10 @@ class AdminLoginController extends Controller
             //     ['name', 'LIKE', "%$search%"],
             //     ['dept', '=', "$dept"]
             // ])->paginate(6);
-        } else {
+        } elseif ($status != "") {
+            $complain = Complain::where('status', '=', "$status")->get();
+        }
+        else {
             $complain = Complain::withTrashed('departmentcm')->get();
         }
 
@@ -153,7 +161,7 @@ class AdminLoginController extends Controller
         // echo $blocked_customer;
         // die;
 
-        $data = compact('complain', 'search', 'dept', 'problem_types', 'pt', 'departments', 'blocked_customer', 'notices');
+        $data = compact('complain', 'search', 'dept', 'problem_types', 'pt', 'departments', 'blocked_customer', 'notices', 'status', 'active', 're_opened');
         return view('addash')->with($data);
     }
 
@@ -182,7 +190,7 @@ class AdminLoginController extends Controller
             $url = url('/adlogin/addash/view/update') . "/" . $id;
             $images = Image::where([
                 ['complain_id', $id],
-                ['reopen_id', '=', 0]
+                ['reopen_id', 0]
             ])->get();
             $reopen_images = Image::where([
                 ['complain_id', $id],
