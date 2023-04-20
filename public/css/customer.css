@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
 
 * {
-  font-family: 'Ubuntu', sans-serif;
+  /* font-family: 'Ubuntu', sans-serif; */
   /* font-family: 'Nunito', sans-serif; */
   /* font-size: small; */
 }
@@ -14,14 +14,16 @@
   /* border: 1px solid rgba(162, 162, 162, 0.32); */
 }
 
-#notice-div{
-  background-color: #FEEFC3;
+#notice-div {
+  background-color: #fff2cc;
   border-radius: 15px;
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
 }
 
-#nh{
+
+#nh {
   font: bold;
-  background-color: #FBBC04;
+  background-color: #ffd049;
   border-radius: 15px;
 }
 
@@ -49,7 +51,46 @@ a {
 
 .dataTables_info {
   font-size: small;
+  padding: 10px;
 }
+
+.dataTables_length{
+  padding-left: 25px;
+  font-size: small;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+
+.dataTables_filter{
+  padding: 10px;
+}
+
+/* .dataTables_paginate{
+  font-size: small;
+  margin-right: 10px;
+} */
+
+/* .current{
+  background: #696CFF !important;
+  color: white !important;
+  border-radius: 50% !important;
+  margin: 3px;
+} */
+
+/* .next:hover{
+  background: none !important;
+}
+
+.previous:hover{
+  background: none !important;
+} */
+
+/* .paginate_button:hover{
+  border-radius: 50% !important;
+  background: #696CFF !important;
+  border: none !important;
+} */
 
 .pagination {
   --bs-pagination-padding-x: 0.5rem;
@@ -58,30 +99,30 @@ a {
   --bs-pagination-border-radius: 0.25rem;
 }
 
-#myTable_length{
+#myTable_length {
   font-size: small;
 }
 
-#preview img { 
+#preview img {
   max-height: 70px;
   margin-right: 7px;
   padding: 2px;
-  border: 1px solid gray; 
+  border: 1px solid gray;
 }
 
-.dropdown-z{
+.dropdown-z {
   /* box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2); */
   z-index: 3;
 }
 
-.table-z{
+.table-z {
   z-index: 0;
 }
 
-.foo{
+.foo {
   align-items: center;
   font-size: small;
-  justify-content:center;
+  justify-content: center;
   display: flex;
   background-color: rgba(162, 162, 162, 0.09);
 }
@@ -89,30 +130,30 @@ a {
 
 /*---------------- edit profile css ----------------*/
 
-.main-div{
+.main-div {
   height: 95vh;
 }
 
-.h-div{
+.h-div {
   background-color: #e6e6fa;
   border-radius: 15px;
   align-items: center;
   justify-content: center;
 }
 
-.ff{
+.ff {
   height: 15px;
 }
 
-.warning{
+.warning {
   font-size: x-small;
 }
 
 
 
-#laravel-notify{
+#laravel-notify {
   position: relative;
-  z-index: 3;
+  z-index: 10;
 }
 
 
@@ -145,4 +186,9 @@ a {
   border-radius: 50%;
   /* padding: 5px; */
   cursor: pointer;
+}
+
+#up-img2{
+  width: 50%;
+  height: 50%;
 }

@@ -14,6 +14,10 @@ class LoginController extends Controller
         return view('register');
     }
 
+    public function sp(){
+        return view('spmodel');
+    }
+
     public function register(Request $request)
     {
         $email = $request->email;

@@ -1,5 +1,5 @@
 * {
-    font-family: 'Ubuntu', sans-serif;
+    /* font-family: 'Ubuntu', sans-serif; */
 }
 
 a{
@@ -96,3 +96,6 @@ a{
     cursor: pointer;
   }
   
+  .dataTables_length{
+    margin-top: 10px;
+  }

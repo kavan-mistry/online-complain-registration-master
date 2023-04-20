@@ -66,10 +66,13 @@ class  CustomerLoginController extends Controller
         $cid = session()->get('cid');
         $customer = customer::where('customer_id', $cid)->first();
 
+        $customer_id = Session()->get('cid');
+        $user = Customer::where('customer_id', $customer_id)->value('name');
+
         $states = $this->states;
         $problem_types = Problem_types::get();
 
-        $data = compact('cid', 'customer', 'states', 'problem_types');
+        $data = compact('cid', 'customer', 'states', 'problem_types', 'user');
         return view('dash')->with($data);
     }
 
@@ -94,7 +97,7 @@ class  CustomerLoginController extends Controller
             // die;
             $complain = Complain::where([
                 // ['customer_id', '=', $customer_id],
-                ['name', 'LIKE', "%$search%"],
+                ['state', 'LIKE', "%$search%"],
                 ['pt', '=', "$pt"],
                 ['customer_id', $customer_id]
             ])->orderBy('complain_id' ,'desc')->get();
@@ -113,7 +116,7 @@ class  CustomerLoginController extends Controller
         } elseif ($search != "") {
             // print_r("qaqaqa");
             $complain = Complain::where([
-                ['name', 'LIKE', "%$search%"],
+                ['state', 'LIKE', "%$search%"],
                 ['customer_id', $customer_id]
             ])->orWhere('email', 'LIKE', "%$search%")->orderBy('complain_id' ,'desc')->get();
         }

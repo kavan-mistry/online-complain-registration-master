@@ -49,9 +49,11 @@ class ResetpasswordController extends Controller
             $customer->remember_token = $random;
             $customer->save();
 
-            return redirect()->back()->with('success', 'Mail send successfully.');
+            notify()->success('Mail send successfully.');
+            return redirect()->back();
         } else {
-            return redirect()->back()->with('error', 'Mail not found.');
+            notify()->error('Mail not found.');
+            return redirect()->back();
         }
     }
 

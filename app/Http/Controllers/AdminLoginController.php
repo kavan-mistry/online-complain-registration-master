@@ -120,10 +120,6 @@ class AdminLoginController extends Controller
         if ($dept != "" && $search != "" && $pt != "" && $status != "") {
             $complain = Complain::where([
                 ['name', 'LIKE', "%$search%"],
-                ['mob', 'LIKE', "%$search%"],
-                ['pt', '=', "$pt"],
-                ['dept', '=', "$dept"],
-                ['status', '=', "$status"]
             ])->get();
             // $complain = Complain::sortable()->where('name', 'LIKE', "%$search%")->orWhere('email', 'LIKE', "%$search%")->paginate(6);
         } elseif ($pt != "" && $search != "") {
@@ -133,7 +129,8 @@ class AdminLoginController extends Controller
                 ['pt', '=', "$pt"],
             ])->get();
         } elseif ($dept != "") {
-            $complain = Complain::where('dept', '=', "$dept")->get();
+            $dept1 = department::where('department', '=', "$dept")->value('department_id');
+            $complain = Complain::where('department_id', '=', "$dept1")->get();
         } elseif ($pt != "") {
             $complain = Complain::where('pt', '=', "$pt")->get();
         } elseif ($search != "") {

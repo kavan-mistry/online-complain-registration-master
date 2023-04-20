@@ -54,10 +54,10 @@ class DeptLoginController extends Controller
             // echo 'this one';
             $complaints = Complain::where([
                 ['name', 'LIKE', "%$search%"],
-                ['dept', '=', "$department"]
+                ['department_id', '=', "$department_id"]
             ])->orWhere([
-                ['email', 'LIKE', "%$search%"],
-                ['dept', '=', "$department"]
+                ['pt', 'LIKE', "%$search%"],
+                ['department_id', '=', "$department_id"]
             ])->get();
             // $complain = Complain::sortable()->where('name', 'LIKE', "%$search%")->orWhere('email', 'LIKE', "%$search%")->paginate(6);
         } else {

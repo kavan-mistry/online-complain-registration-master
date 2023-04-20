@@ -7,7 +7,8 @@ let table = new DataTable('#myTable', {
     columnDefs: [{
         "targets": 'no-sort',
         "orderable": false,
-    }]
+    }],
+    sDom: '<"top"if>rt<"bottom"lp><"clear">',
     // pagingType: 'first_last_numbers',
 });
 
