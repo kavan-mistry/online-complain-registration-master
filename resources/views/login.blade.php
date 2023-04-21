@@ -248,7 +248,7 @@
 
                         <p class="text-center m-auto">
                             <span>New on our platform?</span>
-                            <a href="{{ url('/') }}">
+                            <a href="{{ url('/#card') }}">
                                 <span>Create an account</span>
                             </a>
                         </p>

@@ -551,7 +551,7 @@ Problem : {{ $complains->pt }} ?`)">
                             <div class="d-flex justify-content-between align-items-center pe-4">
                                 <h5 class="card-header col-md-6">Complain List</h5>
                                 <div class="create-new">
-                                    <a href="{{ url('/login/dash') }}">
+                                    <a href="{{ url('/login/dash') }}" class="btn btn-outline-primary">
                                         <i class="bx bx-plus me-1"></i> <span class="d-none d-lg-inline-block">Add New
                                             Complain</span>
                                     </a>
@@ -586,17 +586,17 @@ Problem : {{ $complains->pt }} ?`)">
                                                 <td>{{ $complains->pt }}</td>
                                                 <td>
                                                     @if ($complains->status == 1)
-                                                        <span class="badge rounded-pill bg-label-primary">Active</span>
+                                                        <span class="badge bg-primary fs-tiny">Active</span>
                                                     @elseif($complains->status == 0)
-                                                        <span class="badge rounded-pill bg-label-success">Solved</span>
+                                                        <span class="badge bg-success fs-tiny">Solved</span>
                                                     @elseif($complains->status == 2)
                                                         <span
-                                                            class="badge rounded-pill bg-label-warning">Pending</span>
+                                                            class="badge bg-warning fs-tiny">Pending</span>
                                                     @elseif($complains->status == 3)
                                                         <span
-                                                            class="badge rounded-pill bg-label-danger">Rejected</span>
+                                                            class="badge bg-danger fs-tiny">Rejected</span>
                                                     @elseif($complains->status == 4)
-                                                        <span class="badge rounded-pill bg-label-info">Re-opened</span>
+                                                        <span class="badge bg-info fs-tiny">Re-opened</span>
                                                     @endif
                                                 </td>
                                                 <td class="d-flex justify-content-center">

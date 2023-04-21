@@ -330,7 +330,7 @@
 
     <footer class="foo container-fluid justify-content-center p-1">
         <div>
-            Made with 💖 &emsp; | &emsp; ® OCR &emsp; | &emsp; © all rights recieved .
+            Made with 😃 by Kavan Mistry &emsp; | &emsp; ® OCR &emsp; | &emsp; © all rights recieved .
         </div>
         <div>
             &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;

@@ -439,6 +439,8 @@
                                                         <span class="badge bg-danger fs-tiny">Rejected</span>
                                                     @elseif($complains->status == 4)
                                                         <span class="badge bg-info fs-tiny">Re-opened</span>
+                                                    @elseif($complains->status == 5)
+                                                        <span class="badge bg-info fs-tiny">Deleted</span>
                                                     @endif
                                                 </td>
                                                 <td>

@@ -115,6 +115,7 @@ class AdminLoginController extends Controller
         $status = $request['status'];
 
         $active = Complain::where('status', 1)->count();
+
         $re_opened = Complain::where('status', 4)->count();
 
         if ($dept != "" && $search != "" && $pt != "" && $status != "") {
@@ -166,6 +167,8 @@ class AdminLoginController extends Controller
     {
         $complain = Complain::find($id);
         if (!is_null($complain)) {
+            $complain->status = '5';
+            $complain->save();
             $complain->delete();
         }
         notify()->success('Complain Deleted successfully.');

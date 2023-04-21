@@ -724,6 +724,9 @@
                                                     <option value="4" {{ $status == 4 ? 'selected' : '' }}>
                                                         Re-opened
                                                     </option>
+                                                    <option value="5" {{ $status == 5 ? 'selected' : '' }}>
+                                                        Deleted
+                                                    </option>
                                                 </select>
                                             </div>
 
@@ -788,16 +791,16 @@
                                                             <span class="badge bg-danger fs-tiny">Rejected</span>
                                                         @elseif($complains->status == 4)
                                                             <span class="badge bg-info fs-tiny">Re-opened</span>
+                                                        @elseif($complains->status == 5)
+                                                            <span class="badge bg-danger fs-tiny">Deleted</span>
                                                         @endif
 
                                                     </div>
                                                     @foreach ($blocked_customer as $bcust)
                                                         @if ($complains->customer_id == $bcust->customer_id)
                                                             @if (!empty($bcust->deleted_at))
-                                                                
-                                                                    <span class="badge bg-secondary fs-tiny">User
-                                                                        Blocked</span>
-                                                                
+                                                                <span class="badge bg-secondary fs-tiny">User
+                                                                    Blocked</span>
                                                             @endif
                                                         @endif
                                                     @endforeach
